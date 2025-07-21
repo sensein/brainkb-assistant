@@ -1,0 +1,62 @@
+{
+  "name": "brainkb-assistant",
+  "version": "1.0.0",
+  "description": "A floating chat assistant for BrainKB knowledge base integration",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "jest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write src/**/*.{ts,tsx}"
+  },
+  "keywords": [
+    "react",
+    "chat",
+    "assistant",
+    "brainkb",
+    "neuroscience",
+    "knowledge-base",
+    "widget"
+  ],
+  "author": "BrainKB Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brainkb/brainkb-assistant.git"
+  },
+  "bugs": {
+    "url": "https://github.com/brainkb/brainkb-assistant/issues"
+  },
+  "homepage": "https://github.com/brainkb/brainkb-assistant#readme",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "lucide-react": "^0.263.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "rimraf": "^5.0.0",
+    "rollup": "^3.0.0",
+    "rollup-plugin-dts": "^5.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+} 
