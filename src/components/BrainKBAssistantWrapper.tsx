@@ -1373,7 +1373,7 @@ export default function BrainKBAssistantWrapper({
       const contentMessage: ChatMessage = {
         id: Date.now().toString(),
         type: 'user',
-        content: `📄 Selected Page Content:\n\`\`\`text\n${selectedText}\n\`\`\``,
+        content: `📄 **Selected Page Content:**\n\`\`\`text\n${selectedText}\n\`\`\``,
         timestamp: new Date(),
         sender: 'You'
       };
@@ -1387,7 +1387,7 @@ export default function BrainKBAssistantWrapper({
       const successMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
-        content: `✅ I've captured the selected content (${selectedText.length} characters). You can now ask questions about this specific content!`,
+        content: `✅ **Content Captured!** I've captured ${selectedText.length} characters from your selection. You can now ask specific questions about this content!`,
         timestamp: new Date(),
         sender: mergedConfig.branding?.title || 'BrainKB Assistant'
       };
@@ -1403,13 +1403,56 @@ export default function BrainKBAssistantWrapper({
       const instructionMessage: ChatMessage = {
         id: Date.now().toString(),
         type: 'assistant',
-        content: `📝 **How to select page content:**\n\n1. **Select text** on this page by clicking and dragging\n2. **Click the "📄 Add Selected Content" button** below\n3. **Ask questions** about the selected content\n\nTry selecting some text from this page first!`,
+        content: `📝 **How to select page content:**\n\n1. **Select text** on this page by clicking and dragging\n2. **Click the 📄 button** below\n3. **Ask questions** about the selected content\n\nTry selecting some text from this page first!`,
         timestamp: new Date(),
         sender: mergedConfig.branding?.title || 'BrainKB Assistant'
       };
       
       setMessages(prev => [...prev, instructionMessage]);
     }
+  };
+
+  // Function to show current page content in chat
+  const showCurrentPageContent = () => {
+    const currentContent = getCurrentPageContent();
+    
+    if (currentContent && currentContent.length > 50) {
+      const contentMessage: ChatMessage = {
+        id: Date.now().toString(),
+        type: 'assistant',
+        content: `📄 **Current Page Content (${currentContent.length} characters):**\n\`\`\`text\n${currentContent.substring(0, 500)}${currentContent.length > 500 ? '\n... (truncated)' : ''}\n\`\`\``,
+        timestamp: new Date(),
+        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+      };
+      
+      setMessages(prev => [...prev, contentMessage]);
+      
+      const followUpMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        type: 'assistant',
+        content: `✅ I've read the current page content. You can now ask questions about this page, or use the 📄 button to select specific content if you need more precise analysis.`,
+        timestamp: new Date(),
+        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+      };
+      
+      setMessages(prev => [...prev, followUpMessage]);
+    } else {
+      const noContentMessage: ChatMessage = {
+        id: Date.now().toString(),
+        type: 'assistant',
+        content: `⚠️ **Limited Page Content Detected**\n\nI couldn't find substantial content on this page. Please:\n\n1. **Use the 📄 button** to manually select specific text\n2. **Or tell me** what you'd like to know about\n\nThis will help me provide better answers!`,
+        timestamp: new Date(),
+        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+      };
+      
+      setMessages(prev => [...prev, noContentMessage]);
+    }
+  };
+
+  const handleUseContext = () => {
+    setUsePageContext(true);
+    setContextDetected(true);
+    showCurrentPageContent(); // Show the current page content in chat
   };
 
   return (
@@ -1577,17 +1620,7 @@ export default function BrainKBAssistantWrapper({
             {contextDetected && usePageContext === null && pageContext && mergedConfig.features?.enableContextDetection && (
               <ContextDetectionPrompt
                 pageContext={pageContext}
-                onUseContext={() => {
-                  setUsePageContext(true);
-                  const responseMessage: ChatMessage = {
-                    id: Date.now().toString(),
-                    type: 'assistant',
-                    content: `Perfect! I'll use the context from **${pageContext?.title || 'this page'}** to provide more relevant answers. You can ask me anything about this page or general questions.`,
-                    timestamp: new Date(),
-                    sender: mergedConfig.branding?.title || 'BrainKB Assistant'
-                  };
-                  setMessages(prev => [...prev, responseMessage]);
-                }}
+                onUseContext={handleUseContext}
                 onSkipContext={() => {
                   setUsePageContext(false);
                   const responseMessage: ChatMessage = {
@@ -1621,42 +1654,6 @@ export default function BrainKBAssistantWrapper({
                       <span>{action.label}</span>
                     </button>
                   ))}
-                </div>
-                
-                {/* Related Links */}
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <button className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors">
-                    <Globe className="w-3 h-3" />
-                    <span>🌐 beta.brainkb.org</span>
-                  </button>
-                  <button className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors">
-                    <Users className="w-3 h-3" />
-                    <span>👥 Sensible Intelligence Group</span>
-                  </button>
-                  <button className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors">
-                    <BookOpen className="w-3 h-3" />
-                    <span>📚 Documentation</span>
-                  </button>
-                  <button className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors">
-                    <MessageSquare className="w-3 h-3" />
-                    <span>💬 Community Forum</span>
-                  </button>
-                  <button className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors">
-                    <Zap className="w-3 h-3" />
-                    <span>⚡ API Reference</span>
-                  </button>
-                  <button className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors">
-                    <Settings className="w-3 h-3" />
-                    <span>⚙️ Configuration</span>
-                  </button>
-                  <button className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors">
-                    <Star className="w-3 h-3" />
-                    <span>⭐ GitHub</span>
-                  </button>
-                  <button className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors">
-                    <TrendingUp className="w-3 h-3" />
-                    <span>📈 Analytics</span>
-                  </button>
                 </div>
               </div>
             )}
@@ -1692,27 +1689,18 @@ export default function BrainKBAssistantWrapper({
                   <Upload className="w-4 h-4" />
                 </button>
               )}
-              {/* File Upload Button */}
-              <button
-                onClick={() => setShowUpload(!showUpload)}
-                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
-                title="Upload files"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                </svg>
-              </button>
-
+              
               {/* Page Content Selection Button */}
               <button
                 onClick={captureSelectedText}
-                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="px-3 py-3 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors border border-blue-300"
                 title="Add selected page content"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </button>
+              
               <input
                 type="text"
                 value={inputValue}
