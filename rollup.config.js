@@ -6,6 +6,27 @@ const fs = require('fs');
 
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
+// Plugin to add 'use client' directive to output files
+function addUseClientDirective() {
+  return {
+    name: 'add-use-client-directive',
+    writeBundle(options, bundle) {
+      // Add 'use client' to the main output files
+      const files = ['dist/index.js', 'dist/index.esm.js'];
+      
+      files.forEach(filePath => {
+        if (fs.existsSync(filePath)) {
+          let content = fs.readFileSync(filePath, 'utf8');
+          if (!content.includes("'use client'")) {
+            content = "'use client';\n" + content;
+            fs.writeFileSync(filePath, content);
+          }
+        }
+      });
+    }
+  };
+}
+
 module.exports = {
   input: 'src/index.ts',
   output: [
@@ -13,11 +34,13 @@ module.exports = {
       file: packageJson.main,
       format: 'cjs',
       sourcemap: true,
+      exports: 'named'
     },
     {
       file: packageJson.module,
       format: 'esm',
       sourcemap: true,
+      exports: 'named'
     },
   ],
   plugins: [
@@ -30,7 +53,12 @@ module.exports = {
       include: 'node_modules/**',
       transformMixedEsModules: true
     }),
-    typescript({ tsconfig: './tsconfig.json' }),
+    typescript({ 
+      tsconfig: './tsconfig.json',
+      declaration: true,
+      declarationDir: './dist'
+    }),
+    addUseClientDirective()
   ],
   external: ['react', 'react-dom'],
 }; 
