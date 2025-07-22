@@ -642,12 +642,12 @@ export default function BrainKBAssistantWrapper({
         icon: <span>{action.icon || '💬'}</span>,
         action: action.action,
         description: action.description,
-        url: action.url, // Add url if available
-        external: action.external // Add external if available
+        url: action.url,
+        external: action.external
       }));
     }
 
-    // Default quick actions with more options
+    // Only show default actions if no custom actions are provided
     const baseActions: QuickAction[] = [
       {
         id: 'question',
