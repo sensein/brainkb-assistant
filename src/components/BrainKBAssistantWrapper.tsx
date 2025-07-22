@@ -757,6 +757,18 @@ export default function BrainKBAssistantWrapper({
       mergedConfig.callbacks.onMessageSend(inputValue);
     }
 
+    // Check if the message contains JSON-like content and format it
+    const formattedContent = formatMessageContent(inputValue);
+    
+    // Update the message with formatted content if needed
+    if (formattedContent !== inputValue) {
+      setMessages(prev => prev.map(msg => 
+        msg.id === userMessage.id 
+          ? { ...msg, content: formattedContent }
+          : msg
+      ));
+    }
+
     try {
       // Prepare context with chat history and page context
       const contextData = {
@@ -807,6 +819,142 @@ export default function BrainKBAssistantWrapper({
     } finally {
       setIsTyping(false);
     }
+  };
+
+  // Function to format message content and preserve structure for all types
+  const formatMessageContent = (content: string): string => {
+    const trimmed = content.trim();
+    
+    // If content is already formatted with code blocks, return as is
+    if (content.includes('```')) {
+      return content;
+    }
+    
+    // Check for JSON objects/arrays
+    if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || 
+        (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        const formatted = JSON.stringify(parsed, null, 2);
+        return `\`\`\`json\n${formatted}\n\`\`\``;
+      } catch {
+        // If parsing fails, it's not valid JSON, continue to other checks
+      }
+    }
+    
+    // Check for XML/HTML content
+    if (trimmed.startsWith('<') && trimmed.includes('>')) {
+      return `\`\`\`xml\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for SQL queries
+    if (trimmed.toLowerCase().includes('select') || 
+        trimmed.toLowerCase().includes('insert') || 
+        trimmed.toLowerCase().includes('update') || 
+        trimmed.toLowerCase().includes('delete') ||
+        trimmed.toLowerCase().includes('create') ||
+        trimmed.toLowerCase().includes('drop')) {
+      return `\`\`\`sql\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for JavaScript/TypeScript code
+    if (trimmed.includes('function') || 
+        trimmed.includes('const ') || 
+        trimmed.includes('let ') || 
+        trimmed.includes('var ') ||
+        trimmed.includes('=>') ||
+        trimmed.includes('import ') ||
+        trimmed.includes('export ')) {
+      return `\`\`\`javascript\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for Python code
+    if (trimmed.includes('def ') || 
+        trimmed.includes('import ') ||
+        trimmed.includes('from ') ||
+        trimmed.includes('class ') ||
+        trimmed.includes('if __name__') ||
+        trimmed.includes('print(')) {
+      return `\`\`\`python\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for CSS
+    if (trimmed.includes('{') && trimmed.includes('}') && 
+        (trimmed.includes(':') || trimmed.includes(';'))) {
+      return `\`\`\`css\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for YAML
+    if (trimmed.includes(':') && !trimmed.includes('{') && !trimmed.includes('}')) {
+      const lines = trimmed.split('\n');
+      if (lines.some(line => line.includes(':') && !line.includes('='))) {
+        return `\`\`\`yaml\n${trimmed}\n\`\`\``;
+      }
+    }
+    
+    // Check for shell commands
+    if (trimmed.startsWith('$') || 
+        trimmed.startsWith('npm ') || 
+        trimmed.startsWith('yarn ') ||
+        trimmed.startsWith('git ') ||
+        trimmed.startsWith('cd ') ||
+        trimmed.startsWith('ls ') ||
+        trimmed.startsWith('cat ') ||
+        trimmed.startsWith('echo ')) {
+      return `\`\`\`bash\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for URLs
+    if (trimmed.match(/^https?:\/\/.+/)) {
+      return `\`\`\`url\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for file paths
+    if (trimmed.includes('/') && (trimmed.includes('.js') || 
+        trimmed.includes('.ts') || 
+        trimmed.includes('.json') || 
+        trimmed.includes('.css') || 
+        trimmed.includes('.html'))) {
+      return `\`\`\`file\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for structured data with multiple lines
+    if (trimmed.includes('\n') && trimmed.length > 100) {
+      // If it's multi-line and looks like structured data, format as text
+      return `\`\`\`text\n${trimmed}\n\`\`\``;
+    }
+    
+    // Check for JSON-like strings within the content
+    const jsonPattern = /\{[^{}]*\}|\[[\[\]]*\]/g;
+    const matches = content.match(jsonPattern);
+    
+    if (matches) {
+      let formattedContent = content;
+      matches.forEach(match => {
+        try {
+          const parsed = JSON.parse(match);
+          const formatted = JSON.stringify(parsed, null, 2);
+          formattedContent = formattedContent.replace(match, `\`\`\`json\n${formatted}\n\`\`\``);
+        } catch {
+          // Keep original if parsing fails
+        }
+      });
+      return formattedContent;
+    }
+    
+    // Check for code-like patterns (brackets, parentheses, etc.)
+    if (trimmed.includes('(') && trimmed.includes(')') && 
+        (trimmed.includes(';') || trimmed.includes('{') || trimmed.includes('}'))) {
+      return `\`\`\`code\n${trimmed}\n\`\`\``;
+    }
+    
+    // For regular text, preserve line breaks and formatting
+    if (trimmed.includes('\n')) {
+      return `\`\`\`text\n${trimmed}\n\`\`\``;
+    }
+    
+    // Return original content if no special formatting is needed
+    return content;
   };
 
   const handleQuickAction = (action: string) => {
@@ -898,11 +1046,86 @@ export default function BrainKBAssistantWrapper({
     reader.onload = (e) => {
       const content = e.target?.result as string;
       
-      // Add file content message
+      // Format content based on file type
+      const ext = file.name.split('.').pop()?.toLowerCase();
+      let formattedContent = content;
+      let language = ext || 'text';
+      
+      // Determine language and format content
+      switch (ext) {
+        case 'json':
+        case 'jsonld':
+          try {
+            const parsed = JSON.parse(content);
+            formattedContent = JSON.stringify(parsed, null, 2);
+            language = 'json';
+          } catch {
+            // Keep original if parsing fails
+          }
+          break;
+        case 'xml':
+        case 'html':
+          language = 'xml';
+          break;
+        case 'sql':
+          language = 'sql';
+          break;
+        case 'py':
+          language = 'python';
+          break;
+        case 'js':
+        case 'ts':
+        case 'jsx':
+        case 'tsx':
+          language = 'javascript';
+          break;
+        case 'css':
+        case 'scss':
+        case 'sass':
+          language = 'css';
+          break;
+        case 'yaml':
+        case 'yml':
+          language = 'yaml';
+          break;
+        case 'md':
+        case 'markdown':
+          language = 'markdown';
+          break;
+        case 'txt':
+          language = 'text';
+          break;
+        case 'csv':
+          language = 'csv';
+          break;
+        case 'ttl':
+          language = 'turtle';
+          break;
+        case 'sh':
+        case 'bash':
+          language = 'bash';
+          break;
+        default:
+          // Try to detect language from content
+          if (content.includes('<?xml') || content.includes('<html')) {
+            language = 'xml';
+          } else if (content.includes('function') || content.includes('const ')) {
+            language = 'javascript';
+          } else if (content.includes('def ') || content.includes('import ')) {
+            language = 'python';
+          } else if (content.includes('SELECT') || content.includes('INSERT')) {
+            language = 'sql';
+          } else if (content.includes('{') && content.includes('}') && content.includes(':')) {
+            language = 'json';
+          }
+          break;
+      }
+      
+      // Add file content message with proper code block
       const fileContentMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         type: 'user',
-        content: `File content:\n\`\`\`${file.name.split('.').pop()}\n${content}\n\`\`\``,
+        content: `File content:\n\`\`\`${language}\n${formattedContent}\n\`\`\``,
         timestamp: new Date(),
         sender: 'You'
       };
