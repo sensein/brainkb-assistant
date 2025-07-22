@@ -1,35 +1,27 @@
-import { BrainKBChatWidget } from './components/BrainKBChatWidget';
-import { BrainKBAPI } from './utils/api';
-import { MCPService } from './utils/mcp';
-import { BrainKBSetup, quickSetup } from './utils/setup';
+import BrainKBAssistant from './components/BrainKBAssistant';
+import BrainKBAssistantWrapper, { BrainKBConfig } from './components/BrainKBAssistantWrapper';
 
-// Types
-export type {
-  BrainKBConfig,
-  BrainKBRequest,
-  BrainKBResponse,
-  ChatMessage,
-  QuickAction,
-  PageContext,
-  MCPTool,
-  MCPRequest,
-  MCPResponse,
-  SetupConfig,
-  InstallationGuide
-} from './types';
+// Main component export
+export default BrainKBAssistant;
 
 // Named exports
-export { BrainKBChatWidget } from './components/BrainKBChatWidget';
-export { BrainKBAPI } from './utils/api';
-export { MCPService } from './utils/mcp';
-export { BrainKBSetup, quickSetup } from './utils/setup';
+export { default as BrainKBAssistantWrapper } from './components/BrainKBAssistantWrapper';
+export type { BrainKBConfig } from './components/BrainKBAssistantWrapper';
 
 // Global initialization for CDN usage
 if (typeof window !== 'undefined') {
   (window as any).BrainKBAssistant = {
-    init: (config: any) => {
-      // This would initialize the assistant globally
+    init: (config: BrainKBConfig) => {
+      // This would initialize the assistant globally for static HTML
       console.log('BrainKB Assistant initialized with config:', config);
+      
+      // Create a container and render the component
+      const container = document.createElement('div');
+      container.id = 'brainkb-assistant-container';
+      document.body.appendChild(container);
+      
+      // Note: In a real implementation, you'd need to render the React component here
+      // This is a simplified version for demonstration
     }
   };
 } 

@@ -1,4 +1,4 @@
-import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 import { forwardRef, createElement, useState, useEffect, useRef } from 'react';
 
 /**
@@ -47,6 +47,54 @@ const createLucideIcon = (iconName, iconNode) => {
   return Component;
 };
 var createLucideIcon$1 = createLucideIcon;
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
+const BookOpen = createLucideIcon$1("BookOpen", [
+  ["path", { d: "M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z", key: "vv98re" }],
+  ["path", { d: "M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z", key: "1cyq3y" }]
+]);
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
+const Bot = createLucideIcon$1("Bot", [
+  [
+    "rect",
+    { width: "18", height: "10", x: "3", y: "11", rx: "2", key: "1ofdy3" }
+  ],
+  ["circle", { cx: "12", cy: "5", r: "2", key: "f1ur92" }],
+  ["path", { d: "M12 7v4", key: "xawao1" }],
+  ["line", { x1: "8", x2: "8", y1: "16", y2: "16", key: "h6x27f" }],
+  ["line", { x1: "16", x2: "16", y1: "16", y2: "16", key: "5lty7f" }]
+]);
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
+const Brain = createLucideIcon$1("Brain", [
+  [
+    "path",
+    {
+      d: "M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z",
+      key: "1mhkh5"
+    }
+  ],
+  [
+    "path",
+    {
+      d: "M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z",
+      key: "1d6s00"
+    }
+  ]
+]);
 
 /**
  * lucide-react v0.0.1 - ISC
@@ -106,19 +154,6 @@ const Globe = createLucideIcon$1("Globe", [
  */
 
 
-const Mail = createLucideIcon$1("Mail", [
-  [
-    "rect",
-    { width: "20", height: "16", x: "2", y: "4", rx: "2", key: "18n3k1" }
-  ],
-  ["path", { d: "m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7", key: "1ocrg3" }]
-]);
-
-/**
- * lucide-react v0.0.1 - ISC
- */
-
-
 const MapPin = createLucideIcon$1("MapPin", [
   [
     "path",
@@ -137,6 +172,30 @@ const Maximize2 = createLucideIcon$1("Maximize2", [
   ["polyline", { points: "9 21 3 21 3 15", key: "1avn1i" }],
   ["line", { x1: "21", x2: "14", y1: "3", y2: "10", key: "ota7mn" }],
   ["line", { x1: "3", x2: "10", y1: "21", y2: "14", key: "1atl0r" }]
+]);
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
+const MessageCircle = createLucideIcon$1("MessageCircle", [
+  ["path", { d: "m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z", key: "v2veuj" }]
+]);
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
+const MessageSquare = createLucideIcon$1("MessageSquare", [
+  [
+    "path",
+    {
+      d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
+      key: "1lielz"
+    }
+  ]
 ]);
 
 /**
@@ -179,6 +238,47 @@ const Send = createLucideIcon$1("Send", [
  */
 
 
+const Settings = createLucideIcon$1("Settings", [
+  [
+    "path",
+    {
+      d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z",
+      key: "1qme2f"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+]);
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
+const Star = createLucideIcon$1("Star", [
+  [
+    "polygon",
+    {
+      points: "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2",
+      key: "8f66p6"
+    }
+  ]
+]);
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
+const TrendingUp = createLucideIcon$1("TrendingUp", [
+  ["polyline", { points: "22 7 13.5 15.5 8.5 10.5 2 17", key: "126l90" }],
+  ["polyline", { points: "16 7 22 7 22 13", key: "kwv8wd" }]
+]);
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
 const Upload = createLucideIcon$1("Upload", [
   ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
   ["polyline", { points: "17 8 12 3 7 8", key: "t8dd8p" }],
@@ -200,417 +300,90 @@ const User = createLucideIcon$1("User", [
  */
 
 
+const Users = createLucideIcon$1("Users", [
+  ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+  ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
+  ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+  ["path", { d: "M16 3.13a4 4 0 0 1 0 7.75", key: "1da9ce" }]
+]);
+
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
 const X = createLucideIcon$1("X", [
   ["path", { d: "M18 6 6 18", key: "1bl5f8" }],
   ["path", { d: "m6 6 12 12", key: "d8bk6v" }]
 ]);
 
-class MCPService {
+/**
+ * lucide-react v0.0.1 - ISC
+ */
+
+
+const Zap = createLucideIcon$1("Zap", [
+  [
+    "polygon",
+    { points: "13 2 3 14 12 14 11 22 21 10 12 10 13 2", key: "45s27k" }
+  ]
+]);
+
+// API Service Class
+class BrainKBAPIService {
     constructor(config) {
-        this.serverUrl = config.mcp?.serverUrl || '';
-        this.apiKey = config.mcp?.apiKey || '';
-        this.tools = config.mcp?.tools || [];
+        this.config = config;
     }
-    async callTool(toolName, params) {
-        const tool = this.tools.find(t => t.name === toolName);
-        if (!tool) {
-            throw new Error(`Tool ${toolName} not found`);
+    async sendMessage(message, context) {
+        const { api } = this.config;
+        if (api?.endpoint) {
+            return this.sendRESTMessage(message, context);
         }
-        try {
-            return await tool.function(params);
-        }
-        catch (error) {
-            console.error(`Error calling tool ${toolName}:`, error);
-            throw error;
-        }
+        // Fallback to local response
+        return this.generateLocalResponse(message, context);
     }
-    async sendRequest(request) {
+    async sendRESTMessage(message, context) {
         try {
-            const response = await fetch(`${this.serverUrl}/mcp`, {
+            const response = await fetch(this.config.api.endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.apiKey}`,
+                    ...this.config.api?.headers,
                 },
-                body: JSON.stringify(request),
+                body: JSON.stringify({
+                    message,
+                    context,
+                    timestamp: new Date().toISOString(),
+                }),
             });
-            if (!response.ok) {
-                throw new Error(`MCP request failed: ${response.statusText}`);
-            }
             return await response.json();
         }
         catch (error) {
-            console.error('MCP request error:', error);
-            throw error;
+            console.error('REST API Error:', error);
+            return this.generateLocalResponse(message, context);
         }
     }
-    async listTools() {
-        try {
-            const response = await this.sendRequest({
-                method: 'tools/list',
-                params: {},
-                id: Date.now().toString(),
-            });
-            return response.result?.tools || [];
-        }
-        catch (error) {
-            console.error('Error listing MCP tools:', error);
-            return this.tools;
-        }
-    }
-    async callTools(toolCalls) {
-        const results = [];
-        for (const toolCall of toolCalls) {
-            try {
-                const result = await this.callTool(toolCall.name, toolCall.params);
-                results.push({ name: toolCall.name, result });
-            }
-            catch (error) {
-                results.push({ name: toolCall.name, error: error.message });
-            }
-        }
-        return results;
-    }
-    // Built-in BrainKB tools
-    getBrainKBTools() {
-        return [
-            {
-                name: 'search_knowledge_base',
-                description: 'Search the BrainKB knowledge base for specific information',
-                parameters: {
-                    query: { type: 'string', description: 'Search query' },
-                    limit: { type: 'number', description: 'Maximum number of results', default: 10 },
-                    filters: { type: 'object', description: 'Search filters', optional: true }
-                },
-                function: async (params) => {
-                    // This would integrate with BrainKB API
-                    return {
-                        results: [
-                            { id: '1', title: 'Brain Region Analysis', content: 'Analysis of brain regions...' },
-                            { id: '2', title: 'Neural Pathways', content: 'Information about neural pathways...' }
-                        ],
-                        total: 2
-                    };
-                }
-            },
-            {
-                name: 'get_entity_details',
-                description: 'Get detailed information about a specific entity',
-                parameters: {
-                    entityId: { type: 'string', description: 'Entity ID' },
-                    includeRelations: { type: 'boolean', description: 'Include related entities', default: true }
-                },
-                function: async (params) => {
-                    return {
-                        entity: {
-                            id: params.entityId,
-                            name: 'Brain Region X',
-                            type: 'brain_region',
-                            properties: {
-                                location: 'Frontal lobe',
-                                function: 'Executive control',
-                                connections: ['region_y', 'region_z']
-                            }
-                        }
-                    };
-                }
-            },
-            {
-                name: 'analyze_data',
-                description: 'Analyze uploaded data files',
-                parameters: {
-                    fileId: { type: 'string', description: 'File ID to analyze' },
-                    analysisType: { type: 'string', description: 'Type of analysis', enum: ['json', 'csv', 'image'] }
-                },
-                function: async (params) => {
-                    return {
-                        analysis: {
-                            type: params.analysisType,
-                            summary: 'Data analysis completed',
-                            insights: ['Key finding 1', 'Key finding 2'],
-                            recommendations: ['Recommendation 1', 'Recommendation 2']
-                        }
-                    };
-                }
-            },
-            {
-                name: 'generate_code',
-                description: 'Generate code examples for BrainKB integration',
-                parameters: {
-                    language: { type: 'string', description: 'Programming language', enum: ['javascript', 'python', 'typescript'] },
-                    task: { type: 'string', description: 'Task description' }
-                },
-                function: async (params) => {
-                    const codeExamples = {
-                        javascript: `// BrainKB API Example
-const response = await fetch('/api/brainkb/search', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ query: '${params.task}' })
-});`,
-                        python: `# BrainKB API Example
-import requests
-
-response = requests.post('/api/brainkb/search', 
-  json={'query': '${params.task}'}
-)`,
-                        typescript: `// BrainKB API Example
-interface BrainKBResponse {
-  results: Array<{id: string, title: string, content: string}>;
-}
-
-const response = await fetch('/api/brainkb/search', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ query: '${params.task}' })
-});
-
-const data: BrainKBResponse = await response.json();`
-                    };
-                    return {
-                        code: codeExamples[params.language] || codeExamples.javascript,
-                        language: params.language,
-                        explanation: `Generated ${params.language} code for: ${params.task}`
-                    };
-                }
-            }
-        ];
-    }
-}
-
-class BrainKBAPI {
-    constructor(config) {
-        this.mcpService = null;
-        this.config = config;
-        // Initialize MCP service if enabled
-        if (config.mcp?.enabled) {
-            this.mcpService = new MCPService(config);
-        }
-    }
-    async sendMessage(request) {
-        try {
-            // If MCP is enabled, use agentic capabilities
-            if (this.mcpService && this.config.mcp?.enabled) {
-                return await this.handleMCPRequest(request);
-            }
-            // Fallback to local response generation
-            return this.generateLocalResponse(request);
-        }
-        catch (error) {
-            console.error('Error sending message:', error);
-            return {
-                content: "I'm sorry, I encountered an error. Please try again.",
-                suggestions: ["Try rephrasing your question", "Check your connection"],
-                metadata: { error: true }
-            };
-        }
-    }
-    async handleMCPRequest(request) {
-        const tools = this.mcpService.getBrainKBTools();
-        // Analyze the request to determine which tools to call
-        const toolCalls = await this.analyzeRequestForTools(request.message, tools);
-        if (toolCalls.length > 0) {
-            // Execute the tools
-            const results = await this.mcpService.callTools(toolCalls);
-            // Generate response based on tool results
-            return this.generateResponseFromToolResults(request.message, results);
-        }
-        // If no specific tools are needed, use the MCP server for general chat
-        return await this.callMCPServer(request);
-    }
-    async analyzeRequestForTools(message, tools) {
-        const toolCalls = [];
-        // Simple keyword-based tool selection (in a real implementation, this would use AI)
+    generateLocalResponse(message, context) {
+        // Generate contextual response based on message content
+        const responses = {
+            greeting: "Hello! I'm your BrainKB Assistant. How can I help you today?",
+            question: "I understand your question. Let me help you find the information you need.",
+            knowledge: "I can help you explore the knowledge base and find relevant information.",
+            default: "I'm here to help! What would you like to know about?"
+        };
         const lowerMessage = message.toLowerCase();
-        if (lowerMessage.includes('search') || lowerMessage.includes('find') || lowerMessage.includes('look for')) {
-            toolCalls.push({
-                name: 'search_knowledge_base',
-                params: {
-                    query: message.replace(/search|find|look for/gi, '').trim(),
-                    limit: 10
-                }
-            });
+        if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+            return { content: responses.greeting };
         }
-        if (lowerMessage.includes('entity') || lowerMessage.includes('details') || lowerMessage.includes('information about')) {
-            // Extract entity ID from message (simplified)
-            const entityMatch = message.match(/(?:entity|details|information about)\s+(\w+)/i);
-            if (entityMatch) {
-                toolCalls.push({
-                    name: 'get_entity_details',
-                    params: {
-                        entityId: entityMatch[1],
-                        includeRelations: true
-                    }
-                });
-            }
+        else if (lowerMessage.includes('?')) {
+            return { content: responses.question };
         }
-        if (lowerMessage.includes('analyze') || lowerMessage.includes('data') || lowerMessage.includes('file')) {
-            toolCalls.push({
-                name: 'analyze_data',
-                params: {
-                    fileId: 'uploaded_file',
-                    analysisType: 'json'
-                }
-            });
+        else if (lowerMessage.includes('knowledge') || lowerMessage.includes('data')) {
+            return { content: responses.knowledge };
         }
-        if (lowerMessage.includes('code') || lowerMessage.includes('example') || lowerMessage.includes('generate')) {
-            const language = lowerMessage.includes('python') ? 'python' :
-                lowerMessage.includes('typescript') ? 'typescript' : 'javascript';
-            toolCalls.push({
-                name: 'generate_code',
-                params: {
-                    language,
-                    task: message
-                }
-            });
-        }
-        return toolCalls;
-    }
-    generateResponseFromToolResults(message, results) {
-        let content = '';
-        const suggestions = [];
-        for (const result of results) {
-            if (result.error) {
-                content += `I encountered an error with ${result.name}: ${result.error}\n\n`;
-            }
-            else {
-                switch (result.name) {
-                    case 'search_knowledge_base':
-                        content += `Here are the search results:\n\n`;
-                        if (result.result.results) {
-                            result.result.results.forEach((item, index) => {
-                                content += `${index + 1}. **${item.title}**\n${item.content}\n\n`;
-                            });
-                        }
-                        suggestions.push('Ask for more details about any result', 'Search for something else');
-                        break;
-                    case 'get_entity_details':
-                        content += `**Entity Details:**\n\n`;
-                        if (result.result.entity) {
-                            const entity = result.result.entity;
-                            content += `**Name:** ${entity.name}\n`;
-                            content += `**Type:** ${entity.type}\n`;
-                            content += `**Properties:**\n`;
-                            Object.entries(entity.properties).forEach(([key, value]) => {
-                                content += `- ${key}: ${value}\n`;
-                            });
-                        }
-                        suggestions.push('Ask about related entities', 'Search for similar entities');
-                        break;
-                    case 'analyze_data':
-                        content += `**Data Analysis Results:**\n\n`;
-                        if (result.result.analysis) {
-                            const analysis = result.result.analysis;
-                            content += `**Type:** ${analysis.type}\n`;
-                            content += `**Summary:** ${analysis.summary}\n\n`;
-                            content += `**Insights:**\n`;
-                            analysis.insights.forEach((insight) => {
-                                content += `- ${insight}\n`;
-                            });
-                            content += `\n**Recommendations:**\n`;
-                            analysis.recommendations.forEach((rec) => {
-                                content += `- ${rec}\n`;
-                            });
-                        }
-                        suggestions.push('Upload more data for analysis', 'Ask for specific insights');
-                        break;
-                    case 'generate_code':
-                        content += `**Generated Code:**\n\n`;
-                        if (result.result.code) {
-                            content += `\`\`\`${result.result.language}\n${result.result.code}\n\`\`\`\n\n`;
-                            content += `**Explanation:** ${result.result.explanation}\n`;
-                        }
-                        suggestions.push('Generate code in a different language', 'Ask for more examples');
-                        break;
-                }
-            }
-        }
-        if (!content) {
-            content = "I couldn't find any specific tools to help with your request. Let me try to answer your question directly.";
-        }
-        return {
-            content,
-            suggestions,
-            metadata: {
-                toolCalls: results.length,
-                timestamp: new Date().toISOString()
-            }
-        };
-    }
-    async callMCPServer(request) {
-        try {
-            const mcpRequest = {
-                method: 'chat/completions',
-                params: {
-                    messages: [
-                        { role: 'system', content: 'You are a helpful BrainKB assistant that helps users explore neuroscience knowledge.' },
-                        { role: 'user', content: request.message }
-                    ],
-                    model: this.config.mcp?.model || 'gpt-4',
-                    temperature: this.config.mcp?.temperature || 0.7,
-                    max_tokens: this.config.mcp?.maxTokens || 1000
-                },
-                id: Date.now().toString()
-            };
-            const response = await this.mcpService.sendRequest(mcpRequest);
-            return {
-                content: response.result?.choices?.[0]?.message?.content || 'I apologize, but I couldn\'t generate a response.',
-                suggestions: ['Ask a follow-up question', 'Try a different approach'],
-                metadata: {
-                    model: this.config.mcp?.model,
-                    timestamp: new Date().toISOString()
-                }
-            };
-        }
-        catch (error) {
-            console.error('MCP server error:', error);
-            return this.generateLocalResponse(request);
-        }
-    }
-    generateLocalResponse(request) {
-        const message = request.message.toLowerCase();
-        const context = request.context?.pageContext;
-        let content = '';
-        const suggestions = [];
-        // Context-aware responses
-        if (context?.title) {
-            content += `I can help you with **${context.title}**. `;
-        }
-        if (message.includes('hello') || message.includes('hi')) {
-            content += "Hello! I'm your BrainKB Assistant. How can I help you explore neuroscience knowledge today?";
-            suggestions.push('Ask about brain regions', 'Search for research data', 'Upload files for analysis');
-        }
-        else if (message.includes('brain') || message.includes('neural')) {
-            content += "I can help you explore brain regions, neural pathways, and neuroscience research. What specific aspect would you like to learn about?";
-            suggestions.push('Search for brain regions', 'Explore neural pathways', 'Find research papers');
-        }
-        else if (message.includes('upload') || message.includes('file')) {
-            content += "You can upload files like JSON data, CSV files, or images for analysis. I'll help you process and understand the data.";
-            suggestions.push('Upload a JSON file', 'Upload research data', 'Upload brain scan images');
-        }
-        else if (message.includes('code') || message.includes('api')) {
-            content += "I can help you with BrainKB API integration and code examples. What programming language would you prefer?";
-            suggestions.push('JavaScript examples', 'Python examples', 'TypeScript examples');
-        }
-        else if (message.includes('search') || message.includes('find')) {
-            content += "I can search the BrainKB knowledge base for specific information. What would you like to search for?";
-            suggestions.push('Search for brain regions', 'Find research papers', 'Look for neural pathways');
-        }
-        else {
-            content += "I'm here to help you explore neuroscience knowledge. You can ask me about brain regions, research data, upload files for analysis, or get code examples for BrainKB integration.";
-            suggestions.push('Learn about brain regions', 'Upload research data', 'Get code examples');
-        }
-        return {
-            content,
-            suggestions,
-            metadata: {
-                context: context?.title,
-                timestamp: new Date().toISOString()
-            }
-        };
+        return { content: responses.default };
     }
 }
-
 // Code Block Component with Syntax Highlighting
 const CodeBlock = ({ code, language = 'javascript' }) => {
     const [copied, setCopied] = useState(false);
@@ -624,28 +397,24 @@ const CodeBlock = ({ code, language = 'javascript' }) => {
             console.error('Failed to copy code:', err);
         }
     };
-    return (jsxs("div", { className: "bg-gray-900 rounded-lg overflow-hidden my-2", children: [jsxs("div", { className: "flex items-center justify-between px-4 py-2 bg-gray-800", children: [jsx("span", { className: "text-xs text-gray-300 uppercase font-medium", children: language }), jsx("button", { onClick: copyToClipboard, className: "flex items-center space-x-1 text-gray-400 hover:text-white transition-colors", children: copied ? (jsxs(Fragment, { children: [jsx(Check, { className: "w-3 h-3" }), jsx("span", { className: "text-xs", children: "Copied!" })] })) : (jsxs(Fragment, { children: [jsx(Copy, { className: "w-3 h-3" }), jsx("span", { className: "text-xs", children: "Copy" })] })) })] }), jsx("pre", { className: "p-4 overflow-x-auto", children: jsx("code", { className: "text-green-400 text-sm", children: code }) })] }));
+    return (jsxs("div", { className: "bg-gray-900 rounded-lg overflow-hidden my-2 border border-gray-700", children: [jsxs("div", { className: "flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700", children: [jsx("span", { className: "text-xs text-gray-300 uppercase font-medium", children: language }), jsx("button", { onClick: copyToClipboard, className: "flex items-center space-x-1 text-gray-400 hover:text-white transition-colors", children: copied ? (jsxs(Fragment, { children: [jsx(Check, { className: "w-3 h-3" }), jsx("span", { className: "text-xs", children: "Copied!" })] })) : (jsxs(Fragment, { children: [jsx(Copy, { className: "w-3 h-3" }), jsx("span", { className: "text-xs", children: "Copy" })] })) })] }), jsx("pre", { className: "p-4 overflow-x-auto", children: jsx("code", { className: "text-green-400 text-sm font-mono", children: code }) })] }));
 };
 // Markdown Renderer Component
 const MarkdownRenderer = ({ content }) => {
     const renderContent = (text) => {
-        // Split content into lines for processing
         const lines = text.split('\n');
         const elements = [];
         let inCodeBlock = false;
         let codeBlockContent = [];
         let codeLanguage = '';
         lines.forEach((line, index) => {
-            // Handle code blocks
             if (line.startsWith('```')) {
                 if (!inCodeBlock) {
-                    // Start of code block
                     inCodeBlock = true;
                     codeLanguage = line.slice(3).trim() || 'javascript';
                     codeBlockContent = [];
                 }
                 else {
-                    // End of code block
                     inCodeBlock = false;
                     elements.push(jsx(CodeBlock, { code: codeBlockContent.join('\n'), language: codeLanguage }, `code-${index}`));
                 }
@@ -655,64 +424,84 @@ const MarkdownRenderer = ({ content }) => {
                 codeBlockContent.push(line);
                 return;
             }
-            // Handle inline code
-            if (line.includes('`')) {
-                const parts = line.split('`');
-                const processedParts = parts.map((part, partIndex) => {
-                    if (partIndex % 2 === 1) {
-                        return jsx("code", { className: "bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-xs font-mono", children: part }, partIndex);
-                    }
-                    return part;
-                });
-                elements.push(jsx("p", { className: "mb-2", children: processedParts }, index));
-                return;
-            }
             // Handle headers
             if (line.startsWith('#')) {
                 const level = line.match(/^#+/)?.[0].length || 1;
                 const text = line.replace(/^#+\s*/, '');
                 const Tag = `h${Math.min(level, 6)}`;
-                elements.push(jsx(Tag, { className: `font-bold mb-2 ${level === 1 ? 'text-lg' : level === 2 ? 'text-base' : 'text-sm'}`, children: text }, index));
+                elements.push(jsx(Tag, { className: "font-bold text-gray-900 mb-2", children: text }, index));
                 return;
             }
-            // Handle lists
-            if (line.match(/^[\s]*[-*+]\s/)) {
-                const text = line.replace(/^[\s]*[-*+]\s/, '');
-                elements.push(jsxs("li", { className: "ml-4 mb-1", children: ["\u2022 ", text] }, index));
+            // Handle bold text
+            if (line.includes('**')) {
+                const parts = line.split('**');
+                const elements2 = [];
+                parts.forEach((part, i) => {
+                    if (i % 2 === 1) {
+                        elements2.push(jsx("strong", { className: "font-bold", children: part }, i));
+                    }
+                    else {
+                        elements2.push(part);
+                    }
+                });
+                elements.push(jsx("p", { className: "mb-2", children: elements2 }, index));
                 return;
             }
-            // Handle numbered lists
-            if (line.match(/^[\s]*\d+\.\s/)) {
-                const text = line.replace(/^[\s]*\d+\.\s/, '');
-                elements.push(jsxs("li", { className: "ml-4 mb-1", children: [index + 1, ". ", text] }, index));
+            // Handle italic text
+            if (line.includes('*') && !line.startsWith('*')) {
+                const parts = line.split('*');
+                const elements2 = [];
+                parts.forEach((part, i) => {
+                    if (i % 2 === 1) {
+                        elements2.push(jsx("em", { className: "italic", children: part }, i));
+                    }
+                    else {
+                        elements2.push(part);
+                    }
+                });
+                elements.push(jsx("p", { className: "mb-2", children: elements2 }, index));
                 return;
             }
             // Handle links
             if (line.includes('[') && line.includes('](') && line.includes(')')) {
-                const linkMatch = line.match(/\[([^\]]+)\]\(([^)]+)\)/);
-                if (linkMatch) {
-                    const [, text, url] = linkMatch;
-                    const processedLine = line.replace(/\[([^\]]+)\]\(([^)]+)\)/, `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">${text}</a>`);
-                    elements.push(jsx("p", { className: "mb-2", dangerouslySetInnerHTML: { __html: processedLine } }, index));
-                    return;
+                const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+                const parts = line.split(linkRegex);
+                const elements2 = [];
+                for (let i = 0; i < parts.length; i += 3) {
+                    if (parts[i])
+                        elements2.push(parts[i]);
+                    if (parts[i + 1] && parts[i + 2]) {
+                        elements2.push(jsx("a", { href: parts[i + 2], className: "text-blue-600 hover:underline", target: "_blank", rel: "noopener noreferrer", children: parts[i + 1] }, i));
+                    }
                 }
+                elements.push(jsx("p", { className: "mb-2", children: elements2 }, index));
+                return;
             }
-            // Handle bold and italic
-            let processedLine = line;
-            processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            processedLine = processedLine.replace(/\*(.*?)\*/g, '<em>$1</em>');
-            if (processedLine.trim()) {
-                elements.push(jsx("p", { className: "mb-2", dangerouslySetInnerHTML: { __html: processedLine } }, index));
+            // Handle lists
+            if (line.startsWith('- ') || line.startsWith('* ')) {
+                elements.push(jsxs("li", { className: "ml-4 mb-1", children: ["\u2022 ", line.slice(2)] }, index));
+                return;
+            }
+            // Handle numbered lists
+            if (/^\d+\.\s/.test(line)) {
+                elements.push(jsx("li", { className: "ml-4 mb-1", children: line }, index));
+                return;
+            }
+            // Regular text
+            if (line.trim()) {
+                elements.push(jsx("p", { className: "mb-2", children: line }, index));
             }
         });
         return elements;
     };
-    return jsx("div", { className: "markdown-content", children: renderContent(content) });
+    return jsx("div", { className: "prose prose-sm max-w-none", children: renderContent(content) });
 };
 // File Upload Component
-const FileUpload = ({ onFileUpload }) => {
+const FileUpload = ({ onFileUpload, enabled = true }) => {
+    const [isDragOver, setIsDragOver] = useState(false);
     const fileInputRef = useRef(null);
-    const [dragActive, setDragActive] = useState(false);
+    if (!enabled)
+        return null;
     const handleFileSelect = (files) => {
         if (files && files.length > 0) {
             onFileUpload(files[0]);
@@ -721,147 +510,238 @@ const FileUpload = ({ onFileUpload }) => {
     const handleDrag = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (e.type === "dragenter" || e.type === "dragover") {
-            setDragActive(true);
-        }
-        else if (e.type === "dragleave") {
-            setDragActive(false);
-        }
     };
     const handleDrop = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        setDragActive(false);
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            onFileUpload(e.dataTransfer.files[0]);
+        setIsDragOver(false);
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+            onFileUpload(files[0]);
         }
     };
-    return (jsx("div", { className: "mb-4", children: jsxs("div", { className: `border-2 border-dashed rounded-lg p-4 text-center transition-colors ${dragActive ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`, onDragEnter: handleDrag, onDragLeave: handleDrag, onDragOver: handleDrag, onDrop: handleDrop, onClick: () => fileInputRef.current?.click(), children: [jsx(Upload, { className: "w-8 h-8 text-gray-400 mx-auto mb-2" }), jsx("p", { className: "text-sm text-gray-600 mb-1", children: "Click to upload or drag and drop" }), jsx("p", { className: "text-xs text-gray-500", children: "Supports: JSON, CSV, TXT, Images" }), jsx("input", { ref: fileInputRef, type: "file", className: "hidden", accept: ".json,.csv,.txt,.png,.jpg,.jpeg,.gif", onChange: (e) => handleFileSelect(e.target.files) })] }) }));
+    return (jsxs("div", { className: `border-2 border-dashed rounded-lg p-6 text-center transition-colors ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`, onDragOver: handleDrag, onDragEnter: (e) => { e.preventDefault(); setIsDragOver(true); }, onDragLeave: (e) => { e.preventDefault(); setIsDragOver(false); }, onDrop: handleDrop, children: [jsx(Upload, { className: "w-8 h-8 text-gray-400 mx-auto mb-2" }), jsxs("p", { className: "text-sm text-gray-600 mb-2", children: ["Drag and drop files here, or", ' ', jsx("button", { onClick: () => fileInputRef.current?.click(), className: "text-blue-600 hover:text-blue-700 underline", children: "browse" })] }), jsx("p", { className: "text-xs text-gray-500", children: "Supports: JSON, CSV, TXT, Images (PNG, JPG, GIF)" }), jsx("input", { ref: fileInputRef, type: "file", className: "hidden", accept: ".json,.csv,.txt,.png,.jpg,.jpeg,.gif", onChange: (e) => handleFileSelect(e.target.files) })] }));
 };
 // Content Editor Component
 const ContentEditor = ({ content, onSave, onCancel, title = "Edit Content" }) => {
     const [editedContent, setEditedContent] = useState(content);
-    return (jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-4 mb-4", children: [jsxs("div", { className: "flex items-center justify-between mb-3", children: [jsx("h4", { className: "font-semibold text-gray-900", children: title }), jsxs("div", { className: "flex items-center space-x-2", children: [jsx("button", { onClick: () => onSave(editedContent), className: "px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors", children: "Save" }), jsx("button", { onClick: onCancel, className: "px-3 py-1 bg-gray-300 text-gray-700 text-xs rounded hover:bg-gray-400 transition-colors", children: "Cancel" })] })] }), jsx("textarea", { value: editedContent, onChange: (e) => setEditedContent(e.target.value), className: "w-full h-32 p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "Edit your content here..." })] }));
+    return (jsxs("div", { className: "bg-white rounded-lg shadow-lg p-4 border border-gray-200", children: [jsxs("div", { className: "flex items-center justify-between mb-4", children: [jsx("h3", { className: "font-semibold text-gray-900", children: title }), jsx("button", { onClick: onCancel, className: "text-gray-400 hover:text-gray-600", children: jsx(X, { className: "w-5 h-5" }) })] }), jsx("textarea", { value: editedContent, onChange: (e) => setEditedContent(e.target.value), className: "w-full h-32 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", placeholder: "Edit your content here..." }), jsxs("div", { className: "flex space-x-2 mt-4", children: [jsx("button", { onClick: () => onSave(editedContent), className: "px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors", children: "Save" }), jsx("button", { onClick: onCancel, className: "px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors", children: "Cancel" })] })] }));
 };
 // BrainKB Logo Component
-const BrainKBLogo = ({ className = '' }) => (jsx("div", { className: `flex items-center justify-center ${className}`, children: jsxs("div", { className: "relative", children: [jsx("div", { className: "w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center shadow-lg", children: jsxs("div", { className: "w-6 h-5 relative", children: [jsxs("div", { className: "absolute inset-0 flex", children: [jsx("div", { className: "w-3 h-5 bg-white/90 rounded-l-full border-r border-gray-300" }), jsx("div", { className: "w-3 h-5 bg-white/90 rounded-r-full border-l border-gray-300" })] }), jsx("div", { className: "absolute top-1 left-1 w-1 h-1 bg-gray-400 rounded-full" }), jsx("div", { className: "absolute top-1 right-1 w-1 h-1 bg-gray-400 rounded-full" }), jsx("div", { className: "absolute top-2 left-2 w-1 h-1 bg-gray-400 rounded-full" }), jsx("div", { className: "absolute top-2 right-2 w-1 h-1 bg-gray-400 rounded-full" }), jsx("div", { className: "absolute bottom-2 left-2 w-1 h-1 bg-gray-400 rounded-full" }), jsx("div", { className: "absolute bottom-2 right-2 w-1 h-1 bg-gray-400 rounded-full" })] }) }), jsx("div", { className: "absolute inset-0 bg-blue-400 rounded-lg animate-ping opacity-20" })] }) }));
-const BrainKBChatWidget = ({ config = {}, onMessageSend, onResponseReceived, className = '', currentPage, pageContext }) => {
+const BrainKBLogo = ({ config, className = '' }) => {
+    const branding = config?.branding;
+    const primaryColor = branding?.primaryColor || 'from-blue-600 to-purple-600';
+    const title = branding?.title || 'BrainKB Assistant';
+    const subtitle = branding?.subtitle || 'Knowledge Base Helper';
+    return (jsxs("div", { className: `flex items-center ${className}`, children: [jsx("div", { className: `w-8 h-8 bg-gradient-to-br ${primaryColor} rounded-lg flex items-center justify-center mr-3 shadow-lg`, children: jsx(Brain, { className: "w-5 h-5 text-white" }) }), jsxs("div", { children: [jsx("div", { className: "font-bold text-lg text-white", children: title }), jsx("div", { className: "text-xs text-purple-100", children: subtitle })] })] }));
+};
+function BrainKBAssistantWrapper({ config = {}, currentPage, pageContext, isBrainKB = false }) {
+    // Default configuration
+    const defaultConfig = {
+        branding: {
+            title: 'BrainKB Assistant',
+            subtitle: 'Knowledge Base Helper',
+            primaryColor: 'from-purple-600 to-blue-600',
+            secondaryColor: 'purple-100',
+            accentColor: 'purple-600'
+        },
+        features: {
+            enableQuickActions: true,
+            enableFileUpload: true,
+            enableMessageEditing: true,
+            enableCodeRendering: true,
+            enableMarkdown: true,
+            enableContextDetection: true,
+            enableTypingIndicator: true,
+            enableExpandableWindow: true,
+            enableDragAndDrop: true,
+            enableKeyboardShortcuts: true
+        },
+        ui: {
+            position: 'bottom-right',
+            size: {
+                width: '600px',
+                height: '700px',
+                expandedWidth: '1200px',
+                expandedHeight: '900px'
+            },
+            theme: 'light',
+            zIndex: 9999
+        },
+        customization: {
+            welcomeMessage: 'Hello and welcome to BrainKB Assistant! 👋',
+            placeholderText: 'Ask about Knowledge Graph or anything',
+            errorMessage: 'Sorry, I encountered an error. Please try again.',
+            loadingMessage: 'Thinking...'
+        }
+    };
+    // Merge configurations
+    const mergedConfig = {
+        ...defaultConfig,
+        ...config,
+        branding: { ...defaultConfig.branding, ...config.branding },
+        features: { ...defaultConfig.features, ...config.features },
+        ui: { ...defaultConfig.ui, ...config.ui },
+        customization: { ...defaultConfig.customization, ...config.customization }
+    };
+    const apiService = new BrainKBAPIService(mergedConfig);
     const [isOpen, setIsOpen] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     useState(false);
     useState({ x: 0, y: 0 });
+    const [showUpload, setShowUpload] = useState(false);
+    const [editingMessageId, setEditingMessageId] = useState(null);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [showContext, setShowContext] = useState(true);
+    const [isTyping, setIsTyping] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [contextDetected, setContextDetected] = useState(false);
+    const [usePageContext, setUsePageContext] = useState(null);
     const [messages, setMessages] = useState([
         {
             id: '1',
             type: 'assistant',
-            content: "Hello! I'm your BrainKB Assistant. How can I help you explore the knowledge base today? 👋",
+            content: pageContext && pageContext.title && mergedConfig.features?.enableContextDetection
+                ? `${mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋'}\n\nI can see you're on the **${pageContext.title}** page. Would you like me to answer based on the current page content?`
+                : mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋',
             timestamp: new Date(),
-            sender: config.branding?.title || 'BrainKB Assistant'
+            sender: mergedConfig.branding?.title || 'BrainKB Assistant'
         }
     ]);
-    const [inputValue, setInputValue] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [autoDetectedContext, setAutoDetectedContext] = useState(null);
-    const [showUpload, setShowUpload] = useState(false);
-    const [editingMessageId, setEditingMessageId] = useState(null);
-    const [uploadedFiles, setUploadedFiles] = useState([]);
-    const api = new BrainKBAPI(config);
-    // Debug logging
+    // Set context detected to true if page context is available
     useEffect(() => {
-        console.log('BrainKBChatWidget mounted');
-        console.log('Config:', config);
-        console.log('isOpen:', isOpen);
-    }, [config, isOpen]);
-    // Auto-detect page content when component mounts or page changes
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const detectPageContent = () => {
-                const detectedContext = {
-                    title: document.title || 'Current Page',
-                    description: '',
-                    keywords: [],
-                    entities: []
-                };
-                // Try to get meta description
-                const metaDescription = document.querySelector('meta[name="description"]');
-                if (metaDescription) {
-                    detectedContext.description = metaDescription.getAttribute('content') || '';
-                }
-                // Try to get page heading
-                const mainHeading = document.querySelector('h1, h2');
-                if (mainHeading && mainHeading.textContent) {
-                    detectedContext.title = mainHeading.textContent.trim();
-                }
-                // Try to get page description from content
-                const pageDescription = document.querySelector('p');
-                if (pageDescription && pageDescription.textContent) {
-                    detectedContext.description = pageDescription.textContent.trim().substring(0, 150) + '...';
-                }
-                // Extract potential keywords from headings and content
-                const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-                const keywords = new Set();
-                headings.forEach(heading => {
-                    if (heading.textContent) {
-                        const words = heading.textContent.toLowerCase().split(/\s+/);
-                        words.forEach(word => {
-                            if (word.length > 3)
-                                keywords.add(word);
-                        });
-                    }
-                });
-                detectedContext.keywords = Array.from(keywords).slice(0, 5);
-                setAutoDetectedContext(detectedContext);
-            };
-            // Detect immediately
-            detectPageContent();
-            // Set up observer for dynamic content changes
-            const observer = new MutationObserver(detectPageContent);
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
-            return () => observer.disconnect();
+        if (pageContext && pageContext.title && !contextDetected && mergedConfig.features?.enableContextDetection) {
+            setContextDetected(true);
         }
-    }, [currentPage]);
-    // Use provided pageContext or auto-detected context
-    const effectivePageContext = pageContext || autoDetectedContext;
-    // Generate contextual quick actions based on current page
+    }, [pageContext, contextDetected, mergedConfig.features?.enableContextDetection]);
+    const messagesEndRef = useRef(null);
+    useEffect(() => {
+        console.log('BrainKBAssistantWrapper mounted with config:', mergedConfig);
+    }, [mergedConfig]);
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
     const generateContextualQuickActions = () => {
+        // Use custom quick actions if provided
+        if (mergedConfig.quickActions && mergedConfig.quickActions.length > 0) {
+            return mergedConfig.quickActions.map(action => ({
+                id: action.id,
+                label: action.label,
+                icon: jsx("span", { children: action.icon || '💬' }),
+                action: action.action,
+                description: action.description
+            }));
+        }
+        // Default quick actions with more options
         const baseActions = [
-            { text: "I have a question", icon: "❓" },
-            { text: "Tell me more", icon: "📚" },
-            { text: "Upload file", icon: "📁" },
-            { text: "Show code example", icon: "💻" }
+            {
+                id: 'question',
+                label: '❓ I have a question',
+                icon: jsx("span", { children: "\u2753" }),
+                action: 'ask_question',
+                description: 'Ask any question about the knowledge base'
+            },
+            {
+                id: 'tell_more',
+                label: '💡 Tell me more',
+                icon: jsx("span", { children: "\uD83D\uDCA1" }),
+                action: 'tell_more',
+                description: 'Get more detailed information'
+            },
+            {
+                id: 'about_knowledge',
+                label: '📄 Tell me about Knowledge...',
+                icon: jsx("span", { children: "\uD83D\uDCC4" }),
+                action: 'about_knowledge',
+                description: 'Learn about knowledge graphs and concepts'
+            },
+            {
+                id: 'explain_knowledge',
+                label: '🔍 Explain knowledge',
+                icon: jsx("span", { children: "\uD83D\uDD0D" }),
+                action: 'explain_knowledge',
+                description: 'Get explanations about knowledge concepts'
+            },
+            {
+                id: 'show_entities',
+                label: '📈 Show entities data',
+                icon: jsx("span", { children: "\uD83D\uDCC8" }),
+                action: 'show_entities',
+                description: 'View entity data and relationships'
+            },
+            {
+                id: 'evidence_assertions',
+                label: '📊 Evidence & Assertions',
+                icon: jsx("span", { children: "\uD83D\uDCCA" }),
+                action: 'evidence_assertions',
+                description: 'Explore evidence and assertions'
+            },
+            {
+                id: 'explore_wiki',
+                label: '🔎 Explore Wiki',
+                icon: jsx("span", { children: "\uD83D\uDD0E" }),
+                action: 'explore_wiki',
+                description: 'Browse the knowledge wiki'
+            },
+            {
+                id: 'search_data',
+                label: '🔍 Search Data',
+                icon: jsx("span", { children: "\uD83D\uDD0D" }),
+                action: 'search_data',
+                description: 'Search through the knowledge base'
+            },
+            {
+                id: 'analyze_patterns',
+                label: '📊 Analyze Patterns',
+                icon: jsx("span", { children: "\uD83D\uDCCA" }),
+                action: 'analyze_patterns',
+                description: 'Find patterns and trends in data'
+            },
+            {
+                id: 'get_recommendations',
+                label: '💡 Get Recommendations',
+                icon: jsx("span", { children: "\uD83D\uDCA1" }),
+                action: 'get_recommendations',
+                description: 'Get personalized recommendations'
+            },
+            {
+                id: 'export_data',
+                label: '📤 Export Data',
+                icon: jsx("span", { children: "\uD83D\uDCE4" }),
+                action: 'export_data',
+                description: 'Export data in various formats'
+            },
+            {
+                id: 'visualize_graph',
+                label: '🎨 Visualize Graph',
+                icon: jsx("span", { children: "\uD83C\uDFA8" }),
+                action: 'visualize_graph',
+                description: 'Create custom graph visualizations'
+            },
+            {
+                id: 'compare_entities',
+                label: '⚖️ Compare Entities',
+                icon: jsx("span", { children: "\u2696\uFE0F" }),
+                action: 'compare_entities',
+                description: 'Compare different entities'
+            },
+            {
+                id: 'find_connections',
+                label: '�� Find Connections',
+                icon: jsx("span", { children: "\uD83D\uDD17" }),
+                action: 'find_connections',
+                description: 'Discover hidden connections'
+            },
+            {
+                id: 'generate_report',
+                label: '📋 Generate Report',
+                icon: jsx("span", { children: "\uD83D\uDCCB" }),
+                action: 'generate_report',
+                description: 'Generate comprehensive reports'
+            }
         ];
-        if (effectivePageContext?.title) {
-            baseActions.push({
-                text: `Tell me about ${effectivePageContext.title}`,
-                icon: "📄"
-            });
-        }
-        if (effectivePageContext?.keywords?.length) {
-            const mainKeyword = effectivePageContext.keywords[0];
-            if (mainKeyword) {
-                baseActions.push({
-                    text: `Explain ${mainKeyword}`,
-                    icon: "🔍"
-                });
-            }
-        }
-        if (effectivePageContext?.entities?.length) {
-            const mainEntity = effectivePageContext.entities[0];
-            if (mainEntity) {
-                baseActions.push({
-                    text: `Show ${mainEntity} data`,
-                    icon: "🧬"
-                });
-            }
-        }
-        // Add BrainKB-specific actions
-        baseActions.push({ text: "Evidence & Assertions", icon: "🔬" }, { text: "Explore SEE", icon: "🔍" }, { text: "Edit content", icon: "✏️" });
         return baseActions;
     };
-    const quickActions = generateContextualQuickActions();
     const handleSendMessage = async () => {
         if (!inputValue.trim())
             return;
@@ -874,440 +754,235 @@ const BrainKBChatWidget = ({ config = {}, onMessageSend, onResponseReceived, cla
         };
         setMessages(prev => [...prev, userMessage]);
         setInputValue('');
-        setIsLoading(true);
-        // Call the callback if provided
-        onMessageSend?.(inputValue);
+        setIsTyping(true);
+        // Call custom callback if provided
+        if (mergedConfig.callbacks?.onMessageSend) {
+            mergedConfig.callbacks.onMessageSend(inputValue);
+        }
         try {
-            const response = await api.sendMessage({
-                message: inputValue,
-                context: {
-                    currentPage: currentPage || window.location.pathname,
-                    selectedEntity: effectivePageContext?.entities?.[0],
-                    userPreferences: {},
-                    pageContext: {
-                        title: effectivePageContext?.title,
-                        description: effectivePageContext?.description,
-                        keywords: effectivePageContext?.keywords,
-                        entities: effectivePageContext?.entities
-                    }
-                }
-            });
-            const assistantMessage = {
+            // Prepare context with chat history and page context
+            const contextData = {
+                currentPage,
+                pageContext: usePageContext ? pageContext : null,
+                chatHistory: messages.map(msg => ({
+                    role: msg.type === 'user' ? 'user' : 'assistant',
+                    content: msg.content,
+                    timestamp: msg.timestamp.toISOString()
+                })),
+                timestamp: new Date().toISOString()
+            };
+            // Send message to API service with full context
+            const response = await apiService.sendMessage(inputValue, contextData);
+            const aiResponse = {
                 id: (Date.now() + 1).toString(),
                 type: 'assistant',
-                content: response.content,
+                content: response.content || 'I understand your message. How can I help you further?',
                 timestamp: new Date(),
-                sender: config.branding?.title || 'BrainKB Assistant'
+                sender: mergedConfig.branding?.title || 'BrainKB Assistant'
             };
-            setMessages(prev => [...prev, assistantMessage]);
-            onResponseReceived?.(assistantMessage);
+            setMessages(prev => [...prev, aiResponse]);
+            // Call custom callback if provided
+            if (mergedConfig.callbacks?.onResponseReceived) {
+                mergedConfig.callbacks.onResponseReceived(response);
+            }
         }
         catch (error) {
             console.error('Error sending message:', error);
-            const errorMessage = {
+            const errorResponse = {
                 id: (Date.now() + 1).toString(),
                 type: 'assistant',
-                content: "Sorry, I encountered an error. Please try again.",
+                content: mergedConfig.customization?.errorMessage || 'Sorry, I encountered an error. Please try again.',
                 timestamp: new Date(),
-                sender: config.branding?.title || 'BrainKB Assistant'
+                sender: mergedConfig.branding?.title || 'BrainKB Assistant'
             };
-            setMessages(prev => [...prev, errorMessage]);
+            setMessages(prev => [...prev, errorResponse]);
+            // Call custom callback if provided
+            if (mergedConfig.callbacks?.onError) {
+                mergedConfig.callbacks.onError(error);
+            }
         }
         finally {
-            setIsLoading(false);
+            setIsTyping(false);
         }
     };
     const handleQuickAction = (action) => {
-        if (action === "Upload file") {
-            setShowUpload(true);
-            return;
+        // Call custom callback if provided
+        if (mergedConfig.callbacks?.onQuickAction) {
+            mergedConfig.callbacks.onQuickAction(action);
         }
-        if (action === "Show code example") {
-            setInputValue("Show me a code example for BrainKB API integration");
-            setTimeout(() => {
-                handleSendMessage();
-            }, 0);
-            return;
+        let message = '';
+        switch (action) {
+            case 'ask_question':
+                message = 'I\'m here to help! What questions do you have about the knowledge base?';
+                break;
+            case 'tell_more':
+                message = 'I can provide detailed information about various topics. What would you like to learn more about?';
+                break;
+            case 'about_knowledge':
+                message = 'Knowledge graphs are powerful tools for representing and connecting information. They help us understand relationships between different concepts and entities.';
+                break;
+            case 'explain_knowledge':
+                message = 'Knowledge can be explained in many ways - through data, relationships, patterns, and insights. What specific aspect would you like me to explain?';
+                break;
+            case 'show_entities':
+                message = 'I can show you entity data and relationships. What specific entities or relationships are you interested in?';
+                break;
+            case 'evidence_assertions':
+                message = 'Evidence and assertions are crucial for building reliable knowledge bases. I can help you explore these concepts.';
+                break;
+            case 'explore_wiki':
+                message = 'The knowledge wiki contains a wealth of information. What topic would you like to explore?';
+                break;
+            case 'search_data':
+                message = 'I can help you search through the knowledge base. What specific information are you looking for?';
+                break;
+            case 'analyze_patterns':
+                message = 'I can analyze patterns and trends in your data. What type of analysis would you like to perform?';
+                break;
+            case 'get_recommendations':
+                message = 'I can provide personalized recommendations based on your interests and the knowledge base. What would you like recommendations for?';
+                break;
+            case 'export_data':
+                message = 'I can help you export data in various formats (JSON, CSV, XML). What data would you like to export?';
+                break;
+            case 'visualize_graph':
+                message = 'I can create custom graph visualizations for your data. What type of visualization would you like?';
+                break;
+            case 'compare_entities':
+                message = 'I can help you compare different entities in the knowledge base. Which entities would you like to compare?';
+                break;
+            case 'find_connections':
+                message = 'I can discover hidden connections between entities. What would you like to explore?';
+                break;
+            case 'generate_report':
+                message = 'I can generate comprehensive reports based on your data. What type of report would you like?';
+                break;
+            default:
+                message = `I can help you with "${action}". What specific information are you looking for?`;
         }
-        if (action === "Edit content") {
-            setEditingMessageId(messages[messages.length - 1]?.id || null);
-            return;
+        if (message) {
+            const aiResponse = {
+                id: Date.now().toString(),
+                type: 'assistant',
+                content: message,
+                timestamp: new Date(),
+                sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+            };
+            setMessages(prev => [...prev, aiResponse]);
         }
-        setInputValue(action);
-        // Use setTimeout to ensure the input value is set before sending
-        setTimeout(() => {
-            handleSendMessage();
-        }, 0);
     };
     const handleFileUpload = async (file) => {
-        setUploadedFiles(prev => [...prev, file]);
-        // Create a message about the uploaded file
+        setShowUpload(false);
         const uploadMessage = {
             id: Date.now().toString(),
             type: 'user',
-            content: `📁 Uploaded: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+            content: `📎 Uploaded: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
             timestamp: new Date(),
             sender: 'You'
         };
         setMessages(prev => [...prev, uploadMessage]);
-        setShowUpload(false);
-        // Process the file based on type
-        if (file.type === 'application/json') {
-            try {
-                const text = await file.text();
-                const data = JSON.parse(text);
-                const analysisMessage = {
-                    id: (Date.now() + 1).toString(),
-                    type: 'assistant',
-                    content: `I've analyzed your JSON file. It contains ${Object.keys(data).length} top-level keys. Here's a summary:\n\n\`\`\`json\n${JSON.stringify(data, null, 2).substring(0, 500)}...\n\`\`\``,
-                    timestamp: new Date(),
-                    sender: config.branding?.title || 'BrainKB Assistant'
-                };
-                setMessages(prev => [...prev, analysisMessage]);
-            }
-            catch (error) {
-                const errorMessage = {
-                    id: (Date.now() + 1).toString(),
-                    type: 'assistant',
-                    content: "Sorry, I couldn't parse the JSON file. Please check the format.",
-                    timestamp: new Date(),
-                    sender: config.branding?.title || 'BrainKB Assistant'
-                };
-                setMessages(prev => [...prev, errorMessage]);
-            }
+        setUploadedFiles(prev => [...prev, file]);
+        // Call custom callback if provided
+        if (mergedConfig.callbacks?.onFileUpload) {
+            mergedConfig.callbacks.onFileUpload(file);
         }
-        else if (file.type.startsWith('image/')) {
-            const imageMessage = {
+        // Simulate processing
+        setTimeout(() => {
+            const response = {
                 id: (Date.now() + 1).toString(),
                 type: 'assistant',
-                content: `I can see you've uploaded an image: ${file.name}. I can help you analyze image data or integrate it with BrainKB knowledge base.`,
+                content: `I've processed your file **${file.name}**. I can help you analyze its contents and integrate it with the knowledge base. What would you like to do with this data?`,
                 timestamp: new Date(),
-                sender: config.branding?.title || 'BrainKB Assistant'
+                sender: mergedConfig.branding?.title || 'BrainKB Assistant'
             };
-            setMessages(prev => [...prev, imageMessage]);
-        }
-        else {
-            const textMessage = {
-                id: (Date.now() + 1).toString(),
-                type: 'assistant',
-                content: `I've received your file: ${file.name}. I can help you analyze this data or integrate it with BrainKB.`,
-                timestamp: new Date(),
-                sender: config.branding?.title || 'BrainKB Assistant'
-            };
-            setMessages(prev => [...prev, textMessage]);
-        }
+            setMessages(prev => [...prev, response]);
+        }, 2000);
     };
     const handleEditMessage = (messageId, newContent) => {
-        setMessages(prev => prev.map(msg => msg.id === messageId
-            ? { ...msg, content: newContent }
-            : msg));
+        setMessages(prev => prev.map(msg => msg.id === messageId ? { ...msg, content: newContent } : msg));
         setEditingMessageId(null);
     };
-    const getThemeStyles = () => {
-        const primaryColor = config.theme?.primaryColor || 'from-blue-600 to-purple-600';
-        const secondaryColor = config.theme?.secondaryColor || 'from-blue-700 to-purple-700';
-        const backgroundColor = config.theme?.backgroundColor || 'bg-white';
-        const textColor = config.theme?.textColor || 'text-gray-800';
-        return {
-            primaryColor,
-            secondaryColor,
-            backgroundColor,
-            textColor
-        };
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
     };
-    const theme = getThemeStyles();
-    const position = {
-        bottom: config.position?.bottom || 6,
-        right: config.position?.right || 6
-    };
-    // Responsive size configuration
     const getSizeConfig = () => {
-        const baseSize = {
-            width: config.size?.width || 384,
-            height: config.size?.height || 500
-        };
+        const size = mergedConfig.ui?.size;
         if (isExpanded) {
             return {
-                width: Math.min(window.innerWidth - 48, 800), // Max 800px, with 24px margin on each side
-                height: Math.min(window.innerHeight - 120, 600) // Max 600px, with 60px margin top/bottom
+                width: size?.expandedWidth || '800px',
+                height: size?.expandedHeight || '600px'
             };
         }
-        return baseSize;
+        return {
+            width: size?.width || '450px',
+            height: size?.height || '550px'
+        };
     };
-    const size = getSizeConfig();
-    // Handle window resize
-    useEffect(() => {
-        const handleResize = () => {
-            if (isExpanded) {
-                // Recalculate size when window is resized
-                setIsExpanded(false);
-                setTimeout(() => setIsExpanded(true), 100);
-            }
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [isExpanded]);
-    return (jsxs(Fragment, { children: [jsx("div", { className: `fixed z-50 ${className}`, style: { bottom: `${position.bottom}rem`, right: `${position.right}rem` }, children: jsx("button", { onClick: () => setIsOpen(!isOpen), className: `bg-gradient-to-r ${theme.primaryColor} text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110`, children: isOpen ? (jsx(X, { className: "w-6 h-6" })) : (jsxs("div", { className: "relative", children: [jsx(BrainKBLogo, { className: "w-6 h-6" }), jsx("div", { className: "absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse" })] })) }) }), isOpen && (jsxs("div", { className: `fixed ${theme.backgroundColor} rounded-2xl shadow-2xl border border-gray-200 z-50 flex flex-col transition-all duration-300 ${isExpanded ? 'rounded-none' : ''}`, style: {
-                    bottom: `${position.bottom + 6}rem`,
-                    right: `${position.right}rem`,
-                    width: `${size.width}px`,
-                    height: `${size.height}px`,
-                    maxWidth: 'calc(100vw - 48px)',
-                    maxHeight: 'calc(100vh - 120px)'
-                }, children: [jsx("div", { className: `bg-gradient-to-r ${theme.primaryColor} text-white p-4 ${isExpanded ? 'rounded-t-none' : 'rounded-t-2xl'} relative`, children: jsxs("div", { className: "flex items-center justify-between", children: [jsxs("div", { className: "flex items-center space-x-3", children: [jsx(BrainKBLogo, { className: "w-8 h-8" }), jsxs("div", { children: [jsx("h3", { className: "font-semibold", children: config.branding?.title || 'BrainKB Assistant' }), jsx("p", { className: "text-xs text-blue-100", children: config.branding?.subtitle || 'Knowledge Base Helper' })] })] }), jsxs("div", { className: "flex items-center space-x-2", children: [jsx("button", { onClick: () => setIsExpanded(!isExpanded), className: "text-white hover:text-gray-200 transition-colors p-1 rounded", title: isExpanded ? 'Minimize' : 'Maximize', children: isExpanded ? (jsx(Minimize2, { className: "w-4 h-4" })) : (jsx(Maximize2, { className: "w-4 h-4" })) }), jsx("button", { onClick: () => setIsOpen(false), className: "text-white hover:text-gray-200 transition-colors p-1 rounded", children: jsx(X, { className: "w-5 h-5" }) })] })] }) }), effectivePageContext?.title && (jsxs("div", { className: "px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-gray-200", children: [jsxs("div", { className: "flex items-center space-x-2 text-xs", children: [jsx(MapPin, { className: "w-3 h-3 text-blue-600" }), jsx("span", { className: "text-blue-700 font-medium", children: "Current Page:" }), jsx("span", { className: "text-gray-700 truncate", children: effectivePageContext.title })] }), effectivePageContext.description && (jsx("p", { className: "text-xs text-gray-600 mt-1 truncate", children: effectivePageContext.description }))] })), jsxs("div", { className: "flex-1 overflow-auto p-4 space-y-3", children: [messages.map((message) => (jsx("div", { className: `flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`, children: jsxs("div", { className: `max-w-xs ${message.type === 'user' ? `bg-gradient-to-r ${theme.primaryColor} text-white` : 'bg-gray-100 text-gray-800'} rounded-lg p-3 text-sm shadow-sm`, children: [message.sender && (jsx("div", { className: "flex items-center mb-1", children: message.type === 'assistant' ? (jsxs("div", { className: "flex items-center", children: [jsx(BrainKBLogo, { className: "w-3 h-3 mr-1" }), jsx("span", { className: "text-xs opacity-75", children: message.sender })] })) : (jsxs("div", { className: "flex items-center", children: [jsx(User, { className: "w-3 h-3 mr-1" }), jsx("span", { className: "text-xs opacity-75", children: message.sender })] })) })), jsx(MarkdownRenderer, { content: message.content }), message.type === 'user' && (jsx("div", { className: "flex justify-end mt-2", children: jsx("button", { onClick: () => setEditingMessageId(message.id), className: "text-xs text-gray-500 hover:text-gray-700 transition-colors", children: jsx(PenLine, { className: "w-3 h-3" }) }) }))] }) }, message.id))), isLoading && config.features?.enableTypingIndicator !== false && (jsx("div", { className: "flex justify-start", children: jsx("div", { className: "bg-gray-100 rounded-lg p-3", children: jsxs("div", { className: "flex items-center space-x-2", children: [jsx("div", { className: "animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600" }), jsx("span", { className: "text-xs text-gray-600", children: "Typing..." })] }) }) }))] }), showUpload && (jsx(FileUpload, { onFileUpload: handleFileUpload })), editingMessageId && (jsx(ContentEditor, { content: messages.find(m => m.id === editingMessageId)?.content || '', onSave: (newContent) => handleEditMessage(editingMessageId, newContent), onCancel: () => setEditingMessageId(null), title: "Edit Message" })), messages.length <= 1 && config.features?.enableQuickActions !== false && (jsx("div", { className: "px-4 pb-3", children: jsx("div", { className: `grid gap-2 ${isExpanded ? 'grid-cols-4' : 'grid-cols-2'}`, children: quickActions.map((action, index) => (jsx("button", { onClick: () => handleQuickAction(action.text), className: "bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 text-blue-700 text-xs p-2 rounded-lg border border-blue-200 transition-all duration-200 hover:shadow-sm", children: jsxs("div", { className: "flex items-center justify-center space-x-1", children: [jsx("span", { children: action.icon }), jsx("span", { className: "truncate", children: action.text })] }) }, index))) }) })), config.features?.enableContactInfo !== false && (jsx("div", { className: "px-4 pb-3", children: jsx("div", { className: "bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-3 border border-green-200", children: jsxs("div", { className: "flex items-center justify-between text-xs", children: [jsxs("div", { className: "flex items-center space-x-2", children: [jsx(Globe, { className: "w-3 h-3 text-green-600" }), jsx("span", { className: "text-green-700", children: "beta.brainkb.org" })] }), jsxs("div", { className: "flex items-center space-x-2", children: [jsx(Mail, { className: "w-3 h-3 text-blue-600" }), jsx("span", { className: "text-blue-700", children: "Senseable Intelligence Group" })] })] }) }) })), jsx("div", { className: "p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl", children: jsxs("div", { className: "flex items-center space-x-2", children: [jsx("input", { type: "text", value: inputValue, onChange: (e) => setInputValue(e.target.value), onKeyPress: (e) => e.key === 'Enter' && handleSendMessage(), placeholder: effectivePageContext?.title ?
-                                        `Ask about ${effectivePageContext.title} or anything else...` :
-                                        "Ask about evidence, genome data, anatomical structures...", className: "flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" }), jsx("button", { onClick: handleSendMessage, disabled: !inputValue.trim() || isLoading, className: `px-3 py-2 bg-gradient-to-r ${theme.primaryColor} text-white rounded-lg hover:${theme.secondaryColor} disabled:opacity-50 disabled:cursor-not-allowed transition-all`, children: jsx(Send, { className: "w-4 h-4" }) })] }) })] }))] }));
+    const sizeConfig = getSizeConfig();
+    const position = mergedConfig.ui?.position || 'bottom-right';
+    const zIndex = mergedConfig.ui?.zIndex || 9999;
+    const getPositionClasses = () => {
+        switch (position) {
+            case 'bottom-left':
+                return 'bottom-6 left-6';
+            case 'top-right':
+                return 'top-6 right-6';
+            case 'top-left':
+                return 'top-6 left-6';
+            default:
+                return 'bottom-6 right-6';
+        }
+    };
+    return (jsxs("div", { className: `fixed ${getPositionClasses()} z-[${zIndex}]`, style: {
+            width: sizeConfig.width,
+            height: isOpen ? sizeConfig.height : 'auto'
+        }, children: [isOpen && (jsxs("div", { className: "mb-4 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col", style: { height: sizeConfig.height }, children: [jsxs("div", { className: `flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r ${mergedConfig.branding?.primaryColor || 'from-purple-600 to-blue-600'} text-white rounded-t-lg`, children: [jsx("div", { className: "flex items-center", children: jsx(BrainKBLogo, { config: mergedConfig }) }), jsxs("div", { className: "flex items-center space-x-2", children: [mergedConfig.features?.enableExpandableWindow && (jsx("button", { onClick: () => setIsExpanded(!isExpanded), className: "text-white hover:text-gray-200 transition-colors", title: isExpanded ? "Minimize" : "Maximize", children: isExpanded ? jsx(Minimize2, { className: "w-4 h-4" }) : jsx(Maximize2, { className: "w-4 h-4" }) })), jsx("button", { onClick: () => setIsOpen(false), className: "text-white hover:text-gray-200 transition-colors", children: jsx(X, { className: "w-5 h-5" }) })] })] }), showContext && pageContext && mergedConfig.features?.enableContextDetection && (jsxs("div", { className: "px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-blue-100", children: [jsxs("div", { className: "flex items-center justify-between", children: [jsxs("div", { className: "flex items-center text-sm text-blue-800", children: [jsx(MapPin, { className: "w-4 h-4 mr-2" }), jsx("span", { className: "font-medium", children: "Current Page:" }), jsx("span", { className: "ml-1 font-semibold", children: pageContext.title })] }), jsx("button", { onClick: () => setShowContext(false), className: "text-blue-600 hover:text-blue-800", children: jsx(X, { className: "w-4 h-4" }) })] }), pageContext.description && (jsx("p", { className: "text-xs text-blue-700 mt-1", children: pageContext.description }))] })), jsxs("div", { className: "flex-1 overflow-y-auto p-4 space-y-4", children: [messages.map((message) => (jsx("div", { className: `flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`, children: jsxs("div", { className: "flex items-start space-x-3 max-w-xs", children: [message.type === 'assistant' && (jsx("div", { className: "w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md", children: jsx(Bot, { className: "w-4 h-4 text-white" }) })), jsx("div", { className: `px-4 py-3 rounded-lg shadow-sm ${message.type === 'user'
+                                                ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
+                                                : 'bg-gray-50 text-gray-800 border border-gray-200'}`, children: editingMessageId === message.id ? (jsx(ContentEditor, { content: message.content, onSave: (content) => handleEditMessage(message.id, content), onCancel: () => setEditingMessageId(null) })) : (jsxs("div", { children: [jsx(MarkdownRenderer, { content: message.content }), jsxs("div", { className: "flex items-center justify-between mt-3", children: [jsxs("div", { className: "flex items-center space-x-2", children: [jsx("p", { className: "text-xs opacity-70", children: message.timestamp.toLocaleTimeString() }), message.sender && (jsxs("span", { className: "text-xs opacity-70", children: ["\u2022 ", message.sender] }))] }), message.type === 'user' && mergedConfig.features?.enableMessageEditing && (jsx("button", { onClick: () => setEditingMessageId(message.id), className: "text-xs opacity-70 hover:opacity-100 transition-opacity", title: "Edit message", children: jsx(PenLine, { className: "w-3 h-3" }) }))] })] })) }), message.type === 'user' && (jsx("div", { className: "w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0 shadow-md", children: jsx(User, { className: "w-4 h-4 text-gray-600" }) }))] }) }, message.id))), isTyping && mergedConfig.features?.enableTypingIndicator && (jsxs("div", { className: "flex items-start space-x-3", children: [jsx("div", { className: "w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-md", children: jsx(Bot, { className: "w-4 h-4 text-white" }) }), jsx("div", { className: "bg-gray-50 text-gray-800 px-4 py-3 rounded-lg border border-gray-200", children: jsxs("div", { className: "flex space-x-1", children: [jsx("div", { className: "w-2 h-2 bg-gray-400 rounded-full animate-bounce" }), jsx("div", { className: "w-2 h-2 bg-gray-400 rounded-full animate-bounce", style: { animationDelay: '0.1s' } }), jsx("div", { className: "w-2 h-2 bg-gray-400 rounded-full animate-bounce", style: { animationDelay: '0.2s' } })] }) })] })), jsx("div", { ref: messagesEndRef })] }), usePageContext === null && contextDetected && (jsx("div", { className: "px-4 py-3 border-t border-gray-200 bg-blue-50", children: jsxs("div", { className: "flex flex-wrap gap-2", children: [jsxs("button", { onClick: () => {
+                                        setUsePageContext(true);
+                                        const responseMessage = {
+                                            id: Date.now().toString(),
+                                            type: 'assistant',
+                                            content: `Great! I'll answer based on the current page content: **${pageContext?.title}**. You can now ask me questions about this page.`,
+                                            timestamp: new Date(),
+                                            sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+                                        };
+                                        setMessages(prev => [...prev, responseMessage]);
+                                    }, className: "flex items-center space-x-1 px-3 py-2 text-xs bg-green-100 hover:bg-green-200 text-green-800 rounded-lg border border-green-200 transition-colors shadow-sm", children: [jsx("span", { children: "\u2705" }), jsx("span", { children: "Yes, use page content" })] }), jsxs("button", { onClick: () => {
+                                        setUsePageContext(false);
+                                        const responseMessage = {
+                                            id: Date.now().toString(),
+                                            type: 'assistant',
+                                            content: "No problem! I'll answer general questions without using the current page content. What would you like to know?",
+                                            timestamp: new Date(),
+                                            sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+                                        };
+                                        setMessages(prev => [...prev, responseMessage]);
+                                    }, className: "flex items-center space-x-1 px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg border border-gray-200 transition-colors shadow-sm", children: [jsx("span", { children: "\u274C" }), jsx("span", { children: "No, general questions only" })] })] }) })), mergedConfig.features?.enableQuickActions && usePageContext !== null && (jsxs("div", { className: "px-4 py-3 border-t border-gray-200 bg-gray-50", children: [jsx("div", { className: "flex flex-wrap gap-2", children: generateContextualQuickActions().map((action) => (jsxs("button", { onClick: () => handleQuickAction(action.action), className: "flex items-center space-x-1 px-3 py-2 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg border border-purple-200 transition-colors shadow-sm", title: action.description, children: [action.icon, jsx("span", { children: action.label })] }, action.id))) }), jsxs("div", { className: "mt-3 flex flex-wrap gap-2", children: [jsxs("button", { className: "flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors", children: [jsx(Globe, { className: "w-3 h-3" }), jsx("span", { children: "\uD83C\uDF10 beta.brainkb.org" })] }), jsxs("button", { className: "flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors", children: [jsx(Users, { className: "w-3 h-3" }), jsx("span", { children: "\uD83D\uDC65 Sensible Intelligence Group" })] }), jsxs("button", { className: "flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors", children: [jsx(BookOpen, { className: "w-3 h-3" }), jsx("span", { children: "\uD83D\uDCDA Documentation" })] }), jsxs("button", { className: "flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors", children: [jsx(MessageSquare, { className: "w-3 h-3" }), jsx("span", { children: "\uD83D\uDCAC Community Forum" })] }), jsxs("button", { className: "flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors", children: [jsx(Zap, { className: "w-3 h-3" }), jsx("span", { children: "\u26A1 API Reference" })] }), jsxs("button", { className: "flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors", children: [jsx(Settings, { className: "w-3 h-3" }), jsx("span", { children: "\u2699\uFE0F Configuration" })] }), jsxs("button", { className: "flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors", children: [jsx(Star, { className: "w-3 h-3" }), jsx("span", { children: "\u2B50 GitHub" })] }), jsxs("button", { className: "flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full border border-gray-200 transition-colors", children: [jsx(TrendingUp, { className: "w-3 h-3" }), jsx("span", { children: "\uD83D\uDCC8 Analytics" })] })] })] })), showUpload && mergedConfig.features?.enableFileUpload && (jsxs("div", { className: "px-4 py-3 border-t border-gray-200 bg-gray-50", children: [jsxs("div", { className: "flex items-center justify-between mb-2", children: [jsx("h4", { className: "text-sm font-medium text-gray-700", children: "Upload File" }), jsx("button", { onClick: () => setShowUpload(false), className: "text-gray-400 hover:text-gray-600", children: jsx(X, { className: "w-4 h-4" }) })] }), jsx(FileUpload, { onFileUpload: handleFileUpload, enabled: mergedConfig.features?.enableFileUpload })] })), jsx("div", { className: "p-4 border-t border-gray-200 bg-white", children: jsxs("div", { className: "flex space-x-2", children: [mergedConfig.features?.enableFileUpload && (jsx("button", { onClick: () => setShowUpload(!showUpload), className: "px-3 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg transition-colors border border-gray-300", title: "Upload file", children: jsx(Upload, { className: "w-4 h-4" }) })), jsx("input", { type: "text", value: inputValue, onChange: (e) => setInputValue(e.target.value), onKeyPress: mergedConfig.features?.enableKeyboardShortcuts ? handleKeyPress : undefined, placeholder: mergedConfig.customization?.placeholderText || 'Ask about Knowledge Graph or anything', className: "flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" }), jsx("button", { onClick: handleSendMessage, className: "px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-md", children: jsx(Send, { className: "w-4 h-4" }) })] }) })] })), jsx("button", { className: `bg-gradient-to-r ${mergedConfig.branding?.primaryColor || 'from-blue-600 to-purple-600'} text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110`, onClick: () => setIsOpen(!isOpen), children: isOpen ? (jsx(X, { className: "w-6 h-6" })) : (jsx(MessageCircle, { className: "w-6 h-6" })) })] }));
+}
+
+const BrainKBAssistant = ({ config = {}, currentPage, pageContext }) => {
+    return (jsx(BrainKBAssistantWrapper, { config: config, currentPage: currentPage, pageContext: pageContext }));
 };
 
-class BrainKBSetup {
-    constructor(config) {
-        this.config = config;
-    }
-    // Generate installation code for any website
-    generateInstallationCode() {
-        const config = this.generateConfig();
-        return `
-<!-- BrainKB Assistant Installation -->
-<script type="module">
-  import { BrainKBChatWidget } from 'https://unpkg.com/brainkb-assistant@latest/dist/index.esm.js';
-  
-  // Initialize BrainKB Assistant
-  const assistant = new BrainKBChatWidget(${JSON.stringify(config, null, 2)});
-  
-  // Mount to page
-  document.body.appendChild(assistant);
-</script>
-
-<!-- Alternative: CDN Installation -->
-<script src="https://unpkg.com/brainkb-assistant@latest/dist/index.js"></script>
-<script>
-  window.BrainKBAssistant.init(${JSON.stringify(config, null, 2)});
-</script>
-`;
-    }
-    // Generate React component installation
-    generateReactInstallation() {
-        const config = this.generateConfig();
-        return `
-// Install the package
-npm install brainkb-assistant
-
-// In your React component
-import { BrainKBChatWidget } from 'brainkb-assistant';
-
-function App() {
-  return (
-    <div>
-      <BrainKBChatWidget 
-        config={${JSON.stringify(config, null, 2)}}
-      />
-    </div>
-  );
-}
-`;
-    }
-    // Generate Next.js installation
-    generateNextJSInstallation() {
-        const config = this.generateConfig();
-        return `
-// Install the package
-npm install brainkb-assistant
-
-// In your layout.tsx or page component
-'use client';
-import { BrainKBChatWidget } from 'brainkb-assistant';
-
-export default function Layout({ children }) {
-  return (
-    <html>
-      <body>
-        {children}
-        <BrainKBChatWidget 
-          config={${JSON.stringify(config, null, 2)}}
-        />
-      </body>
-    </html>
-  );
-}
-`;
-    }
-    // Generate WordPress installation
-    generateWordPressInstallation() {
-        const config = this.generateConfig();
-        return `
-// Add to your WordPress theme's footer.php
-<script type="module">
-  import { BrainKBChatWidget } from 'https://unpkg.com/brainkb-assistant@latest/dist/index.esm.js';
-  
-  const assistant = new BrainKBChatWidget(${JSON.stringify(config, null, 2)});
-  document.body.appendChild(assistant);
-</script>
-`;
-    }
-    // Generate configuration object
-    generateConfig() {
-        return {
-            branding: {
-                title: this.config.branding?.title || 'BrainKB Assistant',
-                subtitle: this.config.branding?.subtitle || 'Knowledge Base Helper',
-                logo: this.config.branding?.logo
-            },
-            theme: {
-                primaryColor: 'from-blue-600 to-purple-600',
-                secondaryColor: 'from-blue-700 to-purple-700',
-                backgroundColor: 'bg-white',
-                textColor: 'text-gray-800'
-            },
-            position: {
-                bottom: 6,
-                right: 6
-            },
-            features: {
-                enableQuickActions: true,
-                enableContactInfo: true,
-                enableTypingIndicator: true,
-                enableSizeControls: true,
-                enableResponsiveDesign: true,
-                enableFileUpload: this.config.features?.fileUpload ?? true,
-                enableCodeRendering: this.config.features?.codeRendering ?? true,
-                enableContentEditing: this.config.features?.contentEditing ?? true,
-                enableMCPIntegration: this.config.features?.mcpIntegration ?? false
-            },
-            size: {
-                width: 384,
-                height: 500,
-                minWidth: 320,
-                minHeight: 400,
-                maxWidth: 800,
-                maxHeight: 600,
-                expandedWidth: 800,
-                expandedHeight: 600
-            },
-            responsive: {
-                mobileBreakpoint: 768,
-                tabletBreakpoint: 1024,
-                desktopBreakpoint: 1280,
-                mobileSize: { width: 320, height: 400 },
-                tabletSize: { width: 384, height: 500 },
-                desktopSize: { width: 450, height: 550 }
-            },
-            mcp: this.config.mcpEnabled ? {
-                enabled: true,
-                serverUrl: this.config.mcpServerUrl,
-                apiKey: this.config.mcpApiKey,
-                model: 'gpt-4',
-                temperature: 0.7,
-                maxTokens: 1000
-            } : undefined,
-            backend: this.config.backendEnabled ? {
-                enabled: true,
-                apiUrl: this.config.backendUrl,
-                apiKey: this.config.backendApiKey,
-                endpoints: {
-                    chat: '/api/chat',
-                    upload: '/api/upload',
-                    search: '/api/search',
-                    analytics: '/api/analytics'
-                }
-            } : undefined
-        };
-    }
-    // Generate complete installation guide
-    generateInstallationGuide() {
-        return {
-            steps: [
-                '1. Choose your installation method (CDN, NPM, or direct script)',
-                '2. Copy the generated code to your website',
-                '3. Configure your API keys and endpoints',
-                '4. Customize branding and features as needed',
-                '5. Test the assistant on your website'
-            ],
-            codeSnippet: this.generateInstallationCode(),
-            configuration: this.generateConfig(),
-            troubleshooting: {
-                'Assistant not appearing': 'Check if the script is loaded and no console errors',
-                'API errors': 'Verify your API keys and endpoints are correct',
-                'Styling issues': 'Ensure Tailwind CSS is loaded or add custom styles',
-                'MCP not working': 'Check MCP server URL and API key configuration',
-                'File upload failing': 'Verify backend endpoints and CORS settings'
-            }
-        };
-    }
-    // Generate one-click setup script
-    generateOneClickSetup() {
-        return `
-// One-click BrainKB Assistant setup
-(function() {
-  const script = document.createElement('script');
-  script.src = 'https://unpkg.com/brainkb-assistant@latest/dist/index.js';
-  script.onload = function() {
-    window.BrainKBAssistant.init({
-      branding: {
-        title: '${this.config.branding?.title || 'BrainKB Assistant'}',
-        subtitle: '${this.config.branding?.subtitle || 'Knowledge Base Helper'}'
-      },
-      features: {
-        enableFileUpload: ${this.config.features?.fileUpload ?? true},
-        enableCodeRendering: ${this.config.features?.codeRendering ?? true},
-        enableContentEditing: ${this.config.features?.contentEditing ?? true},
-        enableMCPIntegration: ${this.config.features?.mcpIntegration ?? false}
-      },
-      mcp: ${this.config.mcpEnabled ? `{
-        enabled: true,
-        serverUrl: '${this.config.mcpServerUrl}',
-        apiKey: '${this.config.mcpApiKey}'
-      }` : 'undefined'},
-      backend: ${this.config.backendEnabled ? `{
-        enabled: true,
-        apiUrl: '${this.config.backendUrl}',
-        apiKey: '${this.config.backendApiKey}'
-      }` : 'undefined'}
-    });
-  };
-  document.head.appendChild(script);
-})();
-`;
-    }
-}
-// Quick setup functions for common frameworks
-const quickSetup = {
-    // Vanilla JavaScript/HTML
-    vanilla: (config) => {
-        const setup = new BrainKBSetup(config);
-        return setup.generateInstallationCode();
-    },
-    // React
-    react: (config) => {
-        const setup = new BrainKBSetup(config);
-        return setup.generateReactInstallation();
-    },
-    // Next.js
-    nextjs: (config) => {
-        const setup = new BrainKBSetup(config);
-        return setup.generateNextJSInstallation();
-    },
-    // WordPress
-    wordpress: (config) => {
-        const setup = new BrainKBSetup(config);
-        return setup.generateWordPressInstallation();
-    },
-    // One-click setup
-    oneClick: (config) => {
-        const setup = new BrainKBSetup(config);
-        return setup.generateOneClickSetup();
-    }
-};
-
-// Named exports
 // Global initialization for CDN usage
 if (typeof window !== 'undefined') {
     window.BrainKBAssistant = {
         init: (config) => {
-            // This would initialize the assistant globally
+            // This would initialize the assistant globally for static HTML
             console.log('BrainKB Assistant initialized with config:', config);
+            // Create a container and render the component
+            const container = document.createElement('div');
+            container.id = 'brainkb-assistant-container';
+            document.body.appendChild(container);
+            // Note: In a real implementation, you'd need to render the React component here
+            // This is a simplified version for demonstration
         }
     };
 }
 
-export { BrainKBAPI, BrainKBChatWidget, BrainKBSetup, MCPService, quickSetup };
+export { BrainKBAssistantWrapper, BrainKBAssistant as default };
 //# sourceMappingURL=index.esm.js.map

@@ -1,6 +1,5 @@
-export type { BrainKBConfig, BrainKBRequest, BrainKBResponse, ChatMessage, QuickAction, PageContext, MCPTool, MCPRequest, MCPResponse, SetupConfig, InstallationGuide } from './types';
-export { BrainKBChatWidget } from './components/BrainKBChatWidget';
-export { BrainKBAPI } from './utils/api';
-export { MCPService } from './utils/mcp';
-export { BrainKBSetup, quickSetup } from './utils/setup';
+import BrainKBAssistant from './components/BrainKBAssistant';
+export default BrainKBAssistant;
+export { default as BrainKBAssistantWrapper } from './components/BrainKBAssistantWrapper';
+export type { BrainKBConfig } from './components/BrainKBAssistantWrapper';
 //# sourceMappingURL=index.d.ts.map
