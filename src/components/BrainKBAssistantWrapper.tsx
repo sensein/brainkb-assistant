@@ -620,7 +620,7 @@ export default function BrainKBAssistantWrapper({
       id: '1',
       type: 'assistant',
       content: pageContext && pageContext.title && mergedConfig.features?.enableContextDetection
-                        ? `${mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋'}\n\nI can see you're on the **${pageContext?.title || 'this page'}** page. Would you like me to answer based on the current page content?`
+                ? `${mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋'}`
         : mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋',
       timestamp: new Date(),
       sender: mergedConfig.branding?.title || 'BrainKB Assistant'
@@ -1196,12 +1196,6 @@ export default function BrainKBAssistantWrapper({
                     <MapPin className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-sm font-medium text-blue-800 mb-2">
-                      📍 Context Detected: <span className="font-semibold">{pageContext?.title || 'this page'}</span>
-                    </div>
-                    {pageContext.description && (
-                      <p className="text-xs text-blue-700 mb-3">{pageContext.description}</p>
-                    )}
                     <div className="text-sm text-blue-700 mb-3">
                       Would you like me to answer based on the current page content?
                     </div>
