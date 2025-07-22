@@ -463,6 +463,51 @@ const ContentEditor: React.FC<{
   );
 };
 
+// Context Detection Prompt Component
+const ContextDetectionPrompt: React.FC<{
+  pageContext: any;
+  onUseContext: () => void;
+  onSkipContext: () => void;
+  branding?: any;
+}> = ({ pageContext, onUseContext, onSkipContext, branding }) => {
+  return (
+    <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
+      <div className="flex items-start space-x-3">
+        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+          <MapPin className="w-4 h-4 text-white" />
+        </div>
+        <div className="flex-1">
+          <div className="text-sm font-medium text-blue-800 mb-2">
+            📍 Context Detected: <span className="font-semibold">{pageContext.title}</span>
+          </div>
+          {pageContext.description && (
+            <p className="text-xs text-blue-700 mb-3">{pageContext.description}</p>
+          )}
+          <div className="text-sm text-blue-700 mb-3">
+            Would you like me to answer based on the current page content?
+          </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={onUseContext}
+              className="flex items-center space-x-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-xs rounded-lg transition-colors shadow-sm"
+            >
+              <span>✅</span>
+              <span>Yes, use page content</span>
+            </button>
+            <button
+              onClick={onSkipContext}
+              className="flex items-center space-x-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs rounded-lg transition-colors shadow-sm"
+            >
+              <span>❌</span>
+              <span>No, general questions only</span>
+            </button>
+          </div>
+        </div>
+          </div>
+    </div>
+  );
+};
+
 // BrainKB Logo Component
 const BrainKBLogo: React.FC<{ config?: BrainKBConfig; className?: string }> = ({ config, className = '' }) => {
   const branding = config?.branding;
@@ -519,7 +564,7 @@ export default function BrainKBAssistantWrapper({
         expandedHeight: '900px'
       },
       theme: 'light',
-      zIndex: 9999,
+      zIndex: 999999,
       styling: {
         buttonColor: 'from-blue-600 to-purple-600',
         buttonHoverColor: 'from-blue-700 to-purple-700',
@@ -927,7 +972,7 @@ export default function BrainKBAssistantWrapper({
 
   const sizeConfig = getSizeConfig();
   const position = mergedConfig.ui?.position || 'bottom-right';
-  const zIndex = mergedConfig.ui?.zIndex || 999999; // Much higher z-index
+  const zIndex = mergedConfig.ui?.zIndex || 999999; // Much higher z-index for visibility
   const styling = mergedConfig.ui?.styling || {};
 
   const getPositionClasses = () => {
@@ -1097,6 +1142,64 @@ export default function BrainKBAssistantWrapper({
               </div>
             )}
             
+            {/* Context Detection Prompt */}
+            {contextDetected && usePageContext === null && pageContext && mergedConfig.features?.enableContextDetection && (
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+                    <MapPin className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-blue-800 mb-2">
+                      📍 Context Detected: <span className="font-semibold">{pageContext.title}</span>
+                    </div>
+                    {pageContext.description && (
+                      <p className="text-xs text-blue-700 mb-3">{pageContext.description}</p>
+                    )}
+                    <div className="text-sm text-blue-700 mb-3">
+                      Would you like me to answer based on the current page content?
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => {
+                          setUsePageContext(true);
+                          const responseMessage: ChatMessage = {
+                            id: Date.now().toString(),
+                            type: 'assistant',
+                            content: `Perfect! I'll use the context from **${pageContext?.title || 'this page'}** to provide more relevant answers. You can ask me anything about this page or general questions.`,
+                            timestamp: new Date(),
+                            sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+                          };
+                          setMessages(prev => [...prev, responseMessage]);
+                        }}
+                        className="flex items-center space-x-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-xs rounded-lg transition-colors shadow-sm"
+                      >
+                        <span>✅</span>
+                        <span>Yes, use page content</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setUsePageContext(false);
+                          const responseMessage: ChatMessage = {
+                            id: Date.now().toString(),
+                            type: 'assistant',
+                            content: "Got it! I'll answer general questions without using the current page context. Feel free to ask me anything!",
+                            timestamp: new Date(),
+                            sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+                          };
+                          setMessages(prev => [...prev, responseMessage]);
+                        }}
+                        className="flex items-center space-x-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs rounded-lg transition-colors shadow-sm"
+                      >
+                        <span>❌</span>
+                        <span>No, general questions only</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <div ref={messagesEndRef} />
           </div>
 
@@ -1247,7 +1350,7 @@ export default function BrainKBAssistantWrapper({
         </div>
       )}
 
-      {/* Floating Button */}
+      {/* Floating Button with Brain Icon */}
       <button
         className={`brainkb-assistant-button ${styling.customClasses?.button || ''}`}
         style={{
@@ -1258,13 +1361,21 @@ export default function BrainKBAssistantWrapper({
           boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
           border: '2px solid rgba(255, 255, 255, 0.1)',
           zIndex: zIndex + 1,
+          width: '64px',
+          height: '64px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.3s ease',
+          transform: isOpen ? 'scale(0.9)' : 'scale(1)',
         }}
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (
-          <X className="w-6 h-6" />
+          <X className="w-7 h-7" />
         ) : (
-          <MessageCircle className="w-6 h-6" />
+          <Brain className="w-8 h-8" />
         )}
       </button>
     </div>
