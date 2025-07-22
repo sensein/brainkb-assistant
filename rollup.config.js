@@ -12,7 +12,7 @@ function addUseClientDirective() {
     name: 'add-use-client-directive',
     writeBundle(options, bundle) {
       // Add 'use client' to the main output files
-      const files = ['dist/index.js', 'dist/index.esm.js'];
+      const files = ['dist/index.js', 'dist/index.esm.js', 'dist/index.umd.js'];
       
       files.forEach(filePath => {
         if (fs.existsSync(filePath)) {
@@ -42,6 +42,16 @@ module.exports = {
       sourcemap: true,
       exports: 'named'
     },
+    {
+      file: 'dist/index.umd.js',
+      format: 'umd',
+      name: 'BrainKBAssistant',
+      sourcemap: true,
+      globals: {
+        react: 'React',
+        'react-dom': 'ReactDOM'
+      }
+    }
   ],
   plugins: [
     peerDepsExternal(),
