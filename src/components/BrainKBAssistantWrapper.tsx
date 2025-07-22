@@ -783,6 +783,8 @@ export default function BrainKBAssistantWrapper({
     if (typeof window === 'undefined') return '';
     
     try {
+      console.log('🔍 Starting page content extraction...');
+      
       // Get the main content areas
       const contentSelectors = [
         'main',
@@ -807,8 +809,15 @@ export default function BrainKBAssistantWrapper({
             .replace(/\n+/g, '\n')
             .trim();
           
+          console.log(`🔍 Checking selector '${selector}':`, {
+            found: !!element,
+            textLength: text.length,
+            preview: text.substring(0, 100) + '...'
+          });
+          
           if (text.length > 100) { // Only use if there's substantial content
             pageContent = text;
+            console.log(`✅ Using content from '${selector}' (${text.length} chars)`);
             break;
           }
         }
@@ -819,11 +828,13 @@ export default function BrainKBAssistantWrapper({
         const title = document.title || '';
         const metaDescription = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
         pageContent = `${title}\n${metaDescription}`.trim();
+        console.log('📄 Using fallback content (title + meta):', pageContent);
       }
       
+      console.log('📄 Final page content length:', pageContent.length);
       return pageContent;
     } catch (error) {
-      console.error('Error reading page content:', error);
+      console.error('❌ Error reading page content:', error);
       return '';
     }
   };
@@ -864,6 +875,11 @@ export default function BrainKBAssistantWrapper({
       // Get current page content if context is enabled
       const currentPageContent = usePageContext ? getCurrentPageContent() : '';
       
+      // Log the page content for debugging
+      console.log('🔍 Page Context Enabled:', usePageContext);
+      console.log('📄 Page Content Length:', currentPageContent.length);
+      console.log('📄 Page Content Preview:', currentPageContent.substring(0, 200) + '...');
+      
       // Prepare context with chat history and page context
       const contextData = {
         currentPage,
@@ -876,6 +892,13 @@ export default function BrainKBAssistantWrapper({
         })),
         timestamp: new Date().toISOString()
       };
+
+      console.log('📤 Sending context data:', {
+        hasPageContent: !!contextData.pageContent,
+        pageContentLength: contextData.pageContent?.length || 0,
+        pageContext: contextData.pageContext,
+        currentPage: contextData.currentPage
+      });
 
       // Send message to API service with full context
       const response = await apiService.sendMessage(inputValue, contextData);
