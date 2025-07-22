@@ -620,7 +620,7 @@ export default function BrainKBAssistantWrapper({
       id: '1',
       type: 'assistant',
       content: pageContext && pageContext.title && mergedConfig.features?.enableContextDetection
-        ? `${mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋'}\n\nI can see you're on the **${pageContext.title}** page. Would you like me to answer based on the current page content?`
+                        ? `${mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋'}\n\nI can see you're on the **${pageContext?.title || 'this page'}** page. Would you like me to answer based on the current page content?`
         : mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋',
       timestamp: new Date(),
       sender: mergedConfig.branding?.title || 'BrainKB Assistant'
@@ -1076,7 +1076,19 @@ export default function BrainKBAssistantWrapper({
               >
                 <div className="flex items-start space-x-3 max-w-xs">
                   {message.type === 'assistant' && (
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+                    <div 
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                      }}
+                    >
                       <Bot className="w-4 h-4 text-white" />
                     </div>
                   )}
@@ -1119,7 +1131,19 @@ export default function BrainKBAssistantWrapper({
                     )}
                   </div>
                   {message.type === 'user' && (
-                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+                    <div 
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        background: '#d1d5db',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                      }}
+                    >
                       <User className="w-4 h-4 text-gray-600" />
                     </div>
                   )}
@@ -1129,7 +1153,18 @@ export default function BrainKBAssistantWrapper({
             
             {isTyping && mergedConfig.features?.enableTypingIndicator && (
               <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+                <div 
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                  }}
+                >
                   <Bot className="w-4 h-4 text-white" />
                 </div>
                 <div className="bg-gray-50 text-gray-800 px-4 py-3 rounded-lg border border-gray-200">
@@ -1213,7 +1248,7 @@ export default function BrainKBAssistantWrapper({
                       const responseMessage: ChatMessage = {
                         id: Date.now().toString(),
                         type: 'assistant',
-                        content: `Great! I'll answer based on the current page content: **${pageContext?.title}**. You can now ask me questions about this page.`,
+                        content: `Great! I'll answer based on the current page content: **${pageContext?.title || 'this page'}**. You can now ask me questions about this page.`,
                         timestamp: new Date(),
                         sender: mergedConfig.branding?.title || 'BrainKB Assistant'
                       };
