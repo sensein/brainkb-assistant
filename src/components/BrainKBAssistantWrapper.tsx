@@ -184,7 +184,7 @@ class BrainKBAPIService {
   }
 
   private generateLocalResponse(message: string, context?: any): any {
-    // Generate contextual response based on message content
+    // Generate contextual response based on message content and page context
     const responses = {
       greeting: "Hello! I'm your BrainKB Assistant. How can I help you today?",
       question: "I understand your question. Let me help you find the information you need.",
@@ -193,6 +193,25 @@ class BrainKBAPIService {
     };
 
     const lowerMessage = message.toLowerCase();
+    
+    // If page content is available, provide more contextual response
+    if (context?.pageContent) {
+      const pageContent = context.pageContent;
+      const pageContext = context.pageContext;
+      
+      return {
+        content: `I can see you're on the ${pageContext?.title || 'current page'}. I have access to the page content and can help you with questions about what's displayed here. What would you like to know about this page?`
+      };
+    }
+    
+    // If page context is available but no content
+    if (context?.pageContext) {
+      return {
+        content: `I can help you with questions about ${context.pageContext.title || 'this page'}. What would you like to know?`
+      };
+    }
+
+    // Default responses based on message content
     if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
       return { content: responses.greeting };
     } else if (lowerMessage.includes('?')) {
@@ -759,6 +778,56 @@ export default function BrainKBAssistantWrapper({
     return baseActions;
   };
 
+  // Function to read current page content
+  const getCurrentPageContent = (): string => {
+    if (typeof window === 'undefined') return '';
+    
+    try {
+      // Get the main content areas
+      const contentSelectors = [
+        'main',
+        'article',
+        '.content',
+        '.main-content',
+        '#content',
+        '#main',
+        '.container',
+        'body'
+      ];
+      
+      let pageContent = '';
+      
+      // Try to find content in order of preference
+      for (const selector of contentSelectors) {
+        const element = document.querySelector(selector);
+        if (element && element.textContent) {
+          // Clean up the text content
+          const text = element.textContent
+            .replace(/\s+/g, ' ')
+            .replace(/\n+/g, '\n')
+            .trim();
+          
+          if (text.length > 100) { // Only use if there's substantial content
+            pageContent = text;
+            break;
+          }
+        }
+      }
+      
+      // If no substantial content found, get the page title and meta description
+      if (!pageContent) {
+        const title = document.title || '';
+        const metaDescription = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+        pageContent = `${title}\n${metaDescription}`.trim();
+      }
+      
+      return pageContent;
+    } catch (error) {
+      console.error('Error reading page content:', error);
+      return '';
+    }
+  };
+
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
@@ -792,10 +861,14 @@ export default function BrainKBAssistantWrapper({
     }
 
     try {
+      // Get current page content if context is enabled
+      const currentPageContent = usePageContext ? getCurrentPageContent() : '';
+      
       // Prepare context with chat history and page context
       const contextData = {
         currentPage,
         pageContext: usePageContext ? pageContext : null,
+        pageContent: currentPageContent, // Add actual page content
         chatHistory: messages.map(msg => ({
           role: msg.type === 'user' ? 'user' : 'assistant',
           content: msg.content,
