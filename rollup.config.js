@@ -49,7 +49,8 @@ module.exports = {
       sourcemap: true,
       globals: {
         react: 'React',
-        'react-dom': 'ReactDOM'
+        'react-dom': 'ReactDOM',
+        'react/jsx-runtime': 'jsxRuntime'
       }
     }
   ],
