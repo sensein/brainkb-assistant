@@ -194,6 +194,15 @@ class BrainKBAPIService {
 
     const lowerMessage = message.toLowerCase();
     
+    // If selected page content is available, provide more contextual response
+    if (context?.selectedPageContent) {
+      const selectedContent = context.selectedPageContent;
+      
+      return {
+        content: `I can see you've selected specific content from the page (${selectedContent.length} characters). I can help you analyze this content and answer questions about it. What would you like to know about the selected text?`
+      };
+    }
+    
     // If page content is available, provide more contextual response
     if (context?.pageContent) {
       const pageContent = context.pageContent;
@@ -602,6 +611,10 @@ export default function BrainKBAssistantWrapper({
   const [contextDetected, setContextDetected] = useState(false);
   const [usePageContext, setUsePageContext] = useState<boolean | null>(null);
 
+  // State for selected page content
+  const [selectedPageContent, setSelectedPageContent] = useState<string>('');
+  const [showContentSelector, setShowContentSelector] = useState(false);
+
   // Track current page for navigation detection
   const [currentPageUrl, setCurrentPageUrl] = React.useState<string>('');
   const [lastPageContext, setLastPageContext] = React.useState<any>(null);
@@ -885,6 +898,7 @@ export default function BrainKBAssistantWrapper({
         currentPage,
         pageContext: usePageContext ? pageContext : null,
         pageContent: currentPageContent, // Add actual page content
+        selectedPageContent: selectedPageContent, // Add selected page content
         chatHistory: messages.map(msg => ({
           role: msg.type === 'user' ? 'user' : 'assistant',
           content: msg.content,
@@ -896,6 +910,8 @@ export default function BrainKBAssistantWrapper({
       console.log('📤 Sending context data:', {
         hasPageContent: !!contextData.pageContent,
         pageContentLength: contextData.pageContent?.length || 0,
+        hasSelectedContent: !!contextData.selectedPageContent,
+        selectedContentLength: contextData.selectedPageContent?.length || 0,
         pageContext: contextData.pageContext,
         currentPage: contextData.currentPage
       });
@@ -1344,6 +1360,58 @@ export default function BrainKBAssistantWrapper({
     };
   };
 
+  // Function to capture selected text from page
+  const captureSelectedText = () => {
+    if (typeof window === 'undefined') return;
+    
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim()) {
+      const selectedText = selection.toString().trim();
+      setSelectedPageContent(selectedText);
+      
+      // Add the selected content as a user message
+      const contentMessage: ChatMessage = {
+        id: Date.now().toString(),
+        type: 'user',
+        content: `📄 Selected Page Content:\n\`\`\`text\n${selectedText}\n\`\`\``,
+        timestamp: new Date(),
+        sender: 'You'
+      };
+      
+      setMessages(prev => [...prev, contentMessage]);
+      
+      // Clear the selection
+      selection.removeAllRanges();
+      
+      // Show success message
+      const successMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        type: 'assistant',
+        content: `✅ I've captured the selected content (${selectedText.length} characters). You can now ask questions about this specific content!`,
+        timestamp: new Date(),
+        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+      };
+      
+      setMessages(prev => [...prev, successMessage]);
+      
+      console.log('📄 Captured selected text:', {
+        length: selectedText.length,
+        preview: selectedText.substring(0, 100) + '...'
+      });
+    } else {
+      // Show instruction message
+      const instructionMessage: ChatMessage = {
+        id: Date.now().toString(),
+        type: 'assistant',
+        content: `📝 **How to select page content:**\n\n1. **Select text** on this page by clicking and dragging\n2. **Click the "📄 Add Selected Content" button** below\n3. **Ask questions** about the selected content\n\nTry selecting some text from this page first!`,
+        timestamp: new Date(),
+        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+      };
+      
+      setMessages(prev => [...prev, instructionMessage]);
+    }
+  };
+
   return (
     <div 
       className={`brainkb-assistant-container ${getPositionClasses()} ${styling.customClasses?.container || ''}`}
@@ -1624,6 +1692,27 @@ export default function BrainKBAssistantWrapper({
                   <Upload className="w-4 h-4" />
                 </button>
               )}
+              {/* File Upload Button */}
+              <button
+                onClick={() => setShowUpload(!showUpload)}
+                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                title="Upload files"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                </svg>
+              </button>
+
+              {/* Page Content Selection Button */}
+              <button
+                onClick={captureSelectedText}
+                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                title="Add selected page content"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </button>
               <input
                 type="text"
                 value={inputValue}
