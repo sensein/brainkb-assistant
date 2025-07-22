@@ -78,6 +78,8 @@ export interface BrainKBConfig {
     icon?: string;
     action: string;
     description?: string;
+    url?: string; // New field for external links
+    external?: boolean; // Whether to open in new tab
   }>;
   
   // Context Detection
@@ -136,6 +138,8 @@ interface QuickAction {
   icon: React.ReactNode;
   action: string;
   description?: string;
+  url?: string; // New field for external links
+  external?: boolean; // Whether to open in new tab
 }
 
 // API Service Class
@@ -440,39 +444,34 @@ const ContextDetectionPrompt: React.FC<{
   branding?: any;
 }> = ({ pageContext, onUseContext, onSkipContext, branding }) => {
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
-      <div className="flex items-start space-x-3">
-        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+    <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 mb-4">
+      <div className="flex items-center space-x-3 mb-3">
+        <div 
+          className="w-6 h-6 rounded-full flex items-center justify-center"
+          style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)' }}
+        >
           <MapPin className="w-4 h-4 text-white" />
         </div>
-        <div className="flex-1">
-          <div className="text-sm font-medium text-blue-800 mb-2">
-            📍 Context Detected: <span className="font-semibold">{pageContext?.title || 'this page'}</span>
-          </div>
-          {pageContext.description && (
-            <p className="text-xs text-blue-700 mb-3">{pageContext.description}</p>
-          )}
-          <div className="text-sm text-blue-700 mb-3">
-            Would you like me to answer based on the current page content?
-          </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={onUseContext}
-              className="flex items-center space-x-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-xs rounded-lg transition-colors shadow-sm"
-            >
-              <span>✅</span>
-              <span>Yes, use page content</span>
-            </button>
-            <button
-              onClick={onSkipContext}
-              className="flex items-center space-x-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs rounded-lg transition-colors shadow-sm"
-            >
-              <span>❌</span>
-              <span>No, general questions only</span>
-            </button>
-          </div>
-        </div>
-          </div>
+        <span className="text-sm font-medium text-gray-700">
+          Would you like me to answer based on the current page content?
+        </span>
+      </div>
+      <div className="flex space-x-2">
+        <button
+          onClick={onUseContext}
+          className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-2"
+        >
+          <Check className="w-4 h-4" />
+          <span>Yes, use page content</span>
+        </button>
+        <button
+          onClick={onSkipContext}
+          className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-colors"
+          title="No, skip context"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 };
@@ -584,7 +583,35 @@ export default function BrainKBAssistantWrapper({
   const [contextDetected, setContextDetected] = useState(false);
   const [usePageContext, setUsePageContext] = useState<boolean | null>(null);
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  // Track current page for navigation detection
+  const [currentPageUrl, setCurrentPageUrl] = React.useState<string>('');
+  const [lastPageContext, setLastPageContext] = React.useState<any>(null);
+
+  // Detect page navigation
+  React.useEffect(() => {
+    const currentUrl = window.location.href;
+    if (currentUrl !== currentPageUrl) {
+      setCurrentPageUrl(currentUrl);
+      
+      // If user navigated to a different page, reset context detection
+      if (usePageContext !== null && lastPageContext !== pageContext) {
+        setUsePageContext(null);
+        setContextDetected(false);
+        setLastPageContext(pageContext);
+      }
+    }
+  }, [currentPageUrl, usePageContext, pageContext, lastPageContext]);
+
+  // Detect page context on mount and page changes
+  React.useEffect(() => {
+    if (pageContext && mergedConfig.features?.enableContextDetection && !contextDetected) {
+      setContextDetected(true);
+      setLastPageContext(pageContext);
+    }
+  }, [pageContext, mergedConfig.features?.enableContextDetection, contextDetected]);
+
+  // Initialize messages with welcome message
+  const [messages, setMessages] = React.useState<ChatMessage[]>([
     {
       id: '1',
       type: 'assistant',
@@ -595,13 +622,6 @@ export default function BrainKBAssistantWrapper({
       sender: mergedConfig.branding?.title || 'BrainKB Assistant'
     }
   ]);
-
-  // Set context detected to true if page context is available
-  useEffect(() => {
-    if (pageContext && pageContext.title && !contextDetected && mergedConfig.features?.enableContextDetection) {
-      setContextDetected(true);
-    }
-  }, [pageContext, contextDetected, mergedConfig.features?.enableContextDetection]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -621,7 +641,9 @@ export default function BrainKBAssistantWrapper({
         label: action.label,
         icon: <span>{action.icon || '💬'}</span>,
         action: action.action,
-        description: action.description
+        description: action.description,
+        url: action.url, // Add url if available
+        external: action.external // Add external if available
       }));
     }
 
@@ -957,10 +979,20 @@ export default function BrainKBAssistantWrapper({
     return content;
   };
 
-  const handleQuickAction = (action: string) => {
+  const handleQuickAction = (action: string, url?: string, external?: boolean) => {
     // Call custom callback if provided
     if (mergedConfig.callbacks?.onQuickAction) {
       mergedConfig.callbacks.onQuickAction(action);
+    }
+
+    // Handle external links
+    if (url) {
+      if (external) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      } else {
+        window.location.href = url;
+      }
+      return;
     }
 
     let message = '';
@@ -1379,54 +1411,32 @@ export default function BrainKBAssistantWrapper({
             
             {/* Context Detection Prompt */}
             {contextDetected && usePageContext === null && pageContext && mergedConfig.features?.enableContextDetection && (
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
-                    <MapPin className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm text-blue-700 mb-3">
-                      Would you like me to answer based on the current page content?
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => {
-                          setUsePageContext(true);
-                          const responseMessage: ChatMessage = {
-                            id: Date.now().toString(),
-                            type: 'assistant',
-                            content: `Perfect! I'll use the context from **${pageContext?.title || 'this page'}** to provide more relevant answers. You can ask me anything about this page or general questions.`,
-                            timestamp: new Date(),
-                            sender: mergedConfig.branding?.title || 'BrainKB Assistant'
-                          };
-                          setMessages(prev => [...prev, responseMessage]);
-                        }}
-                        className="flex items-center space-x-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-xs rounded-lg transition-colors shadow-sm"
-                      >
-                        <span>✅</span>
-                        <span>Yes, use page content</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          setUsePageContext(false);
-                          const responseMessage: ChatMessage = {
-                            id: Date.now().toString(),
-                            type: 'assistant',
-                            content: "Got it! I'll answer general questions without using the current page context. Feel free to ask me anything!",
-                            timestamp: new Date(),
-                            sender: mergedConfig.branding?.title || 'BrainKB Assistant'
-                          };
-                          setMessages(prev => [...prev, responseMessage]);
-                        }}
-                        className="flex items-center space-x-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs rounded-lg transition-colors shadow-sm"
-                      >
-                        <span>❌</span>
-                        <span>No, general questions only</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ContextDetectionPrompt
+                pageContext={pageContext}
+                onUseContext={() => {
+                  setUsePageContext(true);
+                  const responseMessage: ChatMessage = {
+                    id: Date.now().toString(),
+                    type: 'assistant',
+                    content: `Perfect! I'll use the context from **${pageContext?.title || 'this page'}** to provide more relevant answers. You can ask me anything about this page or general questions.`,
+                    timestamp: new Date(),
+                    sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+                  };
+                  setMessages(prev => [...prev, responseMessage]);
+                }}
+                onSkipContext={() => {
+                  setUsePageContext(false);
+                  const responseMessage: ChatMessage = {
+                    id: Date.now().toString(),
+                    type: 'assistant',
+                    content: "Got it! I'll answer general questions without using the current page context. Feel free to ask me anything!",
+                    timestamp: new Date(),
+                    sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+                  };
+                  setMessages(prev => [...prev, responseMessage]);
+                }}
+                branding={mergedConfig.branding}
+              />
             )}
             
             <div ref={messagesEndRef} />
@@ -1439,7 +1449,7 @@ export default function BrainKBAssistantWrapper({
                   {generateContextualQuickActions().map((action) => (
                     <button
                       key={action.id}
-                      onClick={() => handleQuickAction(action.action)}
+                      onClick={() => handleQuickAction(action.action, action.url, action.external)}
                       className="flex items-center space-x-1 px-3 py-2 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg border border-purple-200 transition-colors shadow-sm"
                       title={action.description}
                     >
