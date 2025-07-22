@@ -987,6 +987,20 @@ export default function BrainKBAssistantWrapper({
       return content;
     }
     
+    // Don't auto-format natural language messages - return as plain text
+    const naturalLanguagePatterns = [
+      /^(get|give|show|tell|find|search|analyze|explain|help|what|how|why|when|where|who|which)/i,
+      /\b(me|you|this|that|the|a|an|is|are|was|were|will|can|could|should|would)\b/i,
+      /\b(page|data|dataset|information|content|text|file|document)\b/i
+    ];
+    
+    // If the message looks like natural language, don't format it as code
+    const isNaturalLanguage = naturalLanguagePatterns.some(pattern => pattern.test(trimmed));
+    if (isNaturalLanguage && !trimmed.includes('{') && !trimmed.includes('[') && !trimmed.includes('<')) {
+      return content; // Return as plain text
+    }
+    
+    // Only apply code formatting for actual code patterns
     // Check for JSON objects/arrays
     if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || 
         (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
@@ -1004,34 +1018,35 @@ export default function BrainKBAssistantWrapper({
       return `\`\`\`xml\n${trimmed}\n\`\`\``;
     }
     
-    // Check for SQL queries
-    if (trimmed.toLowerCase().includes('select') || 
-        trimmed.toLowerCase().includes('insert') || 
-        trimmed.toLowerCase().includes('update') || 
-        trimmed.toLowerCase().includes('delete') ||
-        trimmed.toLowerCase().includes('create') ||
-        trimmed.toLowerCase().includes('drop')) {
+    // Check for SQL queries - more specific patterns
+    if ((trimmed.toLowerCase().includes('select') && trimmed.toLowerCase().includes('from')) || 
+        (trimmed.toLowerCase().includes('insert') && trimmed.toLowerCase().includes('into')) || 
+        (trimmed.toLowerCase().includes('update') && trimmed.toLowerCase().includes('set')) ||
+        (trimmed.toLowerCase().includes('delete') && trimmed.toLowerCase().includes('from')) ||
+        (trimmed.toLowerCase().includes('create') && trimmed.toLowerCase().includes('table')) ||
+        (trimmed.toLowerCase().includes('drop') && trimmed.toLowerCase().includes('table'))) {
       return `\`\`\`sql\n${trimmed}\n\`\`\``;
     }
     
-    // Check for JavaScript/TypeScript code
-    if (trimmed.includes('function') || 
-        trimmed.includes('const ') || 
-        trimmed.includes('let ') || 
-        trimmed.includes('var ') ||
-        trimmed.includes('=>') ||
-        trimmed.includes('import ') ||
-        trimmed.includes('export ')) {
+    // Check for JavaScript/TypeScript code - more specific patterns
+    if ((trimmed.includes('function') && trimmed.includes('(')) || 
+        (trimmed.includes('const ') && trimmed.includes('=')) || 
+        (trimmed.includes('let ') && trimmed.includes('=')) || 
+        (trimmed.includes('var ') && trimmed.includes('=')) ||
+        (trimmed.includes('=>') && trimmed.includes('(')) ||
+        (trimmed.includes('import ') && trimmed.includes('from')) ||
+        (trimmed.includes('export ') && (trimmed.includes('default') || trimmed.includes('{'))) ||
+        (trimmed.includes('console.log(') && trimmed.includes(')'))) {
       return `\`\`\`javascript\n${trimmed}\n\`\`\``;
     }
     
-    // Check for Python code
-    if (trimmed.includes('def ') || 
-        trimmed.includes('import ') ||
-        trimmed.includes('from ') ||
-        trimmed.includes('class ') ||
+    // Check for Python code - more specific patterns
+    if ((trimmed.includes('def ') && trimmed.includes(':')) || 
+        (trimmed.includes('import ') && !trimmed.includes(' ')) ||
+        (trimmed.includes('from ') && trimmed.includes(' import ')) ||
+        (trimmed.includes('class ') && trimmed.includes(':')) ||
         trimmed.includes('if __name__') ||
-        trimmed.includes('print(')) {
+        (trimmed.includes('print(') && trimmed.includes(')'))) {
       return `\`\`\`python\n${trimmed}\n\`\`\``;
     }
     
@@ -1099,18 +1114,7 @@ export default function BrainKBAssistantWrapper({
       return formattedContent;
     }
     
-    // Check for code-like patterns (brackets, parentheses, etc.)
-    if (trimmed.includes('(') && trimmed.includes(')') && 
-        (trimmed.includes(';') || trimmed.includes('{') || trimmed.includes('}'))) {
-      return `\`\`\`code\n${trimmed}\n\`\`\``;
-    }
-    
-    // For regular text, preserve line breaks and formatting
-    if (trimmed.includes('\n')) {
-      return `\`\`\`text\n${trimmed}\n\`\`\``;
-    }
-    
-    // Return original content if no special formatting is needed
+    // Return as plain text if no code patterns detected
     return content;
   };
 
