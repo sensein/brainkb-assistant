@@ -1,6 +1,6 @@
 {
   "name": "brainkb-assistant",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A configurable, standalone BrainKB Assistant that can be integrated into any website",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -64,4 +64,4 @@
   "dependencies": {
     "lucide-react": "^0.263.1"
   }
-} 
+}
