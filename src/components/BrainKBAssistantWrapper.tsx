@@ -359,6 +359,59 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
   return <div className="prose prose-sm max-w-none">{renderContent(content)}</div>;
 };
 
+// File Renderer Component
+const FileRenderer: React.FC<{ file: File; content: string }> = ({ file, content }) => {
+  const getLanguage = (filename: string) => {
+    const ext = filename.split('.').pop()?.toLowerCase();
+    switch (ext) {
+      case 'json': return 'json';
+      case 'jsonld': return 'json';
+      case 'ttl': return 'turtle';
+      case 'csv': return 'csv';
+      case 'txt': return 'text';
+      default: return 'text';
+    }
+  };
+
+  const formatContent = (content: string, filename: string) => {
+    const ext = filename.split('.').pop()?.toLowerCase();
+    
+    if (ext === 'json' || ext === 'jsonld') {
+      try {
+        return JSON.stringify(JSON.parse(content), null, 2);
+      } catch {
+        return content;
+      }
+    }
+    
+    if (ext === 'csv') {
+      return content;
+    }
+    
+    if (ext === 'ttl') {
+      return content;
+    }
+    
+    return content;
+  };
+
+  return (
+    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-2">
+          <Upload className="w-4 h-4 text-gray-500" />
+          <span className="text-sm font-medium text-gray-700">{file.name}</span>
+          <span className="text-xs text-gray-500">({(file.size / 1024).toFixed(1)} KB)</span>
+        </div>
+      </div>
+      <CodeBlock 
+        code={formatContent(content, file.name)} 
+        language={getLanguage(file.name)} 
+      />
+    </div>
+  );
+};
+
 // File Upload Component
 const FileUpload: React.FC<{ onFileUpload: (file: File) => void; enabled?: boolean }> = ({ onFileUpload, enabled = true }) => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -409,13 +462,13 @@ const FileUpload: React.FC<{ onFileUpload: (file: File) => void; enabled?: boole
         </button>
       </p>
       <p className="text-xs text-gray-500">
-        Supports: JSON, CSV, TXT, Images (PNG, JPG, GIF)
+        Supports: JSON, JSON-LD, TTL, CSV, TXT, Images (PNG, JPG, GIF)
       </p>
       <input
         ref={fileInputRef}
         type="file"
         className="hidden"
-        accept=".json,.csv,.txt,.png,.jpg,.jpeg,.gif"
+        accept=".json,.jsonld,.ttl,.csv,.txt,.png,.jpg,.jpeg,.gif"
         onChange={(e) => handleFileSelect(e.target.files)}
       />
     </div>
@@ -620,7 +673,7 @@ export default function BrainKBAssistantWrapper({
       id: '1',
       type: 'assistant',
       content: pageContext && pageContext.title && mergedConfig.features?.enableContextDetection
-                ? `${mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋'}`
+                ? `${mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋'}\n\nWould you like me to answer based on the current page content?`
         : mergedConfig.customization?.welcomeMessage || 'Hello and welcome to BrainKB Assistant! 👋',
       timestamp: new Date(),
       sender: mergedConfig.branding?.title || 'BrainKB Assistant'
@@ -924,22 +977,41 @@ export default function BrainKBAssistantWrapper({
     setMessages(prev => [...prev, uploadMessage]);
     setUploadedFiles(prev => [...prev, file]);
     
-    // Call custom callback if provided
-    if (mergedConfig.callbacks?.onFileUpload) {
-      mergedConfig.callbacks.onFileUpload(file);
-    }
-    
-    // Simulate processing
-    setTimeout(() => {
-      const response: ChatMessage = {
+    // Read file content
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target?.result as string;
+      
+      // Add file content message
+      const fileContentMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        content: `I've processed your file **${file.name}**. I can help you analyze its contents and integrate it with the knowledge base. What would you like to do with this data?`,
+        type: 'user',
+        content: `File content:\n\`\`\`${file.name.split('.').pop()}\n${content}\n\`\`\``,
         timestamp: new Date(),
-        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+        sender: 'You'
       };
-      setMessages(prev => [...prev, response]);
-    }, 2000);
+      
+      setMessages(prev => [...prev, fileContentMessage]);
+      
+      // Call custom callback if provided
+      if (mergedConfig.callbacks?.onFileUpload) {
+        mergedConfig.callbacks.onFileUpload(file);
+      }
+      
+      // Simulate processing
+      setTimeout(() => {
+        const response: ChatMessage = {
+          id: (Date.now() + 2).toString(),
+          type: 'assistant',
+          content: `I've processed your file **${file.name}**. I can help you analyze its contents and integrate it with the knowledge base. What would you like to do with this data?`,
+          timestamp: new Date(),
+          sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+        };
+        setMessages(prev => [...prev, response]);
+      }, 2000);
+    };
+    
+    reader.readAsText(file);
   };
 
   const handleEditMessage = (messageId: string, newContent: string) => {
@@ -1044,28 +1116,6 @@ export default function BrainKBAssistantWrapper({
               </button>
             </div>
           </div>
-
-          {/* Current Page Context */}
-          {showContext && pageContext && mergedConfig.features?.enableContextDetection && (
-            <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 border-b border-blue-100">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm text-blue-800">
-                  <MapPin className="w-4 h-4 mr-2" />
-                  <span className="font-medium">Current Page:</span>
-                  <span className="ml-1 font-semibold">{pageContext.title}</span>
-                </div>
-                <button
-                  onClick={() => setShowContext(false)}
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              {pageContext.description && (
-                <p className="text-xs text-blue-700 mt-1">{pageContext.description}</p>
-              )}
-            </div>
-          )}
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
