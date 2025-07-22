@@ -145,6 +145,7 @@ interface QuickAction {
 // API Service Class
 class BrainKBAPIService {
   private config: BrainKBConfig;
+  private sessionId: string | null = null;
 
   constructor(config: BrainKBConfig) {
     this.config = config;
@@ -163,20 +164,42 @@ class BrainKBAPIService {
 
   private async sendRESTMessage(message: string, context?: any): Promise<any> {
     try {
+      const requestBody = {
+        message,
+        session_id: this.sessionId, // Include session ID
+        currentPage: context?.currentPage,
+        pageContext: context?.pageContext,
+        pageContent: context?.pageContent,
+        selectedPageContent: context?.selectedPageContent,
+        chatHistory: context?.chatHistory,
+        timestamp: new Date().toISOString(),
+      };
+
+      console.log('📤 Sending request to API:', {
+        endpoint: this.config.api!.endpoint,
+        sessionId: this.sessionId,
+        messageLength: message.length,
+        hasContext: !!context
+      });
+
       const response = await fetch(this.config.api!.endpoint!, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...this.config.api?.headers,
         },
-        body: JSON.stringify({
-          message,
-          context,
-          timestamp: new Date().toISOString(),
-        }),
+        body: JSON.stringify(requestBody),
       });
       
-      return await response.json();
+      const responseData = await response.json();
+      
+      // Store session ID from response for future requests
+      if (responseData.session_id) {
+        this.sessionId = responseData.session_id;
+        console.log('🔗 Session ID received:', this.sessionId);
+      }
+      
+      return responseData;
     } catch (error) {
       console.error('REST API Error:', error);
       return this.generateLocalResponse(message, context);
