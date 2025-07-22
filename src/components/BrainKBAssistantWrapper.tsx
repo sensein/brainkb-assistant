@@ -478,7 +478,7 @@ const ContextDetectionPrompt: React.FC<{
         </div>
         <div className="flex-1">
           <div className="text-sm font-medium text-blue-800 mb-2">
-            📍 Context Detected: <span className="font-semibold">{pageContext.title}</span>
+            📍 Context Detected: <span className="font-semibold">{pageContext?.title || 'this page'}</span>
           </div>
           {pageContext.description && (
             <p className="text-xs text-blue-700 mb-3">{pageContext.description}</p>
@@ -1093,11 +1093,22 @@ export default function BrainKBAssistantWrapper({
                     </div>
                   )}
                   <div
-                    className={`px-4 py-3 rounded-lg shadow-sm ${
-                      message.type === 'user'
-                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
-                        : 'bg-gray-50 text-gray-800 border border-gray-200'
-                    }`}
+                    style={{
+                      padding: '12px 16px',
+                      borderRadius: '8px',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                      ...(message.type === 'user'
+                        ? {
+                            background: '#f9fafb',
+                            color: '#374151',
+                            border: '1px solid #e5e7eb'
+                          }
+                        : {
+                            background: '#f9fafb',
+                            color: '#374151',
+                            border: '1px solid #e5e7eb'
+                          })
+                    }}
                   >
                     {editingMessageId === message.id ? (
                       <ContentEditor
@@ -1186,7 +1197,7 @@ export default function BrainKBAssistantWrapper({
                   </div>
                   <div className="flex-1">
                     <div className="text-sm font-medium text-blue-800 mb-2">
-                      📍 Context Detected: <span className="font-semibold">{pageContext.title}</span>
+                      📍 Context Detected: <span className="font-semibold">{pageContext?.title || 'this page'}</span>
                     </div>
                     {pageContext.description && (
                       <p className="text-xs text-blue-700 mb-3">{pageContext.description}</p>
@@ -1237,48 +1248,6 @@ export default function BrainKBAssistantWrapper({
             
             <div ref={messagesEndRef} />
           </div>
-
-                      {/* Context Response Buttons */}
-            {usePageContext === null && contextDetected && (
-              <div className="px-4 py-3 border-t border-gray-200 bg-blue-50">
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => {
-                      setUsePageContext(true);
-                      const responseMessage: ChatMessage = {
-                        id: Date.now().toString(),
-                        type: 'assistant',
-                        content: `Great! I'll answer based on the current page content: **${pageContext?.title || 'this page'}**. You can now ask me questions about this page.`,
-                        timestamp: new Date(),
-                        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
-                      };
-                      setMessages(prev => [...prev, responseMessage]);
-                    }}
-                    className="flex items-center space-x-1 px-3 py-2 text-xs bg-green-100 hover:bg-green-200 text-green-800 rounded-lg border border-green-200 transition-colors shadow-sm"
-                  >
-                    <span>✅</span>
-                    <span>Yes, use page content</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setUsePageContext(false);
-                      const responseMessage: ChatMessage = {
-                        id: Date.now().toString(),
-                        type: 'assistant',
-                        content: "No problem! I'll answer general questions without using the current page content. What would you like to know?",
-                        timestamp: new Date(),
-                        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
-                      };
-                      setMessages(prev => [...prev, responseMessage]);
-                    }}
-                    className="flex items-center space-x-1 px-3 py-2 text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg border border-gray-200 transition-colors shadow-sm"
-                  >
-                    <span>❌</span>
-                    <span>No, general questions only</span>
-                  </button>
-                </div>
-              </div>
-            )}
 
             {/* Quick Actions */}
             {mergedConfig.features?.enableQuickActions && usePageContext !== null && (
