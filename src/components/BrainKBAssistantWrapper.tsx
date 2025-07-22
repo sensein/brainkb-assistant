@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Phone, Mail, Globe, ArrowRight, User, Bot, MapPin, FileText, Search, Maximize2, Minimize2, Move, Upload, Edit3, Code, File, Image, Download, Copy, Check, Brain, Settings, MessageSquare, Zap, Lightbulb, Database, Network, BarChart3, ChevronDown, ChevronUp, Star, BookOpen, Target, TrendingUp, Users } from 'lucide-react';
+import '../styles/brainkb-assistant.css';
 
 // Configuration Types
 export interface BrainKBConfig {
@@ -50,6 +51,24 @@ export interface BrainKBConfig {
     theme?: 'light' | 'dark' | 'auto';
     language?: string;
     zIndex?: number;
+    // Enhanced styling options
+    styling?: {
+      buttonColor?: string;
+      buttonHoverColor?: string;
+      chatBackground?: string;
+      textColor?: string;
+      borderColor?: string;
+      shadowColor?: string;
+      // Force positioning to override site CSS
+      forcePosition?: boolean;
+      // Custom CSS classes
+      customClasses?: {
+        container?: string;
+        button?: string;
+        chat?: string;
+        header?: string;
+      };
+    };
   };
   
   // Quick Actions
@@ -500,7 +519,22 @@ export default function BrainKBAssistantWrapper({
         expandedHeight: '900px'
       },
       theme: 'light',
-      zIndex: 9999
+      zIndex: 9999,
+      styling: {
+        buttonColor: 'from-blue-600 to-purple-600',
+        buttonHoverColor: 'from-blue-700 to-purple-700',
+        chatBackground: 'bg-white',
+        textColor: 'text-gray-800',
+        borderColor: 'border-gray-200',
+        shadowColor: 'shadow-lg',
+        forcePosition: false,
+        customClasses: {
+          container: 'fixed',
+          button: 'bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110',
+          chat: 'mb-4 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col',
+          header: 'flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-t-lg'
+        }
+      }
     },
     customization: {
       welcomeMessage: 'Hello and welcome to BrainKB Assistant! 👋',
@@ -672,7 +706,7 @@ export default function BrainKBAssistantWrapper({
       },
       {
         id: 'find_connections',
-        label: '�� Find Connections',
+        label: '🔗 Find Connections',
         icon: <span>🔗</span>,
         action: 'find_connections',
         description: 'Discover hidden connections'
@@ -893,10 +927,14 @@ export default function BrainKBAssistantWrapper({
 
   const sizeConfig = getSizeConfig();
   const position = mergedConfig.ui?.position || 'bottom-right';
-  const zIndex = mergedConfig.ui?.zIndex || 9999;
+  const zIndex = mergedConfig.ui?.zIndex || 999999; // Much higher z-index
+  const styling = mergedConfig.ui?.styling || {};
 
   const getPositionClasses = () => {
-    switch (position) {
+    // Always default to bottom-right for better visibility
+    const finalPosition = mergedConfig.ui?.styling?.forcePosition ? position : 'bottom-right';
+    
+    switch (finalPosition) {
       case 'bottom-left':
         return 'bottom-6 left-6';
       case 'top-right':
@@ -908,19 +946,38 @@ export default function BrainKBAssistantWrapper({
     }
   };
 
+  // Enhanced styling with fallbacks
+  const getButtonStyles = () => {
+    const buttonColor = styling.buttonColor || 'from-blue-600 to-purple-600';
+    const buttonHoverColor = styling.buttonHoverColor || 'from-blue-700 to-purple-700';
+    
+    return {
+      background: `linear-gradient(to right, var(--tw-gradient-stops))`,
+      '--tw-gradient-from': buttonColor.includes('from-') ? 
+        `var(--${buttonColor.split('-')[1]}-600)` : '#2563eb',
+      '--tw-gradient-to': buttonColor.includes('to-') ? 
+        `var(--${buttonColor.split('-')[1]}-600)` : '#7c3aed',
+    };
+  };
+
   return (
     <div 
-      className={`fixed ${getPositionClasses()} z-[${zIndex}]`}
+      className={`brainkb-assistant-container ${getPositionClasses()} ${styling.customClasses?.container || ''}`}
       style={{
         width: sizeConfig.width,
-        height: isOpen ? sizeConfig.height : 'auto'
+        height: isOpen ? sizeConfig.height : 'auto',
+        zIndex: zIndex,
+        bottom: position.includes('bottom') ? '24px' : 'auto',
+        right: position.includes('right') ? '24px' : 'auto',
+        left: position.includes('left') ? '24px' : 'auto',
+        top: position.includes('top') ? '24px' : 'auto',
       }}
     >
       {/* Chat Window */}
       {isOpen && (
-        <div className="mb-4 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col" style={{ height: sizeConfig.height }}>
+        <div className={`brainkb-assistant-chat mb-4 ${styling.chatBackground || 'bg-white'} rounded-lg ${styling.shadowColor || 'shadow-xl'} ${styling.borderColor || 'border border-gray-200'} flex flex-col ${styling.customClasses?.chat || ''}`} style={{ height: sizeConfig.height }}>
           {/* Header */}
-          <div className={`flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r ${mergedConfig.branding?.primaryColor || 'from-purple-600 to-blue-600'} text-white rounded-t-lg`}>
+          <div className={`brainkb-assistant-header flex items-center justify-between p-4 border-b ${styling.borderColor || 'border-gray-200'} bg-gradient-to-r ${mergedConfig.branding?.primaryColor || 'from-purple-600 to-blue-600'} text-white rounded-t-lg ${styling.customClasses?.header || ''}`}>
             <div className="flex items-center">
               <BrainKBLogo config={mergedConfig} />
             </div>
@@ -1192,7 +1249,16 @@ export default function BrainKBAssistantWrapper({
 
       {/* Floating Button */}
       <button
-        className={`bg-gradient-to-r ${mergedConfig.branding?.primaryColor || 'from-blue-600 to-purple-600'} text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110`}
+        className={`brainkb-assistant-button ${styling.customClasses?.button || ''}`}
+        style={{
+          background: styling.buttonColor ? 
+            `linear-gradient(135deg, ${styling.buttonColor.includes('from-') ? styling.buttonColor.split('-')[1] : '#667eea'}, ${styling.buttonColor.includes('to-') ? styling.buttonColor.split('-')[1] : '#764ba2'})` :
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: '#ffffff',
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
+          border: '2px solid rgba(255, 255, 255, 0.1)',
+          zIndex: zIndex + 1,
+        }}
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (

@@ -2,6 +2,7 @@ const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const typescript = require('@rollup/plugin-typescript');
 const peerDepsExternal = require('rollup-plugin-peer-deps-external');
+const css = require('rollup-plugin-css-only');
 const fs = require('fs');
 
 const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
@@ -67,6 +68,9 @@ module.exports = {
       tsconfig: './tsconfig.json',
       declaration: true,
       declarationDir: './dist'
+    }),
+    css({
+      output: 'brainkb-assistant.css'
     }),
     addUseClientDirective()
   ],
