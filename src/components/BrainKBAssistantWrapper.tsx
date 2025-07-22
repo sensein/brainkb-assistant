@@ -143,6 +143,9 @@ interface QuickAction {
 }
 
 // API Service Class
+// Create a persistent API service instance
+let apiServiceInstance: BrainKBAPIService | null = null;
+
 class BrainKBAPIService {
   private config: BrainKBConfig;
   private sessionId: string | null = null;
@@ -196,7 +199,7 @@ class BrainKBAPIService {
       // Store session ID from response for future requests
       if (responseData.session_id) {
         this.sessionId = responseData.session_id;
-        console.log('🔗 Session ID received:', this.sessionId);
+        console.log('🔗 Session ID received and stored:', this.sessionId);
       }
       
       return responseData;
@@ -618,7 +621,10 @@ export default function BrainKBAssistantWrapper({
     customization: { ...defaultConfig.customization, ...config.customization }
   };
 
-  const apiService = new BrainKBAPIService(mergedConfig);
+  // Initialize the API service instance if it's not already set
+  if (!apiServiceInstance) {
+    apiServiceInstance = new BrainKBAPIService(mergedConfig);
+  }
 
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -940,7 +946,7 @@ export default function BrainKBAssistantWrapper({
       });
 
       // Send message to API service with full context
-      const response = await apiService.sendMessage(inputValue, contextData);
+      const response = await apiServiceInstance!.sendMessage(inputValue, contextData);
 
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
