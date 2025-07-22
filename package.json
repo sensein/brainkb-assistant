@@ -1,6 +1,6 @@
 {
   "name": "brainkb-assistant",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A configurable, standalone BrainKB Assistant that can be integrated into any website",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

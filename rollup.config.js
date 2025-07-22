@@ -49,8 +49,7 @@ module.exports = {
       sourcemap: true,
       globals: {
         react: 'React',
-        'react-dom': 'ReactDOM',
-        'react/jsx-runtime': 'jsxRuntime'
+        'react-dom': 'ReactDOM'
       }
     }
   ],
@@ -72,4 +71,15 @@ module.exports = {
     addUseClientDirective()
   ],
   external: ['react', 'react-dom'],
+  onwarn(warning, warn) {
+    // Suppress warnings about missing global variable names for react/jsx-runtime
+    if (warning.code === 'MISSING_GLOBAL_NAME' && warning.source === 'react/jsx-runtime') {
+      return;
+    }
+    // Suppress warnings about module level directives
+    if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+      return;
+    }
+    warn(warning);
+  }
 }; 
