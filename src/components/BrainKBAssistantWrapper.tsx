@@ -1462,6 +1462,8 @@ export default function BrainKBAssistantWrapper({
       width: sizeConfig.width,
       height: sizeConfig.height
     });
+    // Reset expanded state when closing
+    setIsExpanded(false);
     setIsOpen(false);
   };
 
@@ -1582,16 +1584,18 @@ export default function BrainKBAssistantWrapper({
         position: 'fixed',
         transition: 'all 0.3s ease-in-out',
         ...(isExpanded ? {
-          // When expanded, ensure it's centered and fully visible
-          top: '2vh',
-          left: '2vw',
-          right: '2vw',
-          bottom: '2vh',
-          width: '96vw',
-          height: '96vh',
+          // When expanded, use dynamic responsive sizing based on screen size
+          top: '1vh',
+          left: '1vw',
+          right: '1vw',
+          bottom: '1vh',
+          width: '98vw',
+          height: '98vh',
           transform: 'none',
-          maxWidth: '96vw',
-          maxHeight: '96vh'
+          maxWidth: '98vw',
+          maxHeight: '98vh',
+          minWidth: '320px',
+          minHeight: '400px'
         } : {
           // Normal positioning - use stored original position or current position
           width: sizeConfig.width,
@@ -1605,9 +1609,10 @@ export default function BrainKBAssistantWrapper({
     >
       {/* Chat Window */}
       {isOpen && (
-        <div className={`brainkb-assistant-chat mb-4 ${styling.chatBackground || 'bg-white'} rounded-lg ${styling.shadowColor || 'shadow-xl'} ${styling.borderColor || 'border border-gray-200'} flex flex-col ${styling.customClasses?.chat || ''}`} style={{ 
-          height: isExpanded ? 'calc(90vh - 120px)' : sizeConfig.height,
-          maxHeight: isExpanded ? 'calc(90vh - 120px)' : sizeConfig.height,
+        <div className={`brainkb-assistant-chat mb-4 ${styling.chatBackground || 'bg-white'} rounded-lg ${styling.shadowColor || 'shadow-xl'} ${styling.borderColor || 'border border-gray-200'} flex flex-col ${styling.customClasses?.chat || ''}`}         style={{
+          height: isExpanded ? 'calc(98vh - 120px)' : sizeConfig.height,
+          maxHeight: isExpanded ? 'calc(98vh - 120px)' : sizeConfig.height,
+          minHeight: isExpanded ? '300px' : 'auto',
           overflow: 'hidden'
         }}>
           {/* Fallback Close Button for Expanded Mode */}
@@ -1665,11 +1670,11 @@ export default function BrainKBAssistantWrapper({
                 style={{ width: '100%' }}
               >
                 <div className="flex items-start space-x-3" style={{ 
-                  maxWidth: isExpanded ? 'calc(100% - 120px)' : 'calc(100% - 16px)', 
+                  maxWidth: isExpanded ? 'calc(100% - 80px)' : 'calc(100% - 16px)', 
                   minWidth: '0',
                   width: '100%',
-                  paddingRight: isExpanded ? '32px' : '0',
-                  paddingLeft: isExpanded ? '32px' : '0',
+                  paddingRight: isExpanded ? '16px' : '0',
+                  paddingLeft: isExpanded ? '16px' : '0',
                   flexDirection: message.type === 'user' ? 'row-reverse' : 'row'
                 }}>
                   {message.type === 'assistant' && (
@@ -1711,7 +1716,7 @@ export default function BrainKBAssistantWrapper({
                       padding: isExpanded ? '16px 20px' : '12px 16px',
                       borderRadius: '8px',
                       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                      maxWidth: isExpanded ? 'calc(100% - 200px)' : 'calc(100% - 48px)',
+                      maxWidth: isExpanded ? 'calc(100% - 120px)' : 'calc(100% - 48px)',
                       minWidth: '0',
                       width: '100%',
                       wordWrap: 'break-word',
@@ -1829,12 +1834,12 @@ export default function BrainKBAssistantWrapper({
             {/* Quick Actions */}
             {mergedConfig.features?.enableQuickActions && usePageContext !== null && (
               <div className="px-4 py-3 border-t border-gray-200 bg-gray-50" style={{ flexShrink: 0 }}>
-                <div className="flex flex-wrap gap-2" style={{ 
-                  maxWidth: '100%',
-                  width: '100%',
-                  paddingRight: isExpanded ? '32px' : '0',
-                  paddingLeft: isExpanded ? '32px' : '0'
-                }}>
+                            <div className="flex flex-wrap gap-2" style={{ 
+              maxWidth: '100%',
+              width: '100%',
+              paddingRight: isExpanded ? '16px' : '0',
+              paddingLeft: isExpanded ? '16px' : '0'
+            }}>
                   {generateContextualQuickActions().map((action) => (
                     <button
                       key={action.id}
@@ -1887,7 +1892,12 @@ export default function BrainKBAssistantWrapper({
 
           {/* Input */}
           <div className="p-4 border-t border-gray-200 bg-white" style={{ flexShrink: 0 }}>
-            <div className="flex space-x-2" style={{ maxWidth: '100%', minWidth: '0' }}>
+            <div className="flex space-x-2" style={{ 
+              maxWidth: '100%', 
+              minWidth: '0',
+              paddingRight: isExpanded ? '16px' : '0',
+              paddingLeft: isExpanded ? '16px' : '0'
+            }}>
               {mergedConfig.features?.enableFileUpload && (
                 <button
                   onClick={() => setShowUpload(!showUpload)}
