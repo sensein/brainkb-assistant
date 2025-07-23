@@ -1454,6 +1454,17 @@ export default function BrainKBAssistantWrapper({
     setIsExpanded(!isExpanded);
   };
 
+  // Handle close with position preservation
+  const handleClose = () => {
+    // Store current position before closing
+    setOriginalPosition(position || 'bottom-right');
+    setOriginalSize({
+      width: sizeConfig.width,
+      height: sizeConfig.height
+    });
+    setIsOpen(false);
+  };
+
   // Enhanced styling with fallbacks
   const getButtonStyles = () => {
     const buttonColor = styling.buttonColor || 'from-blue-600 to-purple-600';
@@ -1582,13 +1593,13 @@ export default function BrainKBAssistantWrapper({
           maxWidth: '96vw',
           maxHeight: '96vh'
         } : {
-          // Normal positioning - use stored original position
+          // Normal positioning - use stored original position or current position
           width: sizeConfig.width,
           height: isOpen ? sizeConfig.height : 'auto',
-          bottom: originalPosition.includes('bottom') ? '24px' : 'auto',
-          right: originalPosition.includes('right') ? '24px' : 'auto',
-          left: originalPosition.includes('left') ? '24px' : 'auto',
-          top: originalPosition.includes('top') ? '24px' : 'auto',
+          bottom: (originalPosition || position || 'bottom-right').includes('bottom') ? '24px' : 'auto',
+          right: (originalPosition || position || 'bottom-right').includes('right') ? '24px' : 'auto',
+          left: (originalPosition || position || 'bottom-right').includes('left') ? '24px' : 'auto',
+          top: (originalPosition || position || 'bottom-right').includes('top') ? '24px' : 'auto',
         })
       }}
     >
@@ -1627,7 +1638,7 @@ export default function BrainKBAssistantWrapper({
                 </button>
               )}
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
                 className="text-white hover:text-gray-200 transition-colors p-2 rounded hover:bg-white hover:bg-opacity-20"
                 style={{ minWidth: '32px', minHeight: '32px' }}
               >
