@@ -371,7 +371,9 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
 };
 
 // File Renderer Component
-const FileRenderer: React.FC<{ file: File; content: string }> = ({ file, content }) => {
+const FileRenderer: React.FC<{ file: File; content?: string }> = ({ file, content }) => {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  
   const getLanguage = (filename: string) => {
     const ext = filename.split('.').pop()?.toLowerCase();
     switch (ext) {
@@ -382,6 +384,11 @@ const FileRenderer: React.FC<{ file: File; content: string }> = ({ file, content
       case 'txt': return 'text';
       default: return 'text';
     }
+  };
+
+  const isImageFile = (filename: string) => {
+    const ext = filename.split('.').pop()?.toLowerCase();
+    return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext || '');
   };
 
   const formatContent = (content: string, filename: string) => {
@@ -406,21 +413,60 @@ const FileRenderer: React.FC<{ file: File; content: string }> = ({ file, content
     return content;
   };
 
-  return (
-    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center space-x-2">
-          <Upload className="w-4 h-4 text-gray-500" />
-          <span className="text-sm font-medium text-gray-700">{file.name}</span>
-          <span className="text-xs text-gray-500">({(file.size / 1024).toFixed(1)} KB)</span>
+  // Handle image files
+  useEffect(() => {
+    if (isImageFile(file.name)) {
+      const url = URL.createObjectURL(file);
+      setImageUrl(url);
+      
+      // Cleanup URL when component unmounts
+      return () => URL.revokeObjectURL(url);
+    }
+  }, [file]);
+
+  // Render image files
+  if (isImageFile(file.name) && imageUrl) {
+    return (
+      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-2">
+            <Upload className="w-4 h-4 text-gray-500" />
+            <span className="text-sm font-medium text-gray-700">{file.name}</span>
+            <span className="text-xs text-gray-500">({(file.size / 1024).toFixed(1)} KB)</span>
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <img 
+            src={imageUrl} 
+            alt={file.name}
+            className="max-w-full max-h-96 rounded-lg shadow-md"
+            style={{ objectFit: 'contain' }}
+          />
         </div>
       </div>
-      <CodeBlock 
-        code={formatContent(content, file.name)} 
-        language={getLanguage(file.name)} 
-      />
-    </div>
-  );
+    );
+  }
+
+  // Render text files
+  if (content) {
+    return (
+      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-2">
+            <Upload className="w-4 h-4 text-gray-500" />
+            <span className="text-sm font-medium text-gray-700">{file.name}</span>
+            <span className="text-xs text-gray-500">({(file.size / 1024).toFixed(1)} KB)</span>
+          </div>
+        </div>
+        <CodeBlock 
+          code={formatContent(content, file.name)} 
+          language={getLanguage(file.name)} 
+        />
+      </div>
+    );
+  }
+
+  return null;
 };
 
 // File Upload Component
@@ -668,7 +714,7 @@ export default function BrainKBAssistantWrapper({
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [showUpload, setShowUpload] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<{ [messageId: string]: File[] }>({});
   const [showContext, setShowContext] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   
@@ -1252,15 +1298,26 @@ export default function BrainKBAssistantWrapper({
     };
     
     setMessages(prev => [...prev, uploadMessage]);
-    setUploadedFiles(prev => [...prev, file]);
+    setUploadedFiles(prev => ({
+      ...prev,
+      [uploadMessage.id]: [file]
+    }));
     
-    // Read file content
+    // Check if it's an image file
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    const isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext || '');
+    
+    if (isImage) {
+      // For image files, just add the upload message - the FileRenderer will handle the display
+      return;
+    }
+    
+    // For text files, read and process content
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
       
       // Format content based on file type
-      const ext = file.name.split('.').pop()?.toLowerCase();
       let formattedContent = content;
       let language = ext || 'text';
       
@@ -1666,6 +1723,19 @@ export default function BrainKBAssistantWrapper({
                         width: '100%'
                       }}>
                         <MarkdownRenderer content={message.content} />
+                        
+                        {/* Render uploaded files if this message has associated files */}
+                        {message.content.includes('📎 Uploaded:') && uploadedFiles[message.id] && uploadedFiles[message.id].length > 0 && (
+                          <div className="mt-3">
+                            {uploadedFiles[message.id].map((file, index) => (
+                              <FileRenderer 
+                                key={`${message.id}-file-${index}`} 
+                                file={file} 
+                              />
+                            ))}
+                          </div>
+                        )}
+                        
                         <div className="flex items-center justify-between mt-3" style={{ flexWrap: 'wrap', gap: '4px' }}>
                           <div className="flex items-center space-x-2" style={{ flexWrap: 'wrap' }}>
                             <p className="text-xs opacity-70">
