@@ -341,7 +341,8 @@ const MarkdownRenderer: React.FC<{ content: string; isExpanded?: boolean }> = ({
             wordWrap: 'break-word',
             overflowWrap: 'break-word',
             maxWidth: '100%',
-            width: '100%'
+            width: '100%',
+            whiteSpace: 'pre-wrap'
           }}
           dangerouslySetInnerHTML={{ 
             __html: text
@@ -1634,9 +1635,10 @@ export default function BrainKBAssistantWrapper({
                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div className="flex items-start space-x-3" style={{ 
-                  maxWidth: isExpanded ? 'calc(100% - 32px)' : 'calc(100% - 16px)', 
+                  maxWidth: isExpanded ? 'calc(100% - 64px)' : 'calc(100% - 16px)', 
                   minWidth: '0',
-                  width: '100%'
+                  width: '100%',
+                  paddingRight: isExpanded ? '16px' : '0'
                 }}>
                   {message.type === 'assistant' && (
                     <div 
@@ -1660,12 +1662,14 @@ export default function BrainKBAssistantWrapper({
                       padding: isExpanded ? '16px 20px' : '12px 16px',
                       borderRadius: '8px',
                       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                      maxWidth: isExpanded ? 'calc(100% - 80px)' : 'calc(100% - 48px)',
+                      maxWidth: isExpanded ? 'calc(100% - 120px)' : 'calc(100% - 48px)',
                       minWidth: '0',
+                      width: '100%',
                       wordWrap: 'break-word',
                       overflowWrap: 'break-word',
                       fontSize: isExpanded ? '16px' : '14px',
                       lineHeight: isExpanded ? '1.6' : '1.5',
+                      whiteSpace: 'pre-wrap',
                       ...(message.type === 'user'
                         ? {
                             background: '#f9fafb',
@@ -1795,7 +1799,8 @@ export default function BrainKBAssistantWrapper({
               <div className="px-4 py-3 border-t border-gray-200 bg-gray-50" style={{ flexShrink: 0 }}>
                 <div className="flex flex-wrap gap-2" style={{ 
                   maxWidth: '100%',
-                  width: '100%'
+                  width: '100%',
+                  paddingRight: isExpanded ? '16px' : '0'
                 }}>
                   {generateContextualQuickActions().map((action) => (
                     <button
@@ -1803,12 +1808,13 @@ export default function BrainKBAssistantWrapper({
                       onClick={() => handleQuickAction(action.action, action.url, action.external)}
                       className="flex items-center space-x-1 px-3 py-2 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg border border-purple-200 transition-colors shadow-sm"
                       style={{ 
-                        maxWidth: isExpanded ? '200px' : '100%',
+                        maxWidth: isExpanded ? '220px' : '100%',
                         wordWrap: 'break-word',
                         overflowWrap: 'break-word',
                         flexShrink: 0,
                         fontSize: isExpanded ? '14px' : '12px',
-                        padding: isExpanded ? '8px 12px' : '6px 10px'
+                        padding: isExpanded ? '8px 12px' : '6px 10px',
+                        minWidth: isExpanded ? '120px' : 'auto'
                       }}
                       title={action.description}
                     >
@@ -1816,7 +1822,10 @@ export default function BrainKBAssistantWrapper({
                       <span style={{ 
                         wordWrap: 'break-word', 
                         overflowWrap: 'break-word',
-                        maxWidth: isExpanded ? '150px' : '100%'
+                        maxWidth: isExpanded ? '180px' : '100%',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
                       }}>{action.label}</span>
                     </button>
                   ))}
