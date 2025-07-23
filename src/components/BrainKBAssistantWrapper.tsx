@@ -1387,7 +1387,7 @@ export default function BrainKBAssistantWrapper({
     const handleGlobalKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isExpanded && isOpen) {
         e.preventDefault();
-        setIsExpanded(false);
+        handleToggleExpanded();
       }
     };
 
@@ -1435,6 +1435,23 @@ export default function BrainKBAssistantWrapper({
       default:
         return 'bottom-6 right-6';
     }
+  };
+
+  // Store the original position when expanding
+  const [originalPosition, setOriginalPosition] = useState<string>('bottom-right');
+  const [originalSize, setOriginalSize] = useState({ width: '450px', height: '550px' });
+
+  // Handle expand/minimize with position preservation
+  const handleToggleExpanded = () => {
+    if (!isExpanded) {
+      // Store current position and size before expanding
+      setOriginalPosition(position || 'bottom-right');
+      setOriginalSize({
+        width: sizeConfig.width,
+        height: sizeConfig.height
+      });
+    }
+    setIsExpanded(!isExpanded);
   };
 
   // Enhanced styling with fallbacks
@@ -1552,6 +1569,7 @@ export default function BrainKBAssistantWrapper({
       style={{
         zIndex: zIndex,
         position: 'fixed',
+        transition: 'all 0.3s ease-in-out',
         ...(isExpanded ? {
           // When expanded, ensure it's centered and fully visible
           top: '2vh',
@@ -1564,13 +1582,13 @@ export default function BrainKBAssistantWrapper({
           maxWidth: '96vw',
           maxHeight: '96vh'
         } : {
-          // Normal positioning
+          // Normal positioning - use stored original position
           width: sizeConfig.width,
           height: isOpen ? sizeConfig.height : 'auto',
-          bottom: position.includes('bottom') ? '24px' : 'auto',
-          right: position.includes('right') ? '24px' : 'auto',
-          left: position.includes('left') ? '24px' : 'auto',
-          top: position.includes('top') ? '24px' : 'auto',
+          bottom: originalPosition.includes('bottom') ? '24px' : 'auto',
+          right: originalPosition.includes('right') ? '24px' : 'auto',
+          left: originalPosition.includes('left') ? '24px' : 'auto',
+          top: originalPosition.includes('top') ? '24px' : 'auto',
         })
       }}
     >
@@ -1584,7 +1602,7 @@ export default function BrainKBAssistantWrapper({
           {/* Fallback Close Button for Expanded Mode */}
           {isExpanded && (
             <button
-              onClick={() => setIsExpanded(false)}
+              onClick={handleToggleExpanded}
               className="absolute top-4 right-4 z-20 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-colors"
               title="Minimize Assistant"
               style={{ minWidth: '40px', minHeight: '40px' }}
@@ -1600,7 +1618,7 @@ export default function BrainKBAssistantWrapper({
             <div className="flex items-center space-x-2">
               {mergedConfig.features?.enableExpandableWindow && (
                 <button
-                  onClick={() => setIsExpanded(!isExpanded)}
+                  onClick={handleToggleExpanded}
                   className="text-white hover:text-gray-200 transition-colors p-2 rounded hover:bg-white hover:bg-opacity-20"
                   title={isExpanded ? "Minimize" : "Maximize"}
                   style={{ minWidth: '32px', minHeight: '32px' }}
