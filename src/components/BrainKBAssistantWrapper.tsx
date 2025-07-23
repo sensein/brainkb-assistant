@@ -260,7 +260,7 @@ class BrainKBAPIService {
 }
 
 // Code Block Component with Syntax Highlighting
-const CodeBlock: React.FC<{ code: string; language?: string }> = ({ code, language = 'javascript' }) => {
+const CodeBlock: React.FC<{ code: string; language?: string; isExpanded?: boolean }> = ({ code, language = 'javascript', isExpanded = false }) => {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(code);
@@ -270,7 +270,10 @@ const CodeBlock: React.FC<{ code: string; language?: string }> = ({ code, langua
   };
 
   return (
-    <div className="bg-gray-900 rounded-lg overflow-hidden border border-gray-700 my-2" style={{ maxWidth: '100%' }}>
+    <div className="bg-gray-900 rounded-lg overflow-hidden border border-gray-700 my-2" style={{ 
+      maxWidth: '100%',
+      width: '100%'
+    }}>
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
         <span className="text-xs font-medium text-gray-300 uppercase">{language}</span>
         <button
@@ -284,21 +287,26 @@ const CodeBlock: React.FC<{ code: string; language?: string }> = ({ code, langua
       <pre 
         className="p-4 overflow-x-auto" 
         style={{ 
-          fontSize: '13px', 
-          lineHeight: '1.4',
+          fontSize: isExpanded ? '14px' : '13px', 
+          lineHeight: isExpanded ? '1.5' : '1.4',
           maxWidth: '100%',
+          width: '100%',
           wordWrap: 'break-word',
           overflowWrap: 'break-word'
         }}
       >
-        <code className="text-gray-100" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>{code}</code>
+        <code className="text-gray-100" style={{ 
+          wordWrap: 'break-word', 
+          overflowWrap: 'break-word',
+          width: '100%'
+        }}>{code}</code>
       </pre>
     </div>
   );
 };
 
 // Markdown Renderer Component
-const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
+const MarkdownRenderer: React.FC<{ content: string; isExpanded?: boolean }> = ({ content, isExpanded = false }) => {
   const renderContent = (text: string) => {
     // Split by code blocks first
     const parts = text.split(/(```[\s\S]*?```)/);
@@ -316,6 +324,7 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
               key={index} 
               code={code} 
               language={language} 
+              isExpanded={isExpanded}
             />
           );
         }
@@ -327,11 +336,12 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
           key={index} 
           className="prose prose-sm max-w-none"
           style={{ 
-            fontSize: '14px', 
-            lineHeight: '1.5',
+            fontSize: isExpanded ? '16px' : '14px', 
+            lineHeight: isExpanded ? '1.6' : '1.5',
             wordWrap: 'break-word',
             overflowWrap: 'break-word',
-            maxWidth: '100%'
+            maxWidth: '100%',
+            width: '100%'
           }}
           dangerouslySetInnerHTML={{ 
             __html: text
@@ -351,7 +361,8 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
       style={{ 
         wordWrap: 'break-word', 
         overflowWrap: 'break-word',
-        maxWidth: '100%'
+        maxWidth: '100%',
+        width: '100%'
       }}
     >
       {renderContent(content)}
@@ -1601,13 +1612,23 @@ export default function BrainKBAssistantWrapper({
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ fontSize: '14px', lineHeight: '1.5' }}>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ 
+            fontSize: isExpanded ? '16px' : '14px', 
+            lineHeight: '1.5',
+            maxWidth: '100%',
+            wordWrap: 'break-word',
+            overflowWrap: 'break-word'
+          }}>
             {messages.map((message) => (
               <div
                 key={message.id}
                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className="flex items-start space-x-3" style={{ maxWidth: 'calc(100% - 16px)', minWidth: '0' }}>
+                <div className="flex items-start space-x-3" style={{ 
+                  maxWidth: isExpanded ? 'calc(100% - 32px)' : 'calc(100% - 16px)', 
+                  minWidth: '0',
+                  width: '100%'
+                }}>
                   {message.type === 'assistant' && (
                     <div 
                       style={{
@@ -1627,13 +1648,15 @@ export default function BrainKBAssistantWrapper({
                   )}
                   <div
                     style={{
-                      padding: '12px 16px',
+                      padding: isExpanded ? '16px 20px' : '12px 16px',
                       borderRadius: '8px',
                       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                      maxWidth: 'calc(100% - 48px)',
+                      maxWidth: isExpanded ? 'calc(100% - 80px)' : 'calc(100% - 48px)',
                       minWidth: '0',
                       wordWrap: 'break-word',
                       overflowWrap: 'break-word',
+                      fontSize: isExpanded ? '16px' : '14px',
+                      lineHeight: isExpanded ? '1.6' : '1.5',
                       ...(message.type === 'user'
                         ? {
                             background: '#f9fafb',
@@ -1654,8 +1677,13 @@ export default function BrainKBAssistantWrapper({
                         onCancel={() => setEditingMessageId(null)}
                       />
                     ) : (
-                      <div style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                        <MarkdownRenderer content={message.content} />
+                      <div style={{ 
+                        wordWrap: 'break-word', 
+                        overflowWrap: 'break-word',
+                        maxWidth: '100%',
+                        width: '100%'
+                      }}>
+                        <MarkdownRenderer content={message.content} isExpanded={isExpanded} />
                         <div className="flex items-center justify-between mt-3" style={{ flexWrap: 'wrap', gap: '4px' }}>
                           <div className="flex items-center space-x-2" style={{ flexWrap: 'wrap' }}>
                             <p className="text-xs opacity-70">
@@ -1751,22 +1779,31 @@ export default function BrainKBAssistantWrapper({
             {/* Quick Actions */}
             {mergedConfig.features?.enableQuickActions && usePageContext !== null && (
               <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                <div className="flex flex-wrap gap-2" style={{ maxWidth: '100%' }}>
+                <div className="flex flex-wrap gap-2" style={{ 
+                  maxWidth: '100%',
+                  width: '100%'
+                }}>
                   {generateContextualQuickActions().map((action) => (
                     <button
                       key={action.id}
                       onClick={() => handleQuickAction(action.action, action.url, action.external)}
                       className="flex items-center space-x-1 px-3 py-2 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg border border-purple-200 transition-colors shadow-sm"
                       style={{ 
-                        maxWidth: '100%',
+                        maxWidth: isExpanded ? '200px' : '100%',
                         wordWrap: 'break-word',
                         overflowWrap: 'break-word',
-                        flexShrink: 0
+                        flexShrink: 0,
+                        fontSize: isExpanded ? '14px' : '12px',
+                        padding: isExpanded ? '8px 12px' : '6px 10px'
                       }}
                       title={action.description}
                     >
                       <span style={{ flexShrink: 0 }}>{action.icon}</span>
-                      <span style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>{action.label}</span>
+                      <span style={{ 
+                        wordWrap: 'break-word', 
+                        overflowWrap: 'break-word',
+                        maxWidth: isExpanded ? '150px' : '100%'
+                      }}>{action.label}</span>
                     </button>
                   ))}
                 </div>
