@@ -1370,12 +1370,27 @@ export default function BrainKBAssistantWrapper({
     }
   };
 
+  // Add keyboard shortcuts for expanded mode
+  useEffect(() => {
+    const handleGlobalKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isExpanded && isOpen) {
+        e.preventDefault();
+        setIsExpanded(false);
+      }
+    };
+
+    if (isExpanded && isOpen) {
+      document.addEventListener('keydown', handleGlobalKeyPress);
+      return () => document.removeEventListener('keydown', handleGlobalKeyPress);
+    }
+  }, [isExpanded, isOpen]);
+
   const getSizeConfig = () => {
     const size = mergedConfig.ui?.size;
     if (isExpanded) {
       return {
-        width: size?.expandedWidth || '800px',
-        height: size?.expandedHeight || '600px'
+        width: size?.expandedWidth || '90vw',
+        height: size?.expandedHeight || '80vh'
       };
     }
     return {
@@ -1392,6 +1407,11 @@ export default function BrainKBAssistantWrapper({
   const getPositionClasses = () => {
     // Always default to bottom-right for better visibility
     const finalPosition = mergedConfig.ui?.styling?.forcePosition ? position : 'bottom-right';
+    
+    // When expanded, center the window and ensure it's fully visible
+    if (isExpanded) {
+      return 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
+    }
     
     switch (finalPosition) {
       case 'bottom-left':
@@ -1518,20 +1538,44 @@ export default function BrainKBAssistantWrapper({
     <div 
       className={`brainkb-assistant-container ${getPositionClasses()} ${styling.customClasses?.container || ''}`}
       style={{
-        width: sizeConfig.width,
-        height: isOpen ? sizeConfig.height : 'auto',
         zIndex: zIndex,
-        bottom: position.includes('bottom') ? '24px' : 'auto',
-        right: position.includes('right') ? '24px' : 'auto',
-        left: position.includes('left') ? '24px' : 'auto',
-        top: position.includes('top') ? '24px' : 'auto',
+        position: 'fixed',
+        ...(isExpanded ? {
+          // When expanded, ensure it's centered and fully visible
+          top: '5vh',
+          left: '5vw',
+          right: '5vw',
+          bottom: '5vh',
+          width: '90vw',
+          height: '90vh',
+          transform: 'none'
+        } : {
+          // Normal positioning
+          width: sizeConfig.width,
+          height: isOpen ? sizeConfig.height : 'auto',
+          bottom: position.includes('bottom') ? '24px' : 'auto',
+          right: position.includes('right') ? '24px' : 'auto',
+          left: position.includes('left') ? '24px' : 'auto',
+          top: position.includes('top') ? '24px' : 'auto',
+        })
       }}
     >
       {/* Chat Window */}
       {isOpen && (
         <div className={`brainkb-assistant-chat mb-4 ${styling.chatBackground || 'bg-white'} rounded-lg ${styling.shadowColor || 'shadow-xl'} ${styling.borderColor || 'border border-gray-200'} flex flex-col ${styling.customClasses?.chat || ''}`} style={{ height: sizeConfig.height }}>
+          {/* Fallback Close Button for Expanded Mode */}
+          {isExpanded && (
+            <button
+              onClick={() => setIsExpanded(false)}
+              className="absolute top-4 right-4 z-20 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-colors"
+              title="Minimize Assistant"
+              style={{ minWidth: '40px', minHeight: '40px' }}
+            >
+              <Minimize2 className="w-5 h-5" />
+            </button>
+          )}
           {/* Header */}
-          <div className={`brainkb-assistant-header flex items-center justify-between p-4 border-b ${styling.borderColor || 'border-gray-200'} bg-gradient-to-r ${mergedConfig.branding?.primaryColor || 'from-purple-600 to-blue-600'} text-white rounded-t-lg ${styling.customClasses?.header || ''}`}>
+          <div className={`brainkb-assistant-header flex items-center justify-between p-4 border-b ${styling.borderColor || 'border-gray-200'} bg-gradient-to-r ${mergedConfig.branding?.primaryColor || 'from-purple-600 to-blue-600'} text-white rounded-t-lg ${styling.customClasses?.header || ''}`} style={{ position: 'sticky', top: 0, zIndex: 10 }}>
             <div className="flex items-center">
               <BrainKBLogo config={mergedConfig} />
             </div>
@@ -1539,15 +1583,17 @@ export default function BrainKBAssistantWrapper({
               {mergedConfig.features?.enableExpandableWindow && (
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="text-white hover:text-gray-200 transition-colors"
+                  className="text-white hover:text-gray-200 transition-colors p-2 rounded hover:bg-white hover:bg-opacity-20"
                   title={isExpanded ? "Minimize" : "Maximize"}
+                  style={{ minWidth: '32px', minHeight: '32px' }}
                 >
                   {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                 </button>
               )}
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-white hover:text-gray-200 transition-colors"
+                className="text-white hover:text-gray-200 transition-colors p-2 rounded hover:bg-white hover:bg-opacity-20"
+                style={{ minWidth: '32px', minHeight: '32px' }}
               >
                 <X className="w-5 h-5" />
               </button>
