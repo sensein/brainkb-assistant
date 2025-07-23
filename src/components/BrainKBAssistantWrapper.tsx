@@ -260,7 +260,7 @@ class BrainKBAPIService {
 }
 
 // Code Block Component with Syntax Highlighting
-const CodeBlock: React.FC<{ code: string; language?: string; isExpanded?: boolean }> = ({ code, language = 'javascript', isExpanded = false }) => {
+const CodeBlock: React.FC<{ code: string; language?: string }> = ({ code, language = 'javascript' }) => {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(code);
@@ -287,8 +287,8 @@ const CodeBlock: React.FC<{ code: string; language?: string; isExpanded?: boolea
       <pre 
         className="p-4 overflow-x-auto" 
         style={{ 
-          fontSize: isExpanded ? '14px' : '13px', 
-          lineHeight: isExpanded ? '1.5' : '1.4',
+          fontSize: '13px', 
+          lineHeight: '1.4',
           maxWidth: '100%',
           width: '100%',
           wordWrap: 'break-word',
@@ -306,7 +306,7 @@ const CodeBlock: React.FC<{ code: string; language?: string; isExpanded?: boolea
 };
 
 // Markdown Renderer Component
-const MarkdownRenderer: React.FC<{ content: string; isExpanded?: boolean }> = ({ content, isExpanded = false }) => {
+const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
   const renderContent = (text: string) => {
     // Split by code blocks first
     const parts = text.split(/(```[\s\S]*?```)/);
@@ -324,7 +324,6 @@ const MarkdownRenderer: React.FC<{ content: string; isExpanded?: boolean }> = ({
               key={index} 
               code={code} 
               language={language} 
-              isExpanded={isExpanded}
             />
           );
         }
@@ -336,8 +335,8 @@ const MarkdownRenderer: React.FC<{ content: string; isExpanded?: boolean }> = ({
           key={index} 
           className="prose prose-sm max-w-none"
           style={{ 
-            fontSize: isExpanded ? '16px' : '14px', 
-            lineHeight: isExpanded ? '1.6' : '1.5',
+            fontSize: '14px', 
+            lineHeight: '1.5',
             wordWrap: 'break-word',
             overflowWrap: 'break-word',
             maxWidth: '100%',
@@ -665,7 +664,6 @@ export default function BrainKBAssistantWrapper({
   }
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [showUpload, setShowUpload] = useState(false);
@@ -1382,29 +1380,10 @@ export default function BrainKBAssistantWrapper({
     }
   };
 
-  // Add keyboard shortcuts for expanded mode
-  useEffect(() => {
-    const handleGlobalKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isExpanded && isOpen) {
-        e.preventDefault();
-        handleToggleExpanded();
-      }
-    };
-
-    if (isExpanded && isOpen) {
-      document.addEventListener('keydown', handleGlobalKeyPress);
-      return () => document.removeEventListener('keydown', handleGlobalKeyPress);
-    }
-  }, [isExpanded, isOpen]);
+  // Removed expand functionality - no keyboard shortcuts needed
 
   const getSizeConfig = () => {
     const size = mergedConfig.ui?.size;
-    if (isExpanded) {
-      return {
-        width: size?.expandedWidth || '90vw',
-        height: size?.expandedHeight || '80vh'
-      };
-    }
     return {
       width: size?.width || '450px',
       height: size?.height || '550px'
@@ -1419,11 +1398,6 @@ export default function BrainKBAssistantWrapper({
   const getPositionClasses = () => {
     // Always default to bottom-right for better visibility
     const finalPosition = mergedConfig.ui?.styling?.forcePosition ? position : 'bottom-right';
-    
-    // When expanded, center the window and ensure it's fully visible
-    if (isExpanded) {
-      return 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2';
-    }
     
     switch (finalPosition) {
       case 'bottom-left':
@@ -1441,29 +1415,8 @@ export default function BrainKBAssistantWrapper({
   const [originalPosition, setOriginalPosition] = useState<string>('bottom-right');
   const [originalSize, setOriginalSize] = useState({ width: '450px', height: '550px' });
 
-  // Handle expand/minimize with position preservation
-  const handleToggleExpanded = () => {
-    if (!isExpanded) {
-      // Store current position and size before expanding
-      setOriginalPosition(position || 'bottom-right');
-      setOriginalSize({
-        width: sizeConfig.width,
-        height: sizeConfig.height
-      });
-    }
-    setIsExpanded(!isExpanded);
-  };
-
-  // Handle close with position preservation
+  // Handle close
   const handleClose = () => {
-    // Store current position before closing
-    setOriginalPosition(position || 'bottom-right');
-    setOriginalSize({
-      width: sizeConfig.width,
-      height: sizeConfig.height
-    });
-    // Reset expanded state when closing
-    setIsExpanded(false);
     setIsOpen(false);
   };
 
@@ -1583,65 +1536,27 @@ export default function BrainKBAssistantWrapper({
         zIndex: zIndex,
         position: 'fixed',
         transition: 'all 0.3s ease-in-out',
-        ...(isExpanded ? {
-          // When expanded, use dynamic responsive sizing based on screen size
-          top: '1vh',
-          left: '1vw',
-          right: '1vw',
-          bottom: '1vh',
-          width: '98vw',
-          height: '98vh',
-          transform: 'none',
-          maxWidth: '98vw',
-          maxHeight: '98vh',
-          minWidth: '320px',
-          minHeight: '400px'
-        } : {
-          // Normal positioning - use stored original position or current position
-          width: sizeConfig.width,
-          height: isOpen ? sizeConfig.height : 'auto',
-          bottom: (originalPosition || position || 'bottom-right').includes('bottom') ? '24px' : 'auto',
-          right: (originalPosition || position || 'bottom-right').includes('right') ? '24px' : 'auto',
-          left: (originalPosition || position || 'bottom-right').includes('left') ? '24px' : 'auto',
-          top: (originalPosition || position || 'bottom-right').includes('top') ? '24px' : 'auto',
-        })
+        width: sizeConfig.width,
+        height: isOpen ? sizeConfig.height : 'auto',
+        bottom: (originalPosition || position || 'bottom-right').includes('bottom') ? '24px' : 'auto',
+        right: (originalPosition || position || 'bottom-right').includes('right') ? '24px' : 'auto',
+        left: (originalPosition || position || 'bottom-right').includes('left') ? '24px' : 'auto',
+        top: (originalPosition || position || 'bottom-right').includes('top') ? '24px' : 'auto',
       }}
     >
       {/* Chat Window */}
       {isOpen && (
         <div className={`brainkb-assistant-chat mb-4 ${styling.chatBackground || 'bg-white'} rounded-lg ${styling.shadowColor || 'shadow-xl'} ${styling.borderColor || 'border border-gray-200'} flex flex-col ${styling.customClasses?.chat || ''}`}         style={{
-          height: isExpanded ? 'calc(98vh - 120px)' : sizeConfig.height,
-          maxHeight: isExpanded ? 'calc(98vh - 120px)' : sizeConfig.height,
-          minHeight: isExpanded ? '300px' : 'auto',
+          height: sizeConfig.height,
+          maxHeight: sizeConfig.height,
           overflow: 'hidden'
         }}>
-          {/* Fallback Close Button for Expanded Mode */}
-          {isExpanded && (
-            <button
-              onClick={handleToggleExpanded}
-              className="absolute top-4 right-4 z-20 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-colors"
-              title="Minimize Assistant"
-              style={{ minWidth: '40px', minHeight: '40px' }}
-            >
-              <Minimize2 className="w-5 h-5" />
-            </button>
-          )}
           {/* Header */}
           <div className={`brainkb-assistant-header flex items-center justify-between p-4 border-b ${styling.borderColor || 'border-gray-200'} bg-gradient-to-r ${mergedConfig.branding?.primaryColor || 'from-purple-600 to-blue-600'} text-white rounded-t-lg ${styling.customClasses?.header || ''}`} style={{ position: 'sticky', top: 0, zIndex: 10 }}>
             <div className="flex items-center">
               <BrainKBLogo config={mergedConfig} />
             </div>
             <div className="flex items-center space-x-2">
-              {mergedConfig.features?.enableExpandableWindow && (
-                <button
-                  onClick={handleToggleExpanded}
-                  className="text-white hover:text-gray-200 transition-colors p-2 rounded hover:bg-white hover:bg-opacity-20"
-                  title={isExpanded ? "Minimize" : "Maximize"}
-                  style={{ minWidth: '32px', minHeight: '32px' }}
-                >
-                  {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-                </button>
-              )}
               <button
                 onClick={handleClose}
                 className="text-white hover:text-gray-200 transition-colors p-2 rounded hover:bg-white hover:bg-opacity-20"
@@ -1654,7 +1569,7 @@ export default function BrainKBAssistantWrapper({
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ 
-            fontSize: isExpanded ? '16px' : '14px', 
+            fontSize: '14px', 
             lineHeight: '1.5',
             maxWidth: '100%',
             width: '100%',
@@ -1670,11 +1585,11 @@ export default function BrainKBAssistantWrapper({
                 style={{ width: '100%' }}
               >
                 <div className="flex items-start space-x-3" style={{ 
-                  maxWidth: isExpanded ? 'calc(100% - 80px)' : 'calc(100% - 16px)', 
+                  maxWidth: 'calc(100% - 16px)', 
                   minWidth: '0',
                   width: '100%',
-                  paddingRight: isExpanded ? '16px' : '0',
-                  paddingLeft: isExpanded ? '16px' : '0',
+                  paddingRight: '0',
+                  paddingLeft: '0',
                   flexDirection: message.type === 'user' ? 'row-reverse' : 'row'
                 }}>
                   {message.type === 'assistant' && (
@@ -1713,16 +1628,16 @@ export default function BrainKBAssistantWrapper({
                   )}
                   <div
                     style={{
-                      padding: isExpanded ? '16px 20px' : '12px 16px',
+                      padding: '12px 16px',
                       borderRadius: '8px',
                       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                      maxWidth: isExpanded ? 'calc(100% - 120px)' : 'calc(100% - 48px)',
+                      maxWidth: 'calc(100% - 48px)',
                       minWidth: '0',
                       width: '100%',
                       wordWrap: 'break-word',
                       overflowWrap: 'break-word',
-                      fontSize: isExpanded ? '16px' : '14px',
-                      lineHeight: isExpanded ? '1.6' : '1.5',
+                      fontSize: '14px',
+                      lineHeight: '1.5',
                       whiteSpace: 'pre-wrap',
                       ...(message.type === 'user'
                         ? {
@@ -1750,7 +1665,7 @@ export default function BrainKBAssistantWrapper({
                         maxWidth: '100%',
                         width: '100%'
                       }}>
-                        <MarkdownRenderer content={message.content} isExpanded={isExpanded} />
+                        <MarkdownRenderer content={message.content} />
                         <div className="flex items-center justify-between mt-3" style={{ flexWrap: 'wrap', gap: '4px' }}>
                           <div className="flex items-center space-x-2" style={{ flexWrap: 'wrap' }}>
                             <p className="text-xs opacity-70">
@@ -1824,7 +1739,7 @@ export default function BrainKBAssistantWrapper({
             )}
             
             <div ref={messagesEndRef} />
-            {isExpanded && messages.length > 3 && (
+            {messages.length > 3 && (
               <div className="text-center py-2 text-xs text-gray-500 bg-gray-50 border-t border-gray-200">
                 Scroll to see more messages
               </div>
@@ -1837,8 +1752,8 @@ export default function BrainKBAssistantWrapper({
                             <div className="flex flex-wrap gap-2" style={{ 
               maxWidth: '100%',
               width: '100%',
-              paddingRight: isExpanded ? '16px' : '0',
-              paddingLeft: isExpanded ? '16px' : '0'
+              paddingRight: '0',
+              paddingLeft: '0'
             }}>
                   {generateContextualQuickActions().map((action) => (
                     <button
@@ -1846,13 +1761,13 @@ export default function BrainKBAssistantWrapper({
                       onClick={() => handleQuickAction(action.action, action.url, action.external)}
                       className="flex items-center space-x-1 px-3 py-2 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg border border-purple-200 transition-colors shadow-sm"
                       style={{ 
-                        maxWidth: isExpanded ? '280px' : '100%',
+                        maxWidth: '100%',
                         wordWrap: 'break-word',
                         overflowWrap: 'break-word',
                         flexShrink: 0,
-                        fontSize: isExpanded ? '14px' : '12px',
-                        padding: isExpanded ? '8px 12px' : '6px 10px',
-                        minWidth: isExpanded ? '160px' : 'auto'
+                        fontSize: '12px',
+                        padding: '6px 10px',
+                        minWidth: 'auto'
                       }}
                       title={action.description}
                     >
@@ -1860,7 +1775,7 @@ export default function BrainKBAssistantWrapper({
                       <span style={{ 
                         wordWrap: 'break-word', 
                         overflowWrap: 'break-word',
-                        maxWidth: isExpanded ? '240px' : '100%',
+                        maxWidth: '100%',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis'
@@ -1895,8 +1810,8 @@ export default function BrainKBAssistantWrapper({
             <div className="flex space-x-2" style={{ 
               maxWidth: '100%', 
               minWidth: '0',
-              paddingRight: isExpanded ? '16px' : '0',
-              paddingLeft: isExpanded ? '16px' : '0'
+              paddingRight: '0',
+              paddingLeft: '0'
             }}>
               {mergedConfig.features?.enableFileUpload && (
                 <button
