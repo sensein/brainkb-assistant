@@ -1651,12 +1651,14 @@ export default function BrainKBAssistantWrapper({
               <div
                 key={message.id}
                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                style={{ width: '100%' }}
               >
                 <div className="flex items-start space-x-3" style={{ 
-                  maxWidth: isExpanded ? 'calc(100% - 64px)' : 'calc(100% - 16px)', 
+                  maxWidth: isExpanded ? 'calc(100% - 80px)' : 'calc(100% - 16px)', 
                   minWidth: '0',
                   width: '100%',
-                  paddingRight: isExpanded ? '16px' : '0'
+                  paddingRight: isExpanded ? '24px' : '0',
+                  flexDirection: message.type === 'user' ? 'row-reverse' : 'row'
                 }}>
                   {message.type === 'assistant' && (
                     <div 
@@ -1675,12 +1677,29 @@ export default function BrainKBAssistantWrapper({
                       <Bot className="w-4 h-4 text-white" />
                     </div>
                   )}
+                  {message.type === 'user' && (
+                    <div 
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        background: '#d1d5db',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                      }}
+                    >
+                      <User className="w-4 h-4 text-gray-600" />
+                    </div>
+                  )}
                   <div
                     style={{
                       padding: isExpanded ? '16px 20px' : '12px 16px',
                       borderRadius: '8px',
                       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                      maxWidth: isExpanded ? 'calc(100% - 120px)' : 'calc(100% - 48px)',
+                      maxWidth: isExpanded ? 'calc(100% - 160px)' : 'calc(100% - 48px)',
                       minWidth: '0',
                       width: '100%',
                       wordWrap: 'break-word',
@@ -1737,23 +1756,6 @@ export default function BrainKBAssistantWrapper({
                       </div>
                     )}
                   </div>
-                  {message.type === 'user' && (
-                    <div 
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        background: '#d1d5db',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
-                      }}
-                    >
-                      <User className="w-4 h-4 text-gray-600" />
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
@@ -1826,13 +1828,13 @@ export default function BrainKBAssistantWrapper({
                       onClick={() => handleQuickAction(action.action, action.url, action.external)}
                       className="flex items-center space-x-1 px-3 py-2 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg border border-purple-200 transition-colors shadow-sm"
                       style={{ 
-                        maxWidth: isExpanded ? '220px' : '100%',
+                        maxWidth: isExpanded ? '240px' : '100%',
                         wordWrap: 'break-word',
                         overflowWrap: 'break-word',
                         flexShrink: 0,
                         fontSize: isExpanded ? '14px' : '12px',
                         padding: isExpanded ? '8px 12px' : '6px 10px',
-                        minWidth: isExpanded ? '120px' : 'auto'
+                        minWidth: isExpanded ? '140px' : 'auto'
                       }}
                       title={action.description}
                     >
@@ -1840,7 +1842,7 @@ export default function BrainKBAssistantWrapper({
                       <span style={{ 
                         wordWrap: 'break-word', 
                         overflowWrap: 'break-word',
-                        maxWidth: isExpanded ? '180px' : '100%',
+                        maxWidth: isExpanded ? '200px' : '100%',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis'
