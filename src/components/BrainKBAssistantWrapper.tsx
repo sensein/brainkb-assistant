@@ -270,7 +270,7 @@ const CodeBlock: React.FC<{ code: string; language?: string }> = ({ code, langua
   };
 
   return (
-    <div className="bg-gray-900 rounded-lg overflow-hidden border border-gray-700 my-2">
+    <div className="bg-gray-900 rounded-lg overflow-hidden border border-gray-700 my-2" style={{ maxWidth: '100%' }}>
       <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
         <span className="text-xs font-medium text-gray-300 uppercase">{language}</span>
         <button
@@ -281,8 +281,17 @@ const CodeBlock: React.FC<{ code: string; language?: string }> = ({ code, langua
           Copy
         </button>
       </div>
-      <pre className="p-4 overflow-x-auto" style={{ fontSize: '13px', lineHeight: '1.4' }}>
-        <code className="text-gray-100">{code}</code>
+      <pre 
+        className="p-4 overflow-x-auto" 
+        style={{ 
+          fontSize: '13px', 
+          lineHeight: '1.4',
+          maxWidth: '100%',
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word'
+        }}
+      >
+        <code className="text-gray-100" style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>{code}</code>
       </pre>
     </div>
   );
@@ -317,7 +326,13 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
         <div 
           key={index} 
           className="prose prose-sm max-w-none"
-          style={{ fontSize: '14px', lineHeight: '1.5' }}
+          style={{ 
+            fontSize: '14px', 
+            lineHeight: '1.5',
+            wordWrap: 'break-word',
+            overflowWrap: 'break-word',
+            maxWidth: '100%'
+          }}
           dangerouslySetInnerHTML={{ 
             __html: text
               .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -330,7 +345,18 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
     });
   };
 
-  return <div className="prose prose-sm max-w-none">{renderContent(content)}</div>;
+  return (
+    <div 
+      className="prose prose-sm max-w-none" 
+      style={{ 
+        wordWrap: 'break-word', 
+        overflowWrap: 'break-word',
+        maxWidth: '100%'
+      }}
+    >
+      {renderContent(content)}
+    </div>
+  );
 };
 
 // File Renderer Component
@@ -1535,7 +1561,7 @@ export default function BrainKBAssistantWrapper({
                 key={message.id}
                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className="flex items-start space-x-3 max-w-xs">
+                <div className="flex items-start space-x-3" style={{ maxWidth: 'calc(100% - 16px)', minWidth: '0' }}>
                   {message.type === 'assistant' && (
                     <div 
                       style={{
@@ -1558,6 +1584,10 @@ export default function BrainKBAssistantWrapper({
                       padding: '12px 16px',
                       borderRadius: '8px',
                       boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                      maxWidth: 'calc(100% - 48px)',
+                      minWidth: '0',
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
                       ...(message.type === 'user'
                         ? {
                             background: '#f9fafb',
@@ -1578,10 +1608,10 @@ export default function BrainKBAssistantWrapper({
                         onCancel={() => setEditingMessageId(null)}
                       />
                     ) : (
-                      <div>
+                      <div style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                         <MarkdownRenderer content={message.content} />
-                        <div className="flex items-center justify-between mt-3">
-                          <div className="flex items-center space-x-2">
+                        <div className="flex items-center justify-between mt-3" style={{ flexWrap: 'wrap', gap: '4px' }}>
+                          <div className="flex items-center space-x-2" style={{ flexWrap: 'wrap' }}>
                             <p className="text-xs opacity-70">
                               {message.timestamp.toLocaleTimeString()}
                             </p>
@@ -1675,16 +1705,22 @@ export default function BrainKBAssistantWrapper({
             {/* Quick Actions */}
             {mergedConfig.features?.enableQuickActions && usePageContext !== null && (
               <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2" style={{ maxWidth: '100%' }}>
                   {generateContextualQuickActions().map((action) => (
                     <button
                       key={action.id}
                       onClick={() => handleQuickAction(action.action, action.url, action.external)}
                       className="flex items-center space-x-1 px-3 py-2 text-xs bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg border border-purple-200 transition-colors shadow-sm"
+                      style={{ 
+                        maxWidth: '100%',
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word',
+                        flexShrink: 0
+                      }}
                       title={action.description}
                     >
-                      {action.icon}
-                      <span>{action.label}</span>
+                      <span style={{ flexShrink: 0 }}>{action.icon}</span>
+                      <span style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>{action.label}</span>
                     </button>
                   ))}
                 </div>
@@ -1712,11 +1748,12 @@ export default function BrainKBAssistantWrapper({
 
           {/* Input */}
           <div className="p-4 border-t border-gray-200 bg-white">
-            <div className="flex space-x-2">
+            <div className="flex space-x-2" style={{ maxWidth: '100%', minWidth: '0' }}>
               {mergedConfig.features?.enableFileUpload && (
                 <button
                   onClick={() => setShowUpload(!showUpload)}
                   className="px-3 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg transition-colors border border-gray-300"
+                  style={{ flexShrink: 0 }}
                   title="Upload file"
                 >
                   <Upload className="w-4 h-4" />
@@ -1727,6 +1764,7 @@ export default function BrainKBAssistantWrapper({
               <button
                 onClick={captureSelectedText}
                 className="px-3 py-3 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors border border-blue-300"
+                style={{ flexShrink: 0 }}
                 title="Add selected page content"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1741,10 +1779,12 @@ export default function BrainKBAssistantWrapper({
                 onKeyPress={mergedConfig.features?.enableKeyboardShortcuts ? handleKeyPress : undefined}
                 placeholder={mergedConfig.customization?.placeholderText || 'Ask about Knowledge Graph or anything'}
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                style={{ minWidth: '0', maxWidth: '100%' }}
               />
               <button
                 onClick={handleSendMessage}
                 className="px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-md"
+                style={{ flexShrink: 0 }}
               >
                 <Send className="w-4 h-4" />
               </button>

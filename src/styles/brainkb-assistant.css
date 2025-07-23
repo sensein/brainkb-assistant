@@ -37,6 +37,9 @@
   border: 1px solid #e5e7eb !important;
   overflow: hidden !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  max-width: 100% !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 .brainkb-assistant-header {
@@ -47,6 +50,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  max-width: 100% !important;
 }
 
 .brainkb-assistant-messages {
@@ -54,12 +58,16 @@
   padding: 16px !important;
   overflow-y: auto !important;
   max-height: 400px !important;
+  max-width: 100% !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 .brainkb-assistant-input {
   background: white !important;
   padding: 16px !important;
   border-top: 1px solid #e5e7eb !important;
+  max-width: 100% !important;
 }
 
 .brainkb-assistant-input input {
@@ -69,6 +77,8 @@
   border-radius: 8px !important;
   font-size: 14px !important;
   outline: none !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }
 
 .brainkb-assistant-input input:focus {
@@ -115,6 +125,7 @@
   .brainkb-assistant-chat {
     width: calc(100vw - 48px) !important;
     max-width: 400px !important;
+    min-width: 300px !important;
   }
   
   .brainkb-assistant-button {
@@ -122,6 +133,40 @@
     min-height: 50px !important;
     padding: 12px !important;
   }
+  
+  .brainkb-assistant-messages {
+    padding: 12px !important;
+    font-size: 13px !important;
+  }
+  
+  .brainkb-assistant-input {
+    padding: 12px !important;
+  }
+  
+  .brainkb-assistant-input input {
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* Content overflow handling */
+.brainkb-assistant-chat * {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
+
+.brainkb-assistant-chat pre {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
+
+.brainkb-assistant-chat code {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
 }
 
 /* Animation for better visibility */
