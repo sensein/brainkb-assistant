@@ -1553,13 +1553,15 @@ export default function BrainKBAssistantWrapper({
         position: 'fixed',
         ...(isExpanded ? {
           // When expanded, ensure it's centered and fully visible
-          top: '5vh',
-          left: '5vw',
-          right: '5vw',
-          bottom: '5vh',
-          width: '90vw',
-          height: '90vh',
-          transform: 'none'
+          top: '2vh',
+          left: '2vw',
+          right: '2vw',
+          bottom: '2vh',
+          width: '96vw',
+          height: '96vh',
+          transform: 'none',
+          maxWidth: '96vw',
+          maxHeight: '96vh'
         } : {
           // Normal positioning
           width: sizeConfig.width,
@@ -1573,7 +1575,11 @@ export default function BrainKBAssistantWrapper({
     >
       {/* Chat Window */}
       {isOpen && (
-        <div className={`brainkb-assistant-chat mb-4 ${styling.chatBackground || 'bg-white'} rounded-lg ${styling.shadowColor || 'shadow-xl'} ${styling.borderColor || 'border border-gray-200'} flex flex-col ${styling.customClasses?.chat || ''}`} style={{ height: sizeConfig.height }}>
+        <div className={`brainkb-assistant-chat mb-4 ${styling.chatBackground || 'bg-white'} rounded-lg ${styling.shadowColor || 'shadow-xl'} ${styling.borderColor || 'border border-gray-200'} flex flex-col ${styling.customClasses?.chat || ''}`} style={{ 
+          height: isExpanded ? 'calc(90vh - 120px)' : sizeConfig.height,
+          maxHeight: isExpanded ? 'calc(90vh - 120px)' : sizeConfig.height,
+          overflow: 'hidden'
+        }}>
           {/* Fallback Close Button for Expanded Mode */}
           {isExpanded && (
             <button
@@ -1616,8 +1622,11 @@ export default function BrainKBAssistantWrapper({
             fontSize: isExpanded ? '16px' : '14px', 
             lineHeight: '1.5',
             maxWidth: '100%',
+            width: '100%',
             wordWrap: 'break-word',
-            overflowWrap: 'break-word'
+            overflowWrap: 'break-word',
+            minHeight: 0,
+            flex: 1
           }}>
             {messages.map((message) => (
               <div
@@ -1774,11 +1783,16 @@ export default function BrainKBAssistantWrapper({
             )}
             
             <div ref={messagesEndRef} />
+            {isExpanded && messages.length > 3 && (
+              <div className="text-center py-2 text-xs text-gray-500 bg-gray-50 border-t border-gray-200">
+                Scroll to see more messages
+              </div>
+            )}
           </div>
 
             {/* Quick Actions */}
             {mergedConfig.features?.enableQuickActions && usePageContext !== null && (
-              <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
+              <div className="px-4 py-3 border-t border-gray-200 bg-gray-50" style={{ flexShrink: 0 }}>
                 <div className="flex flex-wrap gap-2" style={{ 
                   maxWidth: '100%',
                   width: '100%'
@@ -1812,7 +1826,7 @@ export default function BrainKBAssistantWrapper({
 
           {/* File Upload */}
           {showUpload && mergedConfig.features?.enableFileUpload && (
-            <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
+            <div className="px-4 py-3 border-t border-gray-200 bg-gray-50" style={{ flexShrink: 0 }}>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-sm font-medium text-gray-700">Upload File</h4>
                 <button
@@ -1830,7 +1844,7 @@ export default function BrainKBAssistantWrapper({
           )}
 
           {/* Input */}
-          <div className="p-4 border-t border-gray-200 bg-white">
+          <div className="p-4 border-t border-gray-200 bg-white" style={{ flexShrink: 0 }}>
             <div className="flex space-x-2" style={{ maxWidth: '100%', minWidth: '0' }}>
               {mergedConfig.features?.enableFileUpload && (
                 <button
