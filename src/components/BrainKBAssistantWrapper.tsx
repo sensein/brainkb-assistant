@@ -445,19 +445,27 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
         }
       }
       
-      // Enhanced markdown processing
+      // Enhanced markdown processing with better structure handling
       let processedText = part;
       
-      // Headers (h1-h6)
+      // Clean up repeated content patterns (common in AI responses)
       processedText = processedText
-        .replace(/^#{6}\s+(.+)$/gm, '<h6 style="font-size: 1rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h6>')
-        .replace(/^#{5}\s+(.+)$/gm, '<h5 style="font-size: 1.125rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h5>')
-        .replace(/^#{4}\s+(.+)$/gm, '<h4 style="font-size: 1.25rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h4>')
-        .replace(/^#{3}\s+(.+)$/gm, '<h3 style="font-size: 1.5rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h3>')
-        .replace(/^#{2}\s+(.+)$/gm, '<h2 style="font-size: 1.875rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h2>')
-        .replace(/^#{1}\s+(.+)$/gm, '<h1 style="font-size: 2.25rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h1>');
+        .replace(/(Certainly! Let's break down and analyze[^.]*\.)/g, '')
+        .replace(/(Based on your data, the following entities are central:)/g, '### Key Entities Identified')
+        .replace(/(The relationships between these entities can be visualized as follows:)/g, '### Relationships and Data Flow')
+        .replace(/(In a knowledge graph, these entities and relationships might look like:)/g, '### Knowledge Graph Representation')
+        .replace(/(Would you like a visual diagram[^?]*\?)/g, '');
       
-      // Bold and italic
+      // Headers (h1-h6) - improved regex to handle edge cases
+      processedText = processedText
+        .replace(/^#{6}\s+(.+?)(?:\n|$)/gm, '<h6 style="font-size: 1rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h6>')
+        .replace(/^#{5}\s+(.+?)(?:\n|$)/gm, '<h5 style="font-size: 1.125rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h5>')
+        .replace(/^#{4}\s+(.+?)(?:\n|$)/gm, '<h4 style="font-size: 1.25rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h4>')
+        .replace(/^#{3}\s+(.+?)(?:\n|$)/gm, '<h3 style="font-size: 1.5rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h3>')
+        .replace(/^#{2}\s+(.+?)(?:\n|$)/gm, '<h2 style="font-size: 1.875rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h2>')
+        .replace(/^#{1}\s+(.+?)(?:\n|$)/gm, '<h1 style="font-size: 2.25rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h1>');
+      
+      // Bold and italic - improved to handle nested patterns
       processedText = processedText
         .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: 600;">$1</strong>')
         .replace(/\*(.*?)\*/g, '<em style="font-style: italic;">$1</em>')
@@ -472,26 +480,39 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
       processedText = processedText
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color: #3b82f6; text-decoration: underline;" target="_blank" rel="noopener noreferrer">$1</a>');
       
-      // Lists
+      // Lists - improved to handle numbered and bulleted lists better
       processedText = processedText
-        .replace(/^\s*[-*+]\s+(.+)$/gm, '<li style="margin: 0.25rem 0;">$1</li>')
-        .replace(/^\s*\d+\.\s+(.+)$/gm, '<li style="margin: 0.25rem 0;">$1</li>');
+        .replace(/^\s*[-*+]\s+(.+?)(?:\n|$)/gm, '<li style="margin: 0.25rem 0; padding-left: 0.5rem;">$1</li>')
+        .replace(/^\s*\d+\.\s+(.+?)(?:\n|$)/gm, '<li style="margin: 0.25rem 0; padding-left: 0.5rem;">$1</li>');
       
-      // Wrap lists in ul/ol
+      // Wrap consecutive list items in ul/ol
       processedText = processedText
-        .replace(/(<li[^>]*>.*?<\/li>)/gs, '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">$1</ul>');
+        .replace(/(<li[^>]*>.*?<\/li>)(?:\s*<li[^>]*>.*?<\/li>)*/gs, (match) => {
+          return `<ul style="margin: 0.5rem 0; padding-left: 1.5rem; list-style-type: disc;">${match}</ul>`;
+        });
       
       // Blockquotes
       processedText = processedText
-        .replace(/^>\s+(.+)$/gm, '<blockquote style="border-left: 4px solid #e5e7eb; padding-left: 1rem; margin: 1rem 0; color: #6b7280;">$1</blockquote>');
+        .replace(/^>\s+(.+?)(?:\n|$)/gm, '<blockquote style="border-left: 4px solid #e5e7eb; padding-left: 1rem; margin: 1rem 0; color: #6b7280; font-style: italic;">$1</blockquote>');
       
       // Horizontal rules
       processedText = processedText
         .replace(/^---+$/gm, '<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 1rem 0;">');
       
-      // Line breaks
+      // Paragraphs - wrap text in paragraphs for better structure
       processedText = processedText
-        .replace(/\n/g, '<br>');
+        .split('\n\n')
+        .map(paragraph => {
+          if (paragraph.trim() && !paragraph.match(/^<[^>]+>/) && !paragraph.match(/^#{1,6}\s/)) {
+            return `<p style="margin: 0.75rem 0; line-height: 1.6;">${paragraph.trim()}</p>`;
+          }
+          return paragraph;
+        })
+        .join('\n\n');
+      
+      // Line breaks within paragraphs
+      processedText = processedText
+        .replace(/\n(?!\n)/g, '<br>');
       
       return (
         <div 

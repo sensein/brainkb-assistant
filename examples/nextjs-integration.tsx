@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import BrainKBAssistant, { BrainKBConfig } from '../components/BrainKBAssistant';
+import BrainKBAssistant, { BrainKBConfig } from '../src/components/BrainKBAssistantWrapper';
 
 // Example Next.js App with BrainKB Assistant Integration
 const NextJSApp = () => {
