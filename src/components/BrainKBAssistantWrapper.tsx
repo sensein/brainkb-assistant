@@ -159,8 +159,12 @@ class BrainKBAPIService {
     const { api } = this.config;
     
     if (api?.endpoint) {
-      // Check if streaming is enabled
-      if (api.streaming) {
+      // Check if streaming is enabled via config or query parameter
+      const url = new URL(api.endpoint);
+      const isStreamingFromQuery = url.searchParams.get('stream') === 'true';
+      const isStreaming = api.streaming || isStreamingFromQuery;
+      
+      if (isStreaming) {
         return this.sendStreamingMessage(message, context, onStream);
       } else {
         return this.sendRESTMessage(message, context);
@@ -441,27 +445,67 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
         }
       }
       
-      // Regular text with markdown
+      // Enhanced markdown processing
+      let processedText = part;
+      
+      // Headers (h1-h6)
+      processedText = processedText
+        .replace(/^#{6}\s+(.+)$/gm, '<h6 style="font-size: 1rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h6>')
+        .replace(/^#{5}\s+(.+)$/gm, '<h5 style="font-size: 1.125rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h5>')
+        .replace(/^#{4}\s+(.+)$/gm, '<h4 style="font-size: 1.25rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h4>')
+        .replace(/^#{3}\s+(.+)$/gm, '<h3 style="font-size: 1.5rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h3>')
+        .replace(/^#{2}\s+(.+)$/gm, '<h2 style="font-size: 1.875rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h2>')
+        .replace(/^#{1}\s+(.+)$/gm, '<h1 style="font-size: 2.25rem; font-weight: 600; margin: 1rem 0 0.5rem 0; color: #374151;">$1</h1>');
+      
+      // Bold and italic
+      processedText = processedText
+        .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: 600;">$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em style="font-style: italic;">$1</em>')
+        .replace(/__(.*?)__/g, '<strong style="font-weight: 600;">$1</strong>')
+        .replace(/_(.*?)_/g, '<em style="font-style: italic;">$1</em>');
+      
+      // Inline code
+      processedText = processedText
+        .replace(/`([^`]+)`/g, '<code style="background-color: #f3f4f6; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.875rem; font-family: monospace; color: #1f2937;">$1</code>');
+      
+      // Links
+      processedText = processedText
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color: #3b82f6; text-decoration: underline;" target="_blank" rel="noopener noreferrer">$1</a>');
+      
+      // Lists
+      processedText = processedText
+        .replace(/^\s*[-*+]\s+(.+)$/gm, '<li style="margin: 0.25rem 0;">$1</li>')
+        .replace(/^\s*\d+\.\s+(.+)$/gm, '<li style="margin: 0.25rem 0;">$1</li>');
+      
+      // Wrap lists in ul/ol
+      processedText = processedText
+        .replace(/(<li[^>]*>.*?<\/li>)/gs, '<ul style="margin: 0.5rem 0; padding-left: 1.5rem;">$1</ul>');
+      
+      // Blockquotes
+      processedText = processedText
+        .replace(/^>\s+(.+)$/gm, '<blockquote style="border-left: 4px solid #e5e7eb; padding-left: 1rem; margin: 1rem 0; color: #6b7280;">$1</blockquote>');
+      
+      // Horizontal rules
+      processedText = processedText
+        .replace(/^---+$/gm, '<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 1rem 0;">');
+      
+      // Line breaks
+      processedText = processedText
+        .replace(/\n/g, '<br>');
+      
       return (
         <div 
           key={index} 
-          className="prose prose-sm max-w-none"
           style={{ 
             fontSize: '14px', 
-            lineHeight: '1.5',
+            lineHeight: '1.6',
             wordWrap: 'break-word',
             overflowWrap: 'break-word',
             maxWidth: '100%',
             width: '100%',
-            whiteSpace: 'pre-wrap'
+            color: '#374151'
           }}
-          dangerouslySetInnerHTML={{ 
-            __html: text
-              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-              .replace(/\*(.*?)\*/g, '<em>$1</em>')
-              .replace(/`([^`]+)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm">$1</code>')
-              .replace(/\n/g, '<br>')
-          }} 
+          dangerouslySetInnerHTML={{ __html: processedText }} 
         />
       );
     });
@@ -469,7 +513,6 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
 
   return (
     <div 
-      className="prose prose-sm max-w-none" 
       style={{ 
         wordWrap: 'break-word', 
         overflowWrap: 'break-word',
@@ -1139,8 +1182,10 @@ export default function BrainKBAssistantWrapper({
         currentPage: contextData.currentPage
       });
 
-      // Check if streaming is enabled
-      const isStreaming = mergedConfig.api?.streaming;
+      // Check if streaming is enabled via config or query parameter
+      const url = new URL(mergedConfig.api?.endpoint || '');
+      const isStreamingFromQuery = url.searchParams.get('stream') === 'true';
+      const isStreaming = mergedConfig.api?.streaming || isStreamingFromQuery;
       
       let response: any;
       
