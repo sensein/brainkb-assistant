@@ -33,9 +33,8 @@ export interface BrainKBConfig {
   // API Configuration
   api?: {
     endpoint?: string;
-    streamingEndpoint?: string; // Explicit streaming endpoint (e.g., /chat?streaming=true)
+    streaming?: boolean; // Enable/disable streaming for the endpoint
     type?: 'rest' | 'websocket';
-    streaming?: boolean;
     headers?: Record<string, string>;
     timeout?: number;
     retryAttempts?: number;
@@ -160,10 +159,8 @@ class BrainKBAPIService {
     const { api } = this.config;
     
     if (api?.endpoint) {
-      if (api.streaming && api.streamingEndpoint) {
-        return this.sendStreamingMessage(message, context, onStream);
-      } else if (api.streaming && api.endpoint) {
-        // Use regular endpoint with streaming flag
+      // Check if streaming is enabled
+      if (api.streaming) {
         return this.sendStreamingMessage(message, context, onStream);
       } else {
         return this.sendRESTMessage(message, context);
@@ -187,16 +184,16 @@ class BrainKBAPIService {
         timestamp: new Date().toISOString(),
       };
 
-      const streamingEndpoint = this.config.api!.streamingEndpoint || this.config.api!.endpoint!;
+      const endpoint = this.config.api!.endpoint!;
       
       console.log('📤 Sending streaming request to API:', {
-        endpoint: streamingEndpoint,
+        endpoint: endpoint,
         sessionId: this.sessionId,
         messageLength: message.length,
         hasContext: !!context
       });
 
-      const response = await fetch(streamingEndpoint, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1142,8 +1139,8 @@ export default function BrainKBAssistantWrapper({
         currentPage: contextData.currentPage
       });
 
-      // Check if streaming is enabled and has proper endpoint
-      const isStreaming = mergedConfig.api?.streaming && (mergedConfig.api?.streamingEndpoint || mergedConfig.api?.endpoint);
+      // Check if streaming is enabled
+      const isStreaming = mergedConfig.api?.streaming;
       
       let response: any;
       
