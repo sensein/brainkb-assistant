@@ -34,6 +34,7 @@ export interface BrainKBConfig {
   api?: {
     endpoint?: string;
     type?: 'rest' | 'websocket';
+    streaming?: boolean;
     headers?: Record<string, string>;
     timeout?: number;
     retryAttempts?: number;
@@ -154,15 +155,123 @@ class BrainKBAPIService {
     this.config = config;
   }
 
-  async sendMessage(message: string, context?: any): Promise<any> {
+  async sendMessage(message: string, context?: any, onStream?: (chunk: string) => void): Promise<any> {
     const { api } = this.config;
     
     if (api?.endpoint) {
-      return this.sendRESTMessage(message, context);
+      if (api.streaming) {
+        return this.sendStreamingMessage(message, context, onStream);
+      } else {
+        return this.sendRESTMessage(message, context);
+      }
     }
     
     // Fallback to local response
     return this.generateLocalResponse(message, context);
+  }
+
+  private async sendStreamingMessage(message: string, context?: any, onStream?: (chunk: string) => void): Promise<any> {
+    try {
+      const requestBody = {
+        message,
+        session_id: this.sessionId,
+        currentPage: context?.currentPage,
+        pageContext: context?.pageContext,
+        pageContent: context?.pageContent,
+        selectedPageContent: context?.selectedPageContent,
+        chatHistory: context?.chatHistory,
+        timestamp: new Date().toISOString(),
+      };
+
+      console.log('📤 Sending streaming request to API:', {
+        endpoint: this.config.api!.endpoint,
+        sessionId: this.sessionId,
+        messageLength: message.length,
+        hasContext: !!context
+      });
+
+      const response = await fetch(this.config.api!.endpoint!, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/event-stream',
+          ...this.config.api?.headers,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body reader available');
+      }
+
+      const decoder = new TextDecoder();
+      let fullContent = '';
+      let sessionId = this.sessionId;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        
+        if (done) break;
+        
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6); // Remove 'data: ' prefix
+            
+            if (data === '[DONE]') {
+              // Stream ended
+              break;
+            }
+            
+            try {
+              const parsed = JSON.parse(data);
+              
+              // Handle session ID
+              if (parsed.session_id) {
+                sessionId = parsed.session_id;
+                this.sessionId = sessionId;
+                console.log('🔗 Session ID received and stored:', sessionId);
+              }
+              
+              // Handle content chunks
+              if (parsed.content) {
+                fullContent += parsed.content;
+                onStream?.(parsed.content);
+              }
+              
+              // Handle other fields
+              if (parsed.type === 'error') {
+                console.error('Streaming API Error:', parsed.error);
+                throw new Error(parsed.error || 'Streaming API error');
+              }
+              
+            } catch (parseError) {
+              // If it's not JSON, treat as plain text content
+              if (data.trim()) {
+                fullContent += data;
+                onStream?.(data);
+              }
+            }
+          }
+        }
+      }
+
+      return {
+        content: fullContent,
+        session_id: sessionId
+      };
+      
+    } catch (error) {
+      console.error('Streaming API Error:', error);
+      return this.generateLocalResponse(message, context);
+    }
   }
 
   private async sendRESTMessage(message: string, context?: any): Promise<any> {
@@ -1027,18 +1136,61 @@ export default function BrainKBAssistantWrapper({
         currentPage: contextData.currentPage
       });
 
-      // Send message to API service with full context
-      const response = await apiServiceInstance!.sendMessage(inputValue, contextData);
+      // Check if streaming is enabled
+      const isStreaming = mergedConfig.api?.streaming;
+      
+      let response: any;
+      
+      if (isStreaming) {
+        // Create initial assistant message for streaming
+        const aiResponse: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: '',
+          timestamp: new Date(),
+          sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+        };
 
-      const aiResponse: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        content: response.content || 'I understand your message. How can I help you further?',
-        timestamp: new Date(),
-        sender: mergedConfig.branding?.title || 'BrainKB Assistant'
-      };
+        setMessages(prev => [...prev, aiResponse]);
 
-      setMessages(prev => [...prev, aiResponse]);
+        // Send streaming message
+        response = await apiServiceInstance!.sendMessage(
+          inputValue, 
+          contextData,
+          (chunk: string) => {
+            // Update the message content as chunks arrive
+            setMessages(prev => 
+              prev.map(msg => 
+                msg.id === aiResponse.id 
+                  ? { ...msg, content: msg.content + chunk }
+                  : msg
+              )
+            );
+          }
+        );
+
+        // Update the final message with complete content
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.id === aiResponse.id 
+              ? { ...msg, content: response.content || msg.content }
+              : msg
+          )
+        );
+      } else {
+        // Send regular message
+        response = await apiServiceInstance!.sendMessage(inputValue, contextData);
+
+        const aiResponse: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: response.content || 'I understand your message. How can I help you further?',
+          timestamp: new Date(),
+          sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+        };
+
+        setMessages(prev => [...prev, aiResponse]);
+      }
       
       // Call custom callback if provided
       if (mergedConfig.callbacks?.onResponseReceived) {
