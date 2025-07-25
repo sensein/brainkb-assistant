@@ -33,6 +33,7 @@ export interface BrainKBConfig {
   // API Configuration
   api?: {
     endpoint?: string;
+    streamingEndpoint?: string; // Explicit streaming endpoint (e.g., /chat?streaming=true)
     type?: 'rest' | 'websocket';
     streaming?: boolean;
     headers?: Record<string, string>;
@@ -159,7 +160,10 @@ class BrainKBAPIService {
     const { api } = this.config;
     
     if (api?.endpoint) {
-      if (api.streaming) {
+      if (api.streaming && api.streamingEndpoint) {
+        return this.sendStreamingMessage(message, context, onStream);
+      } else if (api.streaming && api.endpoint) {
+        // Use regular endpoint with streaming flag
         return this.sendStreamingMessage(message, context, onStream);
       } else {
         return this.sendRESTMessage(message, context);
@@ -183,14 +187,16 @@ class BrainKBAPIService {
         timestamp: new Date().toISOString(),
       };
 
+      const streamingEndpoint = this.config.api!.streamingEndpoint || this.config.api!.endpoint!;
+      
       console.log('📤 Sending streaming request to API:', {
-        endpoint: this.config.api!.endpoint,
+        endpoint: streamingEndpoint,
         sessionId: this.sessionId,
         messageLength: message.length,
         hasContext: !!context
       });
 
-      const response = await fetch(this.config.api!.endpoint!, {
+      const response = await fetch(streamingEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1136,8 +1142,8 @@ export default function BrainKBAssistantWrapper({
         currentPage: contextData.currentPage
       });
 
-      // Check if streaming is enabled
-      const isStreaming = mergedConfig.api?.streaming;
+      // Check if streaming is enabled and has proper endpoint
+      const isStreaming = mergedConfig.api?.streaming && (mergedConfig.api?.streamingEndpoint || mergedConfig.api?.endpoint);
       
       let response: any;
       
