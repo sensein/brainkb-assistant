@@ -1427,7 +1427,7 @@ export default function BrainKBAssistantWrapper({
     return content;
   };
 
-  const handleQuickAction = (action: string, url?: string, external?: boolean) => {
+  const handleQuickAction = async (action: string, url?: string, external?: boolean) => {
     // Call custom callback if provided
     if (mergedConfig.callbacks?.onQuickAction) {
       mergedConfig.callbacks.onQuickAction(action);
@@ -1443,67 +1443,81 @@ export default function BrainKBAssistantWrapper({
       return;
     }
 
-    let message = '';
-    
-    switch (action) {
-      case 'ask_question':
-        message = 'I\'m here to help! What questions do you have about the knowledge base?';
-        break;
-      case 'tell_more':
-        message = 'I can provide detailed information about various topics. What would you like to learn more about?';
-        break;
-      case 'about_knowledge':
-        message = 'Knowledge graphs are powerful tools for representing and connecting information. They help us understand relationships between different concepts and entities.';
-        break;
-      case 'explain_knowledge':
-        message = 'Knowledge can be explained in many ways - through data, relationships, patterns, and insights. What specific aspect would you like me to explain?';
-        break;
-      case 'show_entities':
-        message = 'I can show you entity data and relationships. What specific entities or relationships are you interested in?';
-        break;
-      case 'evidence_assertions':
-        message = 'Evidence and assertions are crucial for building reliable knowledge bases. I can help you explore these concepts.';
-        break;
-      case 'explore_wiki':
-        message = 'The knowledge wiki contains a wealth of information. What topic would you like to explore?';
-        break;
-      case 'search_data':
-        message = 'I can help you search through the knowledge base. What specific information are you looking for?';
-        break;
-      case 'analyze_patterns':
-        message = 'I can analyze patterns and trends in your data. What type of analysis would you like to perform?';
-        break;
-      case 'get_recommendations':
-        message = 'I can provide personalized recommendations based on your interests and the knowledge base. What would you like recommendations for?';
-        break;
-      case 'export_data':
-        message = 'I can help you export data in various formats (JSON, CSV, XML). What data would you like to export?';
-        break;
-      case 'visualize_graph':
-        message = 'I can create custom graph visualizations for your data. What type of visualization would you like?';
-        break;
-      case 'compare_entities':
-        message = 'I can help you compare different entities in the knowledge base. Which entities would you like to compare?';
-        break;
-      case 'find_connections':
-        message = 'I can discover hidden connections between entities. What would you like to explore?';
-        break;
-      case 'generate_report':
-        message = 'I can generate comprehensive reports based on your data. What type of report would you like?';
-        break;
-      default:
-        message = `I can help you with "${action}". What specific information are you looking for?`;
-    }
-    
-    if (message) {
-      const aiResponse: ChatMessage = {
-        id: Date.now().toString(),
+    // Find the quick action to get its description
+    const quickAction = mergedConfig.quickActions?.find(qa => qa.id === action);
+    const actionDescription = quickAction?.description || action;
+
+    // Add user message showing the action
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      type: 'user',
+      content: `Quick Action: ${quickAction?.label || action}`,
+      timestamp: new Date(),
+      sender: 'You'
+    };
+    setMessages(prev => [...prev, userMessage]);
+
+    // Show typing indicator
+    setIsTyping(true);
+
+    try {
+      // Send the action description to the backend API
+      if (apiServiceInstance) {
+        const response = await apiServiceInstance.sendMessage(actionDescription, {
+          currentPage,
+          pageContext,
+          pageContent: getCurrentPageContent(),
+          selectedPageContent: captureSelectedText(),
+          chatHistory: messages,
+          action: action,
+          actionLabel: quickAction?.label,
+          actionDescription: actionDescription
+        });
+
+        // Add assistant response
+        const assistantMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: response.content || response.message || response.response || 'Action processed successfully.',
+          timestamp: new Date(),
+          sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+        };
+        setMessages(prev => [...prev, assistantMessage]);
+
+        // Call response callback if provided
+        if (mergedConfig.callbacks?.onResponseReceived) {
+          mergedConfig.callbacks.onResponseReceived(response);
+        }
+      } else {
+        // Fallback if no API service
+        const fallbackMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: `Action "${action}" processed. Description: ${actionDescription}`,
+          timestamp: new Date(),
+          sender: mergedConfig.branding?.title || 'BrainKB Assistant'
+        };
+        setMessages(prev => [...prev, fallbackMessage]);
+      }
+    } catch (error) {
+      console.error('Error processing quick action:', error);
+      
+      // Add error message
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
         type: 'assistant',
-        content: message,
+        content: `Sorry, I encountered an error processing the action "${action}". Please try again.`,
         timestamp: new Date(),
         sender: mergedConfig.branding?.title || 'BrainKB Assistant'
       };
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages(prev => [...prev, errorMessage]);
+
+      // Call error callback if provided
+      if (mergedConfig.callbacks?.onError) {
+        mergedConfig.callbacks.onError(error);
+      }
+    } finally {
+      setIsTyping(false);
     }
   };
 
